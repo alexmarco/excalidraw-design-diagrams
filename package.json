@@ -8,5 +8,9 @@
   },
   "scripts": {
     "test": "node --test"
+  },
+  "dependencies": {
+    "@excalidraw/utils": "0.1.7",
+    "esbuild": "0.28.2"
   }
 }
