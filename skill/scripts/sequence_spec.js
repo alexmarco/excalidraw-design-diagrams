@@ -1,5 +1,8 @@
 import { parse } from 'yaml';
 
+const FRAME_KINDS = ['alt', 'opt', 'loop'];
+const MESSAGE_TYPES = ['sync', 'async', 'return'];
+
 function parseParticipant(entry) {
   return { id: entry.id, label: entry.label ?? entry.id, kind: entry.kind ?? 'participant' };
 }
@@ -26,9 +29,21 @@ function parseStep(entry) {
   return { type: 'end', frame: entry.end };
 }
 
+function validateParticipants(participants) {
+  const participantIds = new Set();
+  for (const { id } of participants) {
+    if (participantIds.has(id)) {
+      throw new Error(`Duplicate participant "${id}"`);
+    }
+    participantIds.add(id);
+  }
+  return participantIds;
+}
+
 function validateSpec({ participants, steps }) {
-  const participantIds = new Set(participants.map((participant) => participant.id));
+  const participantIds = validateParticipants(participants);
   const openFrames = [];
+  const openActivations = new Map();
 
   steps.forEach((step, index) => {
     const stepNumber = index + 1;
@@ -38,14 +53,51 @@ function validateSpec({ participants, steps }) {
       }
     };
 
-    if (step.type === 'message') {
-      assertKnownParticipant(step.from);
-      assertKnownParticipant(step.to);
+    if (step.type === 'message' || step.type === 'self') {
+      if (!MESSAGE_TYPES.includes(step.messageType)) {
+        throw new Error(`Unknown message type "${step.messageType}" in step ${stepNumber}`);
+      }
+      const participantsOfStep = step.type === 'message' ? [step.from, step.to] : [step.participant];
+      participantsOfStep.forEach(assertKnownParticipant);
+      openFrames.forEach((frame) => frame.messageCount++);
+    }
+    if (step.type === 'activate' || step.type === 'deactivate') {
+      assertKnownParticipant(step.participant);
+      const activations = openActivations.get(step.participant) ?? [];
+      if (step.type === 'activate') {
+        activations.push(stepNumber);
+      } else if (activations.length === 0) {
+        throw new Error(`Deactivation of "${step.participant}" in step ${stepNumber} has no open activation`);
+      } else {
+        activations.pop();
+      }
+      openActivations.set(step.participant, activations);
     }
     if (step.type === 'frame') {
-      openFrames.push({ frame: step.frame, stepNumber });
+      if (!FRAME_KINDS.includes(step.frame)) {
+        throw new Error(`Unknown frame "${step.frame}" in step ${stepNumber}`);
+      }
+      openFrames.push({ frame: step.frame, stepNumber, messageCount: 0 });
+    }
+    if (step.type === 'else') {
+      const innermostFrame = openFrames.at(-1);
+      if (innermostFrame?.frame !== 'alt') {
+        throw new Error(`"else" in step ${stepNumber} is only valid inside an alt frame`);
+      }
     }
     if (step.type === 'end') {
+      const innermostFrame = openFrames.at(-1);
+      if (!innermostFrame) {
+        throw new Error(`End of "${step.frame}" in step ${stepNumber} has no open frame`);
+      }
+      if (innermostFrame.frame !== step.frame) {
+        throw new Error(
+          `Frame "${innermostFrame.frame}" opened in step ${innermostFrame.stepNumber} is closed by "${step.frame}" in step ${stepNumber}`,
+        );
+      }
+      if (innermostFrame.messageCount === 0) {
+        throw new Error(`Frame "${innermostFrame.frame}" opened in step ${innermostFrame.stepNumber} has no messages`);
+      }
       openFrames.pop();
     }
   });
@@ -53,6 +105,12 @@ function validateSpec({ participants, steps }) {
   const unclosedFrame = openFrames.at(-1);
   if (unclosedFrame) {
     throw new Error(`Frame "${unclosedFrame.frame}" opened in step ${unclosedFrame.stepNumber} is never closed`);
+  }
+  for (const [participant, activations] of openActivations) {
+    if (activations.length > 0) {
+      const stepNumber = activations.at(-1);
+      throw new Error(`Activation of "${participant}" in step ${stepNumber} is never closed`);
+    }
   }
 }
 
