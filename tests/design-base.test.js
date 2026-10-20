@@ -48,6 +48,12 @@ test('frames are tinted so the conditional part of a flow stands out', () => {
   assert.notEqual(design.components['frame-tag'].backgroundColor, design.components.frame.backgroundColor);
 });
 
+test('a label background inside a frame blends with the frame tint', () => {
+  const backing = design.components['label-background-in-frame'];
+  assert.equal(backing.backgroundColor, design.components.frame.backgroundColor);
+  assert.equal(backing.strokeColor, design.components.frame.backgroundColor);
+});
+
 test('each shape purpose of the current palette maps to a role with the same colors', () => {
   for (const [role, { fill, stroke, strokeStyle }] of Object.entries(SHAPE_PURPOSES)) {
     assert.equal(design.components[role].backgroundColor, fill, `${role} fill`);

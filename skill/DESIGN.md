@@ -120,6 +120,9 @@ components:
     backgroundColor: "{colors.amber-50}"
     strokeColor: "{colors.amber-700}"
     textColor: "{colors.amber-700}"
+  label-background-in-frame:
+    backgroundColor: "{colors.amber-50}"
+    strokeColor: "{colors.amber-50}"
   frame-tag:
     backgroundColor: "{colors.amber-100}"
     strokeColor: "{colors.amber-700}"
@@ -156,7 +159,7 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Shape roles: `primary`, `secondary`, `tertiary` (neutral emphasis), `start` (trigger), `end` (success), `warning` (reset), `decision`, `ai`, `inactive` (dashed stroke), `error`.
 - Text roles: `title`, `subtitle`, `body`, `text-on-light`, `text-on-dark`.
 - Evidence roles: `code` (code and data examples), `structure` (structural lines), `marker` (marker dots).
-- Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text).
+- Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text) and `label-background-in-frame` (the same box inside a tinted frame).
 - Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner).
 - Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a sticky note with a short why, next to the step it explains), `step` (numbered badge on a message).
 

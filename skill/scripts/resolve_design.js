@@ -44,6 +44,7 @@ export const REQUIRED_ROLES = [
   'note',
   'step',
   'frame-tag',
+  'label-background-in-frame',
 ];
 
 function parseYamlOrEmpty(source) {
