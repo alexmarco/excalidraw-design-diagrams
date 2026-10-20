@@ -4,7 +4,7 @@ import { REQUIRED_ROLES, resolveDesign } from '../skill/scripts/resolve_design.j
 
 const design = resolveDesign();
 
-// Expected values come from the palette the skill used before DESIGN.md (skill/references/color-palette.md).
+// Expected values come from the palette the skill used before DESIGN.md (the former skill/references/color-palette.md).
 const SHAPE_PURPOSES = {
   primary: { fill: '#3b82f6', stroke: '#1e3a5f' },
   secondary: { fill: '#60a5fa', stroke: '#1e3a5f' },

@@ -51,7 +51,7 @@ test('no skill document points to the old color palette or Playwright flow', () 
   const documents = [
     join(skillDirectory, 'SKILL.md'),
     ...readdirSync(join(skillDirectory, 'references'))
-      .filter((name) => name.endsWith('.md') && name !== 'color-palette.md')
+      .filter((name) => name.endsWith('.md'))
       .map((name) => join(skillDirectory, 'references', name)),
   ];
 
