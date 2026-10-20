@@ -62,6 +62,12 @@ test('a self message, activation or deactivation of an unknown participant fails
   );
 });
 
+test('a text that YAML reads as a number is kept as a string', () => {
+  const spec = parseSequenceSpec(specText([{ from: 'user', to: 'api', text: 401 }]));
+
+  assert.equal(spec.steps[0].text, '401');
+});
+
 test('an unknown message type fails and names it', () => {
   const text = specText([{ from: 'user', to: 'api', text: 'Hi', type: 'asynch' }]);
 

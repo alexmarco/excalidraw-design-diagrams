@@ -3,16 +3,21 @@ import { parse } from 'yaml';
 const FRAME_KINDS = ['alt', 'opt', 'loop'];
 const MESSAGE_TYPES = ['sync', 'async', 'return'];
 
+// YAML reads values such as 401 or 2024 as numbers, but labels are always text.
+function toText(value) {
+  return value === undefined ? undefined : String(value);
+}
+
 function parseParticipant(entry) {
-  return { id: entry.id, label: entry.label ?? entry.id, kind: entry.kind ?? 'participant' };
+  return { id: entry.id, label: toText(entry.label ?? entry.id), kind: entry.kind ?? 'participant' };
 }
 
 function parseStep(entry) {
   if ('from' in entry) {
-    return { type: 'message', messageType: entry.type ?? 'sync', from: entry.from, to: entry.to, text: entry.text };
+    return { type: 'message', messageType: entry.type ?? 'sync', from: entry.from, to: entry.to, text: toText(entry.text) };
   }
   if ('self' in entry) {
-    return { type: 'self', messageType: entry.type ?? 'sync', participant: entry.self, text: entry.text };
+    return { type: 'self', messageType: entry.type ?? 'sync', participant: entry.self, text: toText(entry.text) };
   }
   if ('activate' in entry) {
     return { type: 'activate', participant: entry.activate };
@@ -21,10 +26,10 @@ function parseStep(entry) {
     return { type: 'deactivate', participant: entry.deactivate };
   }
   if ('frame' in entry) {
-    return { type: 'frame', frame: entry.frame, text: entry.text };
+    return { type: 'frame', frame: entry.frame, text: toText(entry.text) };
   }
   if ('else' in entry) {
-    return { type: 'else', text: entry.else };
+    return { type: 'else', text: toText(entry.else) };
   }
   return { type: 'end', frame: entry.end };
 }
