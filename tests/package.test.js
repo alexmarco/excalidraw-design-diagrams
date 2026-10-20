@@ -15,3 +15,7 @@ test('package.json declares an ESM package requiring Node.js 22.18 or later', ()
 test('package.json test script runs node:test', () => {
   assert.equal(packageJson.scripts.test, 'node --test');
 });
+
+test('package.json pins the yaml dependency to an exact version', () => {
+  assert.match(packageJson.dependencies.yaml, /^\d+\.\d+\.\d+$/);
+});
