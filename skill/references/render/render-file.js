@@ -1,4 +1,4 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
@@ -66,8 +66,10 @@ async function bundleExportPage() {
 export async function renderExcalidrawFile(inputPath, { outputPath, scale, maxWidth }) {
   const diagram = await loadDiagram(inputPath);
   const { dir, name } = path.parse(inputPath);
-  const pngPath = outputPath ?? path.join(dir, `${name}.png`);
-  const svgPath = path.join(path.dirname(pngPath), `${path.parse(pngPath).name}.svg`);
+  const outputBase = outputPath ? outputPath.replace(/\.(png|svg)$/i, "") : path.join(dir, name);
+  const pngPath = `${outputBase}.png`;
+  const svgPath = `${outputBase}.svg`;
+  await mkdir(path.dirname(pngPath), { recursive: true });
 
   const browserPath = findBrowser();
   const bundle = await bundleExportPage();
