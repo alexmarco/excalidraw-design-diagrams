@@ -24,6 +24,10 @@ colors:
   slate-500: "#64748b"
   slate-800: "#1e293b"
   gray-700: "#374151"
+  slate-50: "#f8fafc"
+  slate-300: "#cbd5e1"
+  yellow-100: "#fef9c3"
+  yellow-600: "#ca8a04"
   white: "#ffffff"
 components:
   primary:
@@ -113,8 +117,25 @@ components:
     backgroundColor: "{colors.blue-300}"
     strokeColor: "{colors.navy}"
   frame:
-    backgroundColor: "{colors.white}"
+    backgroundColor: "transparent"
     strokeColor: "{colors.navy}"
+  participant-external:
+    backgroundColor: "{colors.blue-100}"
+    strokeColor: "{colors.blue-800}"
+    textColor: "{colors.gray-700}"
+  zone:
+    backgroundColor: "{colors.slate-50}"
+    strokeColor: "{colors.slate-300}"
+    strokeStyle: dashed
+    textColor: "{colors.slate-500}"
+  note:
+    backgroundColor: "{colors.yellow-100}"
+    strokeColor: "{colors.yellow-600}"
+    textColor: "{colors.gray-700}"
+  step:
+    backgroundColor: "{colors.navy}"
+    strokeColor: "{colors.navy}"
+    textColor: "{colors.white}"
 ---
 
 # Excalidraw Diagram Base
@@ -131,7 +152,8 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Text roles: `title`, `subtitle`, `body`, `text-on-light`, `text-on-dark`.
 - Evidence roles: `code` (code and data examples), `structure` (structural lines), `marker` (marker dots).
 - Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text).
-- Sequence roles: `participant`, `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame`.
+- Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame`.
+- Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a short why next to the step it explains), `step` (numbered badge on a message).
 
 Arrows use the stroke color of their source concept.
 
@@ -140,7 +162,8 @@ Arrows use the stroke color of their source concept.
 Diagram-only tokens that are not tied to a role.
 
 ```yaml
-roughness: 0
+roughness: 1
+fontFamily: 5
 strokeWidth: 2
 strokeStyle: solid
 fillStyle: solid

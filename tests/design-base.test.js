@@ -37,6 +37,12 @@ test('base DESIGN.md defines every required role', () => {
   }
 });
 
+test('the roles that make a diagram readable are required', () => {
+  for (const role of ['participant-external', 'zone', 'note', 'step']) {
+    assert.ok(REQUIRED_ROLES.includes(role), `${role} is not required`);
+  }
+});
+
 test('each shape purpose of the current palette maps to a role with the same colors', () => {
   for (const [role, { fill, stroke, strokeStyle }] of Object.entries(SHAPE_PURPOSES)) {
     assert.equal(design.components[role].backgroundColor, fill, `${role} fill`);
@@ -60,8 +66,9 @@ test('evidence artifacts and lines keep the current palette colors', () => {
   assert.equal(design.diagrams.viewBackgroundColor, '#ffffff');
 });
 
-test('base diagram tokens match the skill defaults for technical diagrams', () => {
-  assert.equal(design.diagrams.roughness, 0);
+test('base diagram tokens give the hand-drawn Excalidraw look', () => {
+  assert.equal(design.diagrams.roughness, 1);
+  assert.equal(design.diagrams.fontFamily, 5);
   assert.equal(design.diagrams.strokeWidth, 2);
   assert.equal(design.diagrams.strokeStyle, 'solid');
   assert.equal(design.diagrams.fillStyle, 'solid');

@@ -112,6 +112,20 @@ test('restyling keeps geometry, text and bindings', () => {
   });
 });
 
+test('text elements take the font family of the design and shapes do not', () => {
+  const design = designFrom('---\n---\n\n## Diagrams\n\n```yaml\nfontFamily: 2\n```\n');
+
+  const { document } = restyleDocument(generated, design);
+
+  for (const element of document.elements) {
+    if (element.type === 'text') {
+      assert.equal(element.fontFamily, 2, `${element.id} kept its font`);
+    } else {
+      assert.equal(element.fontFamily, undefined, `${element.id} got a font`);
+    }
+  }
+});
+
 test('a role that defines no color or stroke keeps the values the element already has', () => {
   const element = {
     id: 'note',
