@@ -48,6 +48,18 @@ test('restyles the file in place with the DESIGN.md of the working directory', (
   assert.equal(participantFill(filePath, 'participant-api'), '#111111');
 });
 
+test('uses the DESIGN.md beside the file, whatever the working directory', () => {
+  const fileDir = workspace();
+  const otherDir = workspace();
+  const filePath = generatedFile(fileDir);
+  writeFile(join(fileDir, 'DESIGN.md'), '---\ncomponents:\n  participant:\n    backgroundColor: "#111111"\n---\n');
+
+  const result = runCli([filePath], otherDir);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(participantFill(filePath, 'participant-api'), '#111111');
+});
+
 test('an explicit --design path wins over the project DESIGN.md', () => {
   const dir = workspace();
   const filePath = generatedFile(dir);

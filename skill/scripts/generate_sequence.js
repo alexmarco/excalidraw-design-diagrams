@@ -37,7 +37,7 @@ function generate(args) {
   if (existsSync(resolvedOutputPath)) {
     throw new Error(`${resolvedOutputPath} already exists. The .excalidraw file is the source of truth, so it is not regenerated.`);
   }
-  const design = resolveDesign({ explicitPath: designPath && resolve(designPath), projectDir: process.cwd() });
+  const design = resolveDesign({ explicitPath: designPath && resolve(designPath), projectDir: dirname(specPath) });
   mkdirSync(dirname(resolvedOutputPath), { recursive: true });
   writeFileSync(resolvedOutputPath, `${JSON.stringify(buildSequenceDocument(spec, design), null, 2)}\n`);
 }

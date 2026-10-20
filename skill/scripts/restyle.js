@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 import { resolveDesign } from './resolve_design.js';
 import { restyleDocument } from './restyle_excalidraw.js';
@@ -26,7 +26,7 @@ function parseCommandLine(args) {
 
 function restyle(args) {
   const { filePath, designPath } = parseCommandLine(args);
-  const design = resolveDesign({ explicitPath: designPath && resolve(designPath), projectDir: process.cwd() });
+  const design = resolveDesign({ explicitPath: designPath && resolve(designPath), projectDir: dirname(filePath) });
   const { document, unstyledIds } = restyleDocument(JSON.parse(readFileSync(filePath, 'utf8')), design);
   writeFileSync(filePath, `${JSON.stringify(document, null, 2)}\n`);
 
