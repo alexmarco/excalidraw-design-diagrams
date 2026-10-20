@@ -17,8 +17,14 @@ const FONT_SIZES = { participant: 18, message: 16, frame: 16 };
 const TEXT_WIDTH_RATIO = 0.6;
 const TEXT_LINE_RATIO = 1.25;
 
+// Width is the longest line in code points; height is one line box per line.
 function textSize(text, fontSize) {
-  return { width: Math.ceil(text.length * fontSize * TEXT_WIDTH_RATIO), height: Math.ceil(fontSize * TEXT_LINE_RATIO) };
+  const lines = text.split(/\r?\n/);
+  const longestLineLength = Math.max(...lines.map((line) => [...line].length));
+  return {
+    width: Math.ceil(longestLineLength * fontSize * TEXT_WIDTH_RATIO),
+    height: lines.length * Math.ceil(fontSize * TEXT_LINE_RATIO),
+  };
 }
 
 function textLabel(text, fontSize, x, y) {

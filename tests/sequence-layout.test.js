@@ -66,6 +66,21 @@ test('a wide message label stays between the lifelines of the participants it co
   assert.ok(label.x + label.width < lifelineX.get('b'), 'label crosses the lifeline of b');
 });
 
+test('a multi-line label is as wide as its longest line and as tall as its lines', () => {
+  const single = layoutWithMessage([{ from: 'a', to: 'b', text: 'Longer line here' }]).messages[0].label;
+  const multi = layoutWithMessage([{ from: 'a', to: 'b', text: 'Short\nLonger line here' }]).messages[0].label;
+
+  assert.equal(multi.width, single.width);
+  assert.equal(multi.height, 2 * single.height);
+});
+
+test('a label is measured in code points, so an emoji counts as one character', () => {
+  const ascii = layoutWithMessage([{ from: 'a', to: 'b', text: 'abcd' }]).messages[0].label;
+  const emoji = layoutWithMessage([{ from: 'a', to: 'b', text: '😀😀😀😀' }]).messages[0].label;
+
+  assert.equal(emoji.width, ascii.width);
+});
+
 test('a wide message label spanning two columns stays between the lifelines it connects', () => {
   const layout = layoutWithMessage([{ from: 'a', to: 'c', text: WIDE_LABEL }]);
   const lifelineX = new Map(layout.lifelines.map((lifeline) => [lifeline.participantId, lifeline.x]));
