@@ -42,3 +42,35 @@ test('a message outside a frame is not inside its bounds', () => {
 
   assert.equal(contains(alt.bounds, outsideMessage.bounds), false);
 });
+
+const WIDE_LABEL = 'Authenticate the user with the identity provider';
+
+function layoutWithMessage(sequence) {
+  const text = JSON.stringify({
+    participants: [
+      { id: 'a', label: 'A' },
+      { id: 'b', label: 'B' },
+      { id: 'c', label: 'C' },
+    ],
+    sequence,
+  });
+  return layoutSequence(parseSequenceSpec(text));
+}
+
+test('a wide message label stays between the lifelines of the participants it connects', () => {
+  const layout = layoutWithMessage([{ from: 'a', to: 'b', text: WIDE_LABEL }]);
+  const lifelineX = new Map(layout.lifelines.map((lifeline) => [lifeline.participantId, lifeline.x]));
+  const { label } = layout.messages[0];
+
+  assert.ok(label.x > lifelineX.get('a'), 'label crosses the lifeline of a');
+  assert.ok(label.x + label.width < lifelineX.get('b'), 'label crosses the lifeline of b');
+});
+
+test('a wide message label spanning two columns stays between the lifelines it connects', () => {
+  const layout = layoutWithMessage([{ from: 'a', to: 'c', text: WIDE_LABEL }]);
+  const lifelineX = new Map(layout.lifelines.map((lifeline) => [lifeline.participantId, lifeline.x]));
+  const { label } = layout.messages[0];
+
+  assert.ok(label.x > lifelineX.get('a'), 'label crosses the lifeline of a');
+  assert.ok(label.x + label.width < lifelineX.get('c'), 'label crosses the lifeline of c');
+});
