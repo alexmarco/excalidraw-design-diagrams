@@ -1,5 +1,6 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { parse } from 'yaml';
 
 const FRONT_MATTER = /^---\n([\s\S]*?)\n---(?:\n|$)/;
@@ -8,6 +9,7 @@ const YAML_BLOCK = /^```yaml\n([\s\S]*?)\n```/m;
 const REFERENCE = /^\{([^{}]+)\}$/;
 
 const BASE_DESIGN_PATH = fileURLToPath(new URL('../DESIGN.md', import.meta.url));
+const PROJECT_DESIGN_PATHS = ['DESIGN.md', join('docs', 'DESIGN.md')];
 
 export const REQUIRED_ROLES = [
   'primary',
@@ -92,9 +94,33 @@ function assertRequiredRoles(design) {
   }
 }
 
-export function resolveDesign({ basePath = BASE_DESIGN_PATH } = {}) {
-  const base = parseDesign(readFileSync(basePath, 'utf8'));
-  const document = { ...base.tokens, diagrams: base.diagrams };
+function isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function mergeDeep(base, override) {
+  const merged = { ...base };
+  for (const [key, value] of Object.entries(override)) {
+    merged[key] = isPlainObject(base[key]) && isPlainObject(value) ? mergeDeep(base[key], value) : value;
+  }
+  return merged;
+}
+
+function findProjectDesignPath(projectDir) {
+  return PROJECT_DESIGN_PATHS.map((relativePath) => join(projectDir, relativePath)).find((candidate) =>
+    existsSync(candidate),
+  );
+}
+
+function toDocument({ tokens, diagrams }) {
+  return { ...tokens, diagrams };
+}
+
+export function resolveDesign({ explicitPath, projectDir, basePath = BASE_DESIGN_PATH } = {}) {
+  const base = toDocument(parseDesign(readFileSync(basePath, 'utf8')));
+  const overridePath = explicitPath ?? (projectDir && findProjectDesignPath(projectDir));
+  const override = overridePath ? toDocument(parseDesign(readFileSync(overridePath, 'utf8'))) : {};
+  const document = mergeDeep(base, override);
   const design = resolveReferences(document, document);
   assertRequiredRoles(design);
   return design;
