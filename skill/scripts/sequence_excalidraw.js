@@ -1,8 +1,8 @@
 import { layoutSequence } from './sequence_layout.js';
+import { roleStyle } from './role_style.js';
 
 const FONT_FAMILY = 3;
 const TEXT_LINE_HEIGHT = 1.25;
-const TEXT_ROLE_FALLBACK = 'text-on-light';
 
 // FNV-1a hash, so seeds and nonces depend only on the element id and stay stable across runs.
 function stableNumber(text) {
@@ -15,18 +15,12 @@ function stableNumber(text) {
 }
 
 function baseElement(id, type, geometry, role, design) {
-  const component = design.components[role];
   return {
     id,
     type,
     ...geometry,
     angle: 0,
-    strokeColor: component.strokeColor ?? component.textColor,
-    backgroundColor: component.backgroundColor ?? 'transparent',
-    fillStyle: design.diagrams.fillStyle,
-    strokeWidth: design.diagrams.strokeWidth,
-    strokeStyle: component.strokeStyle ?? design.diagrams.strokeStyle,
-    roughness: design.diagrams.roughness,
+    ...roleStyle(role, type, design),
     opacity: 100,
     groupIds: [],
     frameId: null,
@@ -61,12 +55,8 @@ function linear(id, type, { x, y, width, height, points }, role, design, endArro
 }
 
 function textElement(id, label, role, design, { containerId = null, textAlign, verticalAlign }) {
-  const component = design.components[role];
-  const textColor = component.textColor ?? design.components[TEXT_ROLE_FALLBACK].textColor;
   return {
     ...baseElement(id, 'text', { x: label.x, y: label.y, width: label.width, height: label.height }, role, design),
-    strokeColor: textColor,
-    backgroundColor: 'transparent',
     text: label.text,
     originalText: label.text,
     fontSize: label.fontSize,
