@@ -17,6 +17,17 @@ test('README.md covers purpose, commands and working rules', () => {
   assert.match(readme, /dependenc/i);
 });
 
+test('README.md documents usage and the manual skill install', () => {
+  const readme = readRepoFile('README.md').replace(/\r\n/g, '\n');
+
+  assert.match(readme, /^## Usage$/m);
+  assert.match(readme, /generate_sequence\.js/);
+  assert.match(readme, /render_excalidraw\.js/);
+  assert.match(readme, /restyle\.js/);
+  assert.match(readme, /^## Install the skill manually$/m);
+  assert.match(readme, /\.claude[\\/]skills/);
+});
+
 test('AGENTS.md covers commands and working rules for agents', () => {
   const agents = readRepoFile('AGENTS.md');
 
