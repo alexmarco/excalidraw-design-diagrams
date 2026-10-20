@@ -74,6 +74,9 @@ function validateSpec({ participants, steps }) {
       }
       const participantsOfStep = step.type === 'message' ? [step.from, step.to] : [step.participant];
       participantsOfStep.forEach(assertKnownParticipant);
+      if (step.type === 'message' && step.from === step.to) {
+        throw new Error(`Message from "${step.from}" to itself in step ${stepNumber} is invisible; use a "self" step instead`);
+      }
       openFrames.forEach((frame) => frame.messageCount++);
     }
     if (step.type === 'activate' || step.type === 'deactivate') {
