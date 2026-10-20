@@ -28,3 +28,30 @@ test('ADR 0001 states the out-of-scope items', () => {
   assert.match(adr, /Mermaid/);
   assert.match(adr, /automatic layout/i);
 });
+
+// Returns the ADR content with CRLF normalized to LF, or an empty string when no file matches the prefix.
+function readAdr(prefix) {
+  const name = readdirSync(adrDirectory).find((candidate) => candidate.startsWith(prefix));
+  return name ? readFileSync(join(adrDirectory, name), 'utf8').replace(/\r\n/g, '\n') : '';
+}
+
+const adr2 = readAdr('0002-');
+
+test('ADR 0002 exists', () => {
+  assert.ok(adr2, 'docs/adr/0002-*.md must exist');
+});
+
+test('ADR 0002 records whether excalidraw.com keeps the element role', () => {
+  assert.match(adr2, /excalidraw\.com/);
+  assert.match(adr2, /customData/);
+  assert.match(adr2, /role/);
+});
+
+test('ADR 0002 separates what was verified from what was not', () => {
+  assert.match(adr2, /verified/i);
+  assert.match(adr2, /not verified/i);
+});
+
+test('ADR 0002 describes how to check the finding on a real file', () => {
+  assert.match(adr2, /restyle/);
+});
