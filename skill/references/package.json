@@ -1,0 +1,12 @@
+{
+  "name": "excalidraw-diagram-renderer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render_excalidraw.js",
+    "install-browser": "playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
