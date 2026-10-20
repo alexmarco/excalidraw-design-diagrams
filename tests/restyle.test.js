@@ -114,6 +114,28 @@ test('restyling keeps geometry, text and bindings', () => {
   });
 });
 
+test('a role that defines no color or stroke keeps the values the element already has', () => {
+  const element = {
+    id: 'note',
+    type: 'rectangle',
+    x: 0,
+    y: 0,
+    width: 10,
+    height: 10,
+    strokeColor: '#abcdef',
+    strokeStyle: 'dashed',
+    strokeWidth: 3,
+    fillStyle: 'hachure',
+    roughness: 2,
+    customData: { role: 'custom' },
+  };
+  const design = { components: { custom: { backgroundColor: '#111111' } }, diagrams: {} };
+
+  const { document } = restyleDocument({ elements: [element] }, design);
+
+  assert.deepEqual(document.elements[0], { ...element, backgroundColor: '#111111' });
+});
+
 test('restyling twice gives the same document', () => {
   const design = designFrom('---\ncomponents:\n  participant:\n    backgroundColor: "#111111"\n---\n');
 
