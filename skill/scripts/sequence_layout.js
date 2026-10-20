@@ -44,20 +44,45 @@ function frameLabelText(frame) {
 function layoutMessage(step, columns, cursorY) {
   if (step.type === 'self') {
     const x = columns.get(step.participant);
-    const arrow = { x, y: cursorY, width: SELF_MESSAGE_WIDTH, height: SELF_MESSAGE_HEIGHT };
+    const arrow = {
+      x,
+      y: cursorY,
+      width: SELF_MESSAGE_WIDTH,
+      height: SELF_MESSAGE_HEIGHT,
+      points: [
+        [0, 0],
+        [SELF_MESSAGE_WIDTH, 0],
+        [SELF_MESSAGE_WIDTH, SELF_MESSAGE_HEIGHT],
+        [0, SELF_MESSAGE_HEIGHT],
+      ],
+    };
     const label = step.text
-      ? textLabel(step.text, FONT_SIZES.message, x + SELF_MESSAGE_WIDTH + LABEL_GAP * 2, cursorY + SELF_MESSAGE_HEIGHT / 2 - textSize(step.text, FONT_SIZES.message).height / 2)
+      ? textLabel(
+          step.text,
+          FONT_SIZES.message,
+          x + SELF_MESSAGE_WIDTH + LABEL_GAP * 2,
+          cursorY + SELF_MESSAGE_HEIGHT / 2 - textSize(step.text, FONT_SIZES.message).height / 2,
+        )
       : null;
-    return { fromX: x, toX: x, selfLoop: true, label, bounds: unite([arrow, label ?? arrow]) };
+    return { arrow, label, bounds: unite([arrow, label ?? arrow]) };
   }
 
   const fromX = columns.get(step.from);
   const toX = columns.get(step.to);
-  const arrow = { x: Math.min(fromX, toX), y: cursorY, width: Math.abs(toX - fromX), height: 0 };
+  const arrow = {
+    x: fromX,
+    y: cursorY,
+    width: Math.abs(toX - fromX),
+    height: 0,
+    points: [
+      [0, 0],
+      [toX - fromX, 0],
+    ],
+  };
   const label = step.text
     ? centeredLabel(step.text, FONT_SIZES.message, (fromX + toX) / 2, cursorY - LABEL_GAP - textSize(step.text, FONT_SIZES.message).height / 2)
     : null;
-  return { fromX, toX, selfLoop: false, label, bounds: unite([arrow, label ?? arrow]) };
+  return { arrow, label, bounds: unite([{ x: Math.min(fromX, toX), y: cursorY, width: arrow.width, height: 0 }, label ?? arrow]) };
 }
 
 function closeFrame(frame, bottom) {
