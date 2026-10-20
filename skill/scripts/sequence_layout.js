@@ -13,6 +13,7 @@ const SELF_MESSAGE_HEIGHT = 30;
 const SELF_LABEL_OFFSET = SELF_MESSAGE_WIDTH + LABEL_GAP * 2;
 const ACTIVATION_WIDTH = 12;
 const ACTIVATION_DEPTH_OFFSET = 6;
+const ACTIVATION_MIN_HEIGHT = ROW_HEIGHT / 2;
 const FONT_SIZES = { participant: 18, message: 16, frame: 16 };
 const TEXT_WIDTH_RATIO = 0.6;
 const TEXT_LINE_RATIO = 1.25;
@@ -158,12 +159,13 @@ export function layoutSequence({ participants, steps }) {
       cursorY += ROW_HEIGHT;
     } else if (step.type === 'activate') {
       const stack = openActivations.get(step.participant) ?? [];
-      stack.push({ top: lastMessageY ?? cursorY, depth: stack.length });
+      stack.push({ top: cursorY, depth: stack.length });
       openActivations.set(step.participant, stack);
     } else if (step.type === 'deactivate') {
       const { top, depth } = openActivations.get(step.participant).pop();
       const x = columns.get(step.participant) - ACTIVATION_WIDTH / 2 + depth * ACTIVATION_DEPTH_OFFSET;
-      activations.push({ id: `activation-${activations.length + 1}`, participantId: step.participant, x, top, bottom: lastMessageY ?? cursorY, width: ACTIVATION_WIDTH });
+      const bottom = Math.max(lastMessageY ?? cursorY, top + ACTIVATION_MIN_HEIGHT);
+      activations.push({ id: `activation-${activations.length + 1}`, participantId: step.participant, x, top, bottom, width: ACTIVATION_WIDTH });
     } else if (step.type === 'frame') {
       openFrames.push({ stepNumber, frame: step.frame, text: step.text, top: cursorY, left: Infinity, right: -Infinity, elseSections: [] });
       cursorY += SECTION_HEIGHT;

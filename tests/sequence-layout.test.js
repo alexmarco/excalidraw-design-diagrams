@@ -66,6 +66,30 @@ test('a wide message label stays between the lifelines of the participants it co
   assert.ok(label.x + label.width < lifelineX.get('b'), 'label crosses the lifeline of b');
 });
 
+test('an activation starts at the next message, even when a frame header comes before it', () => {
+  const layout = layoutWithMessage([
+    { from: 'a', to: 'b', text: 'first' },
+    { frame: 'opt', text: 'when ready' },
+    { activate: 'b' },
+    { from: 'b', to: 'c', text: 'second' },
+    { deactivate: 'b' },
+    { end: 'opt' },
+  ]);
+
+  assert.equal(layout.activations[0].top, layout.messages[1].y);
+});
+
+test('an activation with no message inside it still has a visible height', () => {
+  const layout = layoutWithMessage([
+    { from: 'a', to: 'b', text: 'first' },
+    { activate: 'b' },
+    { deactivate: 'b' },
+  ]);
+  const [activation] = layout.activations;
+
+  assert.ok(activation.bottom - activation.top >= 30, `height is ${activation.bottom - activation.top}`);
+});
+
 test('a multi-line label is as wide as its longest line and as tall as its lines', () => {
   const single = layoutWithMessage([{ from: 'a', to: 'b', text: 'Longer line here' }]).messages[0].label;
   const multi = layoutWithMessage([{ from: 'a', to: 'b', text: 'Short\nLonger line here' }]).messages[0].label;
