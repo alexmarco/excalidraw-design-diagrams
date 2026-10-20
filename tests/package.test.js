@@ -29,3 +29,7 @@ test('no package in the repository depends on Playwright', () => {
     assert.equal(declared.playwright, undefined, `${manifestPath} must not depend on playwright`);
   }
 });
+
+test('package.json pins the yaml dependency to an exact version', () => {
+  assert.match(packageJson.dependencies.yaml, /^\d+\.\d+\.\d+$/);
+});
