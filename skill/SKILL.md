@@ -1,42 +1,32 @@
 ---
 name: excalidraw-diagram
-description: Create and visually validate Excalidraw diagrams that explain workflows, architectures, and concepts. Use when creating or editing .excalidraw diagrams.
+description: Create, render and restyle Excalidraw diagrams that explain workflows, architectures, and concepts. Use when creating or editing .excalidraw diagrams.
 ---
 
-# Excalidraw Diagram Creator
+# Excalidraw Diagram
 
-Create `.excalidraw` JSON files that communicate relationships, causality, and flow through their visual structure, not just through labels. This skill is adapted from [coleam00/excalidraw-diagram-skill](https://github.com/coleam00/excalidraw-diagram-skill).
+Create `.excalidraw` files that show relationships and flow through their structure. In the commands below, `<skill>` is this skill's directory (`skill/` in this repository). Run them from the project root.
 
-## Design the diagram
+## Workflow
 
-1. Decide whether the request calls for a simple conceptual diagram or a comprehensive technical diagram.
-2. For a technical diagram, research the real formats, event names, API methods, and relationships before drawing. Show concrete examples such as code, payloads, or actual interface content where they teach the reader.
-3. Map each concept to a fitting visual pattern: fan-out, convergence, tree, timeline, cycle, transformation, comparison, or phase break. Use distinct patterns for distinct concepts instead of a uniform grid of cards.
-4. Plan the eye's path and use layers of detail for a comprehensive diagram: summary flow, section boundaries, and concrete details.
-5. Default to free-floating text. Add a shape only when the shape itself communicates meaning, groups related content, or provides a useful connection point.
-6. Read `references/color-palette.md` and use it as the sole source for colors.
-7. For large diagrams, build one coherent section at a time. Use descriptive IDs, avoid duplicate IDs, and check bindings between sections.
+1. Pick the diagram type from the index below and read its guide before writing anything.
+2. Generate the draft from a spec, for example `node <skill>/scripts/generate_sequence.js spec.yaml` for sequence diagrams.
+3. Render the diagram: `node <skill>/references/render_excalidraw.js diagram.excalidraw` writes a PNG and an SVG beside it. Open the PNG, check it against the guide's checklist, fix the spec or the file, and render again until it passes. If rendering fails, see [references/README.md](references/README.md).
+4. After changing `DESIGN.md`, restyle the file with `node <skill>/scripts/restyle.js diagram.excalidraw`, then render again. Restyling changes only the look; it keeps meaning and layout.
 
-## Create Excalidraw JSON
+The `.excalidraw` file is the source of truth. Generate it once; edit it by hand afterwards instead of regenerating it from the spec.
 
-Use `references/element-templates.md` for element examples and `references/json-schema.md` for the file and element structure. Keep `text` and `originalText` limited to readable text. Set `fontFamily` to `3`, prefer `roughness: 0` for technical diagrams, and use `opacity: 100`. Connect related elements explicitly with lines or arrows; position alone does not express a relationship.
+## Diagram types
 
-## Render and inspect
+| Type | Use it for | Guide |
+| --- | --- | --- |
+| Sequence | Messages exchanged between participants over time: API calls, login flows, retries | [references/sequence.md](references/sequence.md) |
 
-Rendering and visual inspection are required after creating or changing a diagram. From this skill's `references` directory, run:
+Load only the guide for the type you need. For a type without a generator, draw the file by hand with [references/element-templates.md](references/element-templates.md) and [references/json-schema.md](references/json-schema.md).
 
-```bash
-node render_excalidraw.js <path-to-file.excalidraw>
-```
+## Design rules
 
-The renderer writes a PNG and an SVG beside the input file by default. Use `--output`, `--scale`, and `--width` to set the PNG path, its device scale, and its maximum width in CSS pixels. The SVG is for documentation and the web. Open the PNG and compare it with the intended visual story. Check for clipped or unreadable text, unintended overlaps, arrows crossing or missing targets, unclear labels, uneven spacing, and an unbalanced composition. Fix the JSON and render again until those issues are resolved.
-
-If the renderer is not installed, follow `references/README.md`.
-
-## Final review
-
-- Does the visual structure mirror the concepts and show a clear reading order?
-- For technical diagrams, are names, formats, and examples accurate and concrete?
-- Do all intended relationships have clear connections?
-- Are colors drawn from the palette and text readable at the rendered size?
-- Does the rendered image have balanced spacing, no unintended overlaps, and no clipping?
+- Give every element a role. Colors and strokes come from the design tokens of its role, never from hand-picked values. The design file is the first that exists of: the one passed with `--design`, the project's `DESIGN.md` (or `docs/DESIGN.md`), and the base `<skill>/DESIGN.md`.
+- Verify names, formats and examples against the real source before drawing a technical diagram.
+- Default to free-floating text. Add a shape only when it carries meaning, groups content, or anchors a connection.
+- Keep labels short enough to read at the rendered size.

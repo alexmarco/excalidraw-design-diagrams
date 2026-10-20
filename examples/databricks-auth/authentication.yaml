@@ -1,0 +1,77 @@
+# Authentication of the dak server in alexmarco/databricks-agent-kit.
+# Source: src/auth.ts (resolveAuth, m2mProvider, u2mProvider), src/client.ts and
+# src/workspace-session.ts, as read on 2026-10-20. Covers the first tool call of a session.
+participants:
+  - id: agent
+    label: Coding agent
+    kind: actor
+  - id: dak
+    label: dak
+  - id: config
+    label: "~/.databrickscfg"
+  - id: cli
+    label: Databricks CLI
+  - id: oidc
+    label: Workspace OIDC
+  - id: api
+    label: Workspace API
+sequence:
+  - from: agent
+    to: dak
+    text: Tool call
+  - activate: dak
+  # Environment credentials are ignored when --profile is given.
+  - frame: alt
+    text: no --profile and env set
+  - self: dak
+    text: Use env vars
+  - else: otherwise
+  - from: dak
+    to: config
+    text: Read profile
+  - from: config
+    to: dak
+    text: profile
+    type: return
+  - end: alt
+  # The profile keys choose the method. Any other auth_type is rejected.
+  - frame: alt
+    text: token
+  - self: dak
+    text: Use token
+  - else: client_id and client_secret
+  - from: dak
+    to: oidc
+    text: POST /oidc/v1/token
+  - from: oidc
+    to: dak
+    text: access_token
+    type: return
+  - else: auth_type = databricks-cli
+  - from: dak
+    to: cli
+    text: auth token
+  - from: cli
+    to: dak
+    text: access_token, expiry
+    type: return
+  - else: other auth_type
+  - self: dak
+    text: Reject
+  - end: alt
+  - self: dak
+    text: Cache token
+  - activate: api
+  - from: dak
+    to: api
+    text: GET with Bearer
+  - from: api
+    to: dak
+    text: response
+    type: return
+  - deactivate: api
+  - from: dak
+    to: agent
+    text: Result
+    type: return
+  - deactivate: dak

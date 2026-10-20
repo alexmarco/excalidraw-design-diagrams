@@ -82,6 +82,12 @@ test('an unknown message type fails and names it', () => {
   assert.throws(() => parseSequenceSpec(text), /unknown message type "asynch" in step 1/i);
 });
 
+test('an unknown participant kind fails and names it', () => {
+  const text = JSON.stringify({ participants: [...participants, { id: 'cache', kind: 'service' }], sequence: [message] });
+
+  assert.throws(() => parseSequenceSpec(text), /unknown kind "service" for participant "cache"/i);
+});
+
 test('a duplicate participant id fails and names it', () => {
   const text = JSON.stringify({ participants: [...participants, { id: 'api' }], sequence: [message] });
 

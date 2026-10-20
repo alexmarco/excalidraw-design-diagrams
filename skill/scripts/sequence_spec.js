@@ -2,6 +2,7 @@ import { parse } from 'yaml';
 
 const FRAME_KINDS = ['alt', 'opt', 'loop'];
 const MESSAGE_TYPES = ['sync', 'async', 'return'];
+const PARTICIPANT_KINDS = ['participant', 'actor'];
 
 // YAML reads values such as 401 or 2024 as numbers, but labels are always text.
 function toText(value) {
@@ -36,7 +37,10 @@ function parseStep(entry) {
 
 function validateParticipants(participants) {
   const participantIds = new Set();
-  for (const { id } of participants) {
+  for (const { id, kind } of participants) {
+    if (!PARTICIPANT_KINDS.includes(kind)) {
+      throw new Error(`Unknown kind "${kind}" for participant "${id}"`);
+    }
     if (participantIds.has(id)) {
       throw new Error(`Duplicate participant "${id}"`);
     }

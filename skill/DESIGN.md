@@ -85,6 +85,9 @@ components:
   marker:
     backgroundColor: "{colors.blue-500}"
     strokeColor: "{colors.blue-500}"
+  label-background:
+    backgroundColor: "{colors.white}"
+    strokeColor: "{colors.white}"
   participant:
     backgroundColor: "{colors.blue-500}"
     strokeColor: "{colors.navy}"
@@ -127,6 +130,7 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Shape roles: `primary`, `secondary`, `tertiary` (neutral emphasis), `start` (trigger), `end` (success), `warning` (reset), `decision`, `ai`, `inactive` (dashed stroke), `error`.
 - Text roles: `title`, `subtitle`, `body`, `text-on-light`, `text-on-dark`.
 - Evidence roles: `code` (code and data examples), `structure` (structural lines), `marker` (marker dots).
+- Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text).
 - Sequence roles: `participant`, `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame`.
 
 Arrows use the stroke color of their source concept.

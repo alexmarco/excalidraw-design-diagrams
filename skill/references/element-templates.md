@@ -1,6 +1,6 @@
 # Element Templates
 
-Use these compact templates as starting points. Choose colors from `color-palette.md`. Excalidraw files need the enclosing document structure shown in `json-schema.md`.
+Use these compact templates as starting points. Set `customData.role` on every element and take its colors from the role tokens in `DESIGN.md`; the hex values below only illustrate the base design. Excalidraw files need the enclosing document structure shown in `json-schema.md`.
 
 ## Free-floating text
 

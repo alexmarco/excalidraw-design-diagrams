@@ -30,6 +30,7 @@ export const REQUIRED_ROLES = [
   'code',
   'structure',
   'marker',
+  'label-background',
   'participant',
   'actor',
   'message-sync',

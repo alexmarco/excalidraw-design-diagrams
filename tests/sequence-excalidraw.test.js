@@ -115,6 +115,28 @@ test('every text sits inside the container it is bound to', () => {
   }
 });
 
+test('every label is drawn after the lines and shapes, so lifelines never cross it', () => {
+  const firstLabel = elements.findIndex((element) => element.type === 'text');
+  const lastShape = elements.findLastIndex((element) => element.type !== 'text');
+
+  assert.ok(firstLabel > lastShape, 'a label is listed before a line or shape');
+});
+
+test('every label outside a participant header sits on a knock-out, so lifelines do not cross its text', () => {
+  const knockOuts = withRole('label-background').filter((element) => element.type === 'rectangle');
+  const labelsOnLines = elements.filter(
+    (element) => element.type === 'text' && !['participant', 'actor'].includes(element.customData.role),
+  );
+
+  assert.ok(labelsOnLines.length > 0);
+  for (const label of labelsOnLines) {
+    assert.ok(
+      knockOuts.some((knockOut) => contains(knockOut, label)),
+      `${label.id} has no knock-out behind it`,
+    );
+  }
+});
+
 test('every element has a role that the design defines', () => {
   for (const element of elements) {
     const role = element.customData?.role;

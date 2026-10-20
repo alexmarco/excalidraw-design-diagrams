@@ -75,6 +75,11 @@ function boundText(container, id, label, role, design, alignment) {
   return textElement(id, label, role, design, { containerId: container.id, ...alignment });
 }
 
+// Excalidraw paints no background behind free text, so a box in the canvas color hides the lines behind a label.
+function labelBacking(labelId, label, design) {
+  return rectangle(`${labelId}-background`, 'label-background', { x: label.x, y: label.y, width: label.width, height: label.height }, design);
+}
+
 function participantElements(participant, design) {
   const header = rectangle(`participant-${participant.id}`, participant.kind, participant.header, design);
   const label = boundText(header, `participant-${participant.id}-label`, participant.label, participant.kind, design, {
@@ -89,12 +94,14 @@ function frameElements(frame, design) {
   const container = rectangle(idPrefix, 'frame', frame.bounds, design);
   const elements = [
     container,
-    boundText(container, `${idPrefix}-label`, frame.label, 'frame', design, { textAlign: 'left', verticalAlign: 'top' }),
+    labelBacking(`${idPrefix}-label`, frame.label, design),
+    textElement(`${idPrefix}-label`, frame.label, 'frame', design, { textAlign: 'left', verticalAlign: 'top' }),
   ];
   frame.elseSections.forEach((section, index) => {
     const divider = { x: frame.bounds.x, y: section.y, width: frame.bounds.width, height: 0 };
     const sectionPrefix = `${idPrefix}-else-${index + 1}`;
     elements.push(linear(sectionPrefix, 'line', { ...divider, points: [[0, 0], [frame.bounds.width, 0]] }, 'frame', design, null));
+    elements.push(labelBacking(`${sectionPrefix}-label`, section.label, design));
     elements.push(textElement(`${sectionPrefix}-label`, section.label, 'frame', design, { textAlign: 'left', verticalAlign: 'top' }));
   });
   return elements;
@@ -113,16 +120,17 @@ function messageElements(message, design) {
   if (!message.label) {
     return [arrow];
   }
-  const label = textElement(`message-${message.stepNumber}-label`, message.label, role, design, {
+  const labelId = `message-${message.stepNumber}-label`;
+  const label = textElement(labelId, message.label, role, design, {
     textAlign: 'center',
     verticalAlign: 'bottom',
   });
-  return [arrow, label];
+  return [arrow, labelBacking(labelId, message.label, design), label];
 }
 
 export function buildSequenceDocument(spec, design) {
   const layout = layoutSequence(spec);
-  const elements = [
+  const shapesAndLines = [
     ...layout.frames.flatMap((frame) => frameElements(frame, design)),
     ...layout.lifelines.map((lifeline) =>
       linear(
@@ -144,6 +152,13 @@ export function buildSequenceDocument(spec, design) {
     ),
     ...layout.messages.flatMap((message) => messageElements(message, design)),
     ...layout.participants.flatMap((participant) => participantElements(participant, design)),
+  ];
+  // Label backings and then labels come last, so lifelines, activation bars and arrows never cross a label.
+  const isBacking = (element) => element.customData.role === 'label-background';
+  const elements = [
+    ...shapesAndLines.filter((element) => element.type !== 'text' && !isBacking(element)),
+    ...shapesAndLines.filter(isBacking),
+    ...shapesAndLines.filter((element) => element.type === 'text'),
   ];
 
   return {
