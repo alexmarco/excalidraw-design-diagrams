@@ -29,3 +29,24 @@ test('parses synchronous, asynchronous, return and self messages', () => {
   assert.deepEqual(messageKinds, ['sync', 'async', 'sync', 'sync', 'return', 'return', 'sync', 'return']);
   assert.equal(spec.steps.find((step) => step.type === 'self').participant, 'api');
 });
+
+const participants = [
+  { id: 'user', label: 'User', kind: 'actor' },
+  { id: 'api', label: 'API' },
+];
+
+function specText(sequence) {
+  return JSON.stringify({ participants, sequence });
+}
+
+test('a message to an unknown participant fails and names it', () => {
+  const text = specText([{ from: 'user', to: 'usr', text: 'Hi' }]);
+
+  assert.throws(() => parseSequenceSpec(text), /unknown participant "usr".*step 1/i);
+});
+
+test('a frame that is never closed fails and names the frame', () => {
+  const text = specText([{ frame: 'alt', text: 'ok' }, { from: 'user', to: 'api', text: 'Hi' }]);
+
+  assert.throws(() => parseSequenceSpec(text), /frame "alt".*step 1.*never closed/i);
+});
