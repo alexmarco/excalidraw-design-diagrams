@@ -29,7 +29,7 @@ Rendering and visual inspection are required after creating or changing a diagra
 node render_excalidraw.js <path-to-file.excalidraw>
 ```
 
-The renderer writes a PNG beside the input file by default. Use `--output`, `--scale`, and `--width` to set the output path, device scale, and maximum viewport width. Open the PNG and compare it with the intended visual story. Check for clipped or unreadable text, unintended overlaps, arrows crossing or missing targets, unclear labels, uneven spacing, and an unbalanced composition. Fix the JSON and render again until those issues are resolved.
+The renderer writes a PNG and an SVG beside the input file by default. Use `--output`, `--scale`, and `--width` to set the PNG path, its device scale, and its maximum width in CSS pixels. The SVG is for documentation and the web. Open the PNG and compare it with the intended visual story. Check for clipped or unreadable text, unintended overlaps, arrows crossing or missing targets, unclear labels, uneven spacing, and an unbalanced composition. Fix the JSON and render again until those issues are resolved.
 
 If the renderer is not installed, follow `references/README.md`.
 
