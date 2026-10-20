@@ -43,6 +43,7 @@ export const REQUIRED_ROLES = [
   'zone',
   'note',
   'step',
+  'frame-tag',
 ];
 
 function parseYamlOrEmpty(source) {

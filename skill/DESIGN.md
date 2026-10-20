@@ -17,6 +17,7 @@ colors:
   red-200: "#fecaca"
   red-600: "#dc2626"
   red-700: "#b91c1c"
+  amber-50: "#fffbeb"
   amber-100: "#fef3c7"
   amber-700: "#b45309"
   violet-200: "#ddd6fe"
@@ -24,7 +25,6 @@ colors:
   slate-500: "#64748b"
   slate-800: "#1e293b"
   gray-700: "#374151"
-  slate-50: "#f8fafc"
   slate-300: "#cbd5e1"
   yellow-100: "#fef9c3"
   yellow-600: "#ca8a04"
@@ -117,14 +117,19 @@ components:
     backgroundColor: "{colors.blue-300}"
     strokeColor: "{colors.navy}"
   frame:
-    backgroundColor: "transparent"
-    strokeColor: "{colors.navy}"
+    backgroundColor: "{colors.amber-50}"
+    strokeColor: "{colors.amber-700}"
+    textColor: "{colors.amber-700}"
+  frame-tag:
+    backgroundColor: "{colors.amber-100}"
+    strokeColor: "{colors.amber-700}"
+    textColor: "{colors.amber-700}"
   participant-external:
     backgroundColor: "{colors.blue-100}"
     strokeColor: "{colors.blue-800}"
     textColor: "{colors.gray-700}"
   zone:
-    backgroundColor: "{colors.slate-50}"
+    backgroundColor: "transparent"
     strokeColor: "{colors.slate-300}"
     strokeStyle: dashed
     textColor: "{colors.slate-500}"
@@ -152,8 +157,8 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Text roles: `title`, `subtitle`, `body`, `text-on-light`, `text-on-dark`.
 - Evidence roles: `code` (code and data examples), `structure` (structural lines), `marker` (marker dots).
 - Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text).
-- Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame`.
-- Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a short why next to the step it explains), `step` (numbered badge on a message).
+- Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner).
+- Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a sticky note with a short why, next to the step it explains), `step` (numbered badge on a message).
 
 Arrows use the stroke color of their source concept.
 
@@ -162,7 +167,7 @@ Arrows use the stroke color of their source concept.
 Diagram-only tokens that are not tied to a role.
 
 ```yaml
-roughness: 1
+roughness: 0.5
 fontFamily: 5
 strokeWidth: 2
 strokeStyle: solid

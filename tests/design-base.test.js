@@ -38,9 +38,14 @@ test('base DESIGN.md defines every required role', () => {
 });
 
 test('the roles that make a diagram readable are required', () => {
-  for (const role of ['participant-external', 'zone', 'note', 'step']) {
+  for (const role of ['participant-external', 'zone', 'note', 'step', 'frame-tag']) {
     assert.ok(REQUIRED_ROLES.includes(role), `${role} is not required`);
   }
+});
+
+test('frames are tinted so the conditional part of a flow stands out', () => {
+  assert.notEqual(design.components.frame.backgroundColor, 'transparent');
+  assert.notEqual(design.components['frame-tag'].backgroundColor, design.components.frame.backgroundColor);
 });
 
 test('each shape purpose of the current palette maps to a role with the same colors', () => {
@@ -67,7 +72,7 @@ test('evidence artifacts and lines keep the current palette colors', () => {
 });
 
 test('base diagram tokens give the hand-drawn Excalidraw look', () => {
-  assert.equal(design.diagrams.roughness, 1);
+  assert.equal(design.diagrams.roughness, 0.5);
   assert.equal(design.diagrams.fontFamily, 5);
   assert.equal(design.diagrams.strokeWidth, 2);
   assert.equal(design.diagrams.strokeStyle, 'solid');
