@@ -17,7 +17,7 @@ npm test    # runs the test suite with node:test
 ## Working rules
 
 - Develop test-first: write a failing test, then the minimal code that passes it, one slice at a time.
-- Ask before adding any new dependency, and explain why it is needed. The project currently has no runtime dependencies.
+- Ask before adding any new dependency, and explain why it is needed. The renderer depends on `@excalidraw/utils` and `esbuild`, pinned to exact versions.
 - Use [Conventional Commits](https://www.conventionalcommits.org/) for commit messages, one logical change per commit.
 - Follow GitFlow: branch `feature/*` and `bugfix/*` from `develop`, branch `hotfix/*` from `main`, and never commit directly to `main`.
 

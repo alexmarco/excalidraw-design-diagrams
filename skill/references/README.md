@@ -4,14 +4,15 @@ This skill adapts the diagram design workflow and reference material from [colea
 
 ## Setup
 
-Install the JavaScript dependency and Chromium from this directory:
+Install the dependencies from the repository root:
 
 ```bash
 npm install
-npx playwright install chromium
 ```
 
-The renderer uses Playwright with headless Chromium. Its HTML template imports Excalidraw from `esm.sh`, so rendering also needs network access.
+The renderer needs a local Google Chrome or Chromium. It looks for the browser in this order: the `CHROME_PATH` environment variable, the default install locations, then `PATH`. If none is found, the error names `CHROME_PATH`; set it to the browser executable.
+
+Rendering needs no network access and does not download a browser.
 
 ## Render
 
@@ -19,12 +20,14 @@ The renderer uses Playwright with headless Chromium. Its HTML template imports E
 node render_excalidraw.js <path-to-file.excalidraw>
 ```
 
-The PNG is written beside the input by default. Optional arguments:
+The PNG and the SVG are written beside the input by default. Optional arguments:
 
 ```text
---output, -o <path>   PNG destination
---scale, -s <number>  Device scale factor (default: 2)
---width, -w <number>  Maximum viewport width (default: 1920)
+--output, -o <path>   PNG destination; the SVG takes the same base name with a .svg extension
+--scale, -s <number>  Device scale factor for the PNG (default: 2)
+--width, -w <number>  Maximum PNG width in CSS pixels; wider diagrams are scaled down to fit (default: 1920)
 ```
 
-`package.json` replaces the upstream Python project metadata, and `render_excalidraw.js` replaces its Python renderer.
+The PNG is for visual review; the SVG is for documentation and the web.
+
+`render_excalidraw.js` replaces the upstream Python renderer. Its dependencies are declared in the repository's root `package.json`.
