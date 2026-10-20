@@ -39,16 +39,11 @@ node <skill>/scripts/restyle.js diagrams/login.excalidraw
 
 ## Install the skill manually
 
-The skill is not installed automatically. To use it as a Claude Code user skill:
+The skill is not installed automatically. To use it:
 
-1. Run `npm install` at the repository root, the folder that contains `package.json`, not inside `skill/`. The skill's scripts load their dependencies from that folder's `node_modules`.
-2. Link the `skill/` directory into your skills folder as `excalidraw-diagram`. Use a link, not a copy, because a copy cannot reach `node_modules`:
-   - Windows (Command Prompt or PowerShell, which creates a junction without administrator rights):
-     `mklink /J "%USERPROFILE%\.claude\skills\excalidraw-diagram" "C:\path\to\this\repository\skill"`
-   - macOS or Linux: `ln -s /path/to/this/repository/skill ~/.claude/skills/excalidraw-diagram`
+1. Run `npm install` at the repository root, the folder that contains `package.json`.
+2. Put the `skill/` folder in your Claude Code skills folder (`~/.claude/skills/excalidraw-diagram`). You can link it, so a `git pull` updates it, or copy the whole repository there and point to its `skill/` folder; the scripts need the repository's `node_modules`, so copying `skill/` alone does not work.
 3. Start a new Claude Code session and check that the skill is listed.
-
-The link follows this repository, so a `git pull` updates the skill. To remove it, delete only the link: use `rmdir` on a Windows junction, or `rm` on a symbolic link. Recursive deletion (`rm -r`, `Remove-Item -Recurse`) follows the link into the repository and must not be used.
 
 ## Working rules
 
