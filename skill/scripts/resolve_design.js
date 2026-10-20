@@ -58,22 +58,44 @@ function lookup(document, referencePath) {
   return referencePath.split('.').reduce((node, key) => node?.[key], document);
 }
 
-function resolveReferences(node, document) {
+function resolveReference(referencePath, document, referenceStack) {
+  if (referenceStack.includes(referencePath)) {
+    throw new Error(`Circular design reference: {${referencePath}}`);
+  }
+  const target = lookup(document, referencePath);
+  if (target === undefined) {
+    throw new Error(`Broken design reference: {${referencePath}}`);
+  }
+  return resolveReferences(target, document, [...referenceStack, referencePath]);
+}
+
+function resolveReferences(node, document, referenceStack = []) {
   if (typeof node === 'string') {
     const reference = REFERENCE.exec(node);
-    return reference ? resolveReferences(lookup(document, reference[1]), document) : node;
+    return reference ? resolveReference(reference[1], document, referenceStack) : node;
   }
   if (Array.isArray(node)) {
-    return node.map((item) => resolveReferences(item, document));
+    return node.map((item) => resolveReferences(item, document, referenceStack));
   }
   if (node !== null && typeof node === 'object') {
-    return Object.fromEntries(Object.entries(node).map(([key, value]) => [key, resolveReferences(value, document)]));
+    return Object.fromEntries(
+      Object.entries(node).map(([key, value]) => [key, resolveReferences(value, document, referenceStack)]),
+    );
   }
   return node;
+}
+
+function assertRequiredRoles(design) {
+  const missingRoles = REQUIRED_ROLES.filter((role) => !design.components?.[role]);
+  if (missingRoles.length > 0) {
+    throw new Error(`Design is missing required roles: ${missingRoles.join(', ')}`);
+  }
 }
 
 export function resolveDesign({ basePath = BASE_DESIGN_PATH } = {}) {
   const base = parseDesign(readFileSync(basePath, 'utf8'));
   const document = { ...base.tokens, diagrams: base.diagrams };
-  return resolveReferences(document, document);
+  const design = resolveReferences(document, document);
+  assertRequiredRoles(design);
+  return design;
 }
