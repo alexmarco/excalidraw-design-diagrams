@@ -41,7 +41,7 @@ node <skill>/scripts/restyle.js diagrams/login.excalidraw
 
 The skill is not installed automatically. To use it as a Claude Code user skill:
 
-1. Run `npm install` in this repository. The skill's scripts load their dependencies from this repository's `node_modules`.
+1. Run `npm install` at the repository root, the folder that contains `package.json`, not inside `skill/`. The skill's scripts load their dependencies from that folder's `node_modules`.
 2. Link the `skill/` directory into your skills folder as `excalidraw-diagram`. Use a link, not a copy, because a copy cannot reach `node_modules`:
    - Windows (Command Prompt or PowerShell, which creates a junction without administrator rights):
      `mklink /J "%USERPROFILE%\.claude\skills\excalidraw-diagram" "C:\path\to\this\repository\skill"`
