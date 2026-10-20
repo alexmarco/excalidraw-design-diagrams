@@ -76,6 +76,7 @@ Each entry in `sequence` is one step. Message steps are numbered in order; the d
 - `type` on messages and self messages: `sync` (default, solid line with a filled head), `async` (solid line with an open head) or `return` (dashed line with an open head). Use `return` for every reply.
 - `text` is optional on messages and frames. Frames show it in brackets, for example `alt [valid credentials]`.
 - Frames can be nested. A frame must contain at least one message.
+- An `alt` frame can have several `else` sections, one per branch, as in the example in `examples/databricks-auth/`.
 - An activation must be closed by a matching `deactivate`, and every frame must be closed by an `end`.
 
 The parser rejects a spec with an unknown participant, an unknown message type, an unmatched frame or activation, or an `else` outside an `alt` frame. The error names the step, so fix the spec and generate again.
