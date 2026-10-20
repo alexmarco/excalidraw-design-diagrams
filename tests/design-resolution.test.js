@@ -40,7 +40,7 @@ test('a circular reference fails instead of recursing forever', () => {
 });
 
 test('a design without a required role fails', () => {
-  const basePath = writeFile(join(tempDirectory(), 'DESIGN.md'), baseMarkdown.replace('\n  frame:\n', '\n  frame-old:\n'));
+  const basePath = writeFile(join(tempDirectory(), 'DESIGN.md'), baseMarkdown.replace(/^ {2}frame:$/m, '  frame-old:'));
 
   assert.throws(() => resolveDesign({ basePath }), /frame/);
 });
