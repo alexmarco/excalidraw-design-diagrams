@@ -5,13 +5,8 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { parseSequenceSpec } from '../skill/scripts/sequence_spec.js';
-import { buildSequenceDocument } from '../skill/scripts/sequence_excalidraw.js';
-import { resolveDesign } from '../skill/scripts/resolve_design.js';
-
 const CLI_PATH = fileURLToPath(new URL('../skill/scripts/restyle.js', import.meta.url));
-const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.yaml', import.meta.url));
-const loginSpec = parseSequenceSpec(readFileSync(FIXTURE_PATH, 'utf8'));
+const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.excalidraw', import.meta.url));
 
 function workspace() {
   return mkdtempSync(join(tmpdir(), 'restyle-cli-'));
@@ -29,7 +24,7 @@ function runCli(args, cwd) {
 
 function generatedFile(dir) {
   const path = join(dir, 'login.excalidraw');
-  writeFile(path, `${JSON.stringify(buildSequenceDocument(loginSpec, resolveDesign()), null, 2)}\n`);
+  writeFile(path, readFileSync(FIXTURE_PATH, 'utf8'));
   return path;
 }
 

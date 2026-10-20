@@ -4,14 +4,12 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseSequenceSpec } from '../skill/scripts/sequence_spec.js';
-import { buildSequenceDocument } from '../skill/scripts/sequence_excalidraw.js';
 import { resolveDesign } from '../skill/scripts/resolve_design.js';
 import { restyleDocument } from '../skill/scripts/restyle_excalidraw.js';
 
-const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.yaml', import.meta.url));
-const loginSpec = parseSequenceSpec(readFileSync(FIXTURE_PATH, 'utf8'));
-const generated = buildSequenceDocument(loginSpec, resolveDesign());
+const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.excalidraw', import.meta.url));
+// Style the fixture with the current base design first, so the tests do not depend on past token values.
+const generated = restyleDocument(JSON.parse(readFileSync(FIXTURE_PATH, 'utf8')), resolveDesign()).document;
 
 function tempFile(content) {
   const path = join(mkdtempSync(join(tmpdir(), 'restyle-')), 'DESIGN.md');
