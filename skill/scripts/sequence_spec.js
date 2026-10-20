@@ -121,6 +121,12 @@ function validateSpec({ participants, steps }) {
 
 export function parseSequenceSpec(yamlText) {
   const document = parse(yamlText);
+  if (!Array.isArray(document?.participants)) {
+    throw new Error('The spec needs a "participants" list');
+  }
+  if (!Array.isArray(document.sequence)) {
+    throw new Error('The spec needs a "sequence" list');
+  }
   const spec = {
     participants: document.participants.map(parseParticipant),
     steps: document.sequence.map(parseStep),

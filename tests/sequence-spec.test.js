@@ -62,6 +62,14 @@ test('a self message, activation or deactivation of an unknown participant fails
   );
 });
 
+test('a spec without participants fails and says so', () => {
+  assert.throws(() => parseSequenceSpec(JSON.stringify({ sequence: [message] })), /"participants" list/);
+});
+
+test('a spec without a sequence fails and says so', () => {
+  assert.throws(() => parseSequenceSpec(JSON.stringify({ participants })), /"sequence" list/);
+});
+
 test('a text that YAML reads as a number is kept as a string', () => {
   const spec = parseSequenceSpec(specText([{ from: 'user', to: 'api', text: 401 }]));
 
