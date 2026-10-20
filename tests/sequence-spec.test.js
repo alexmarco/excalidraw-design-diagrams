@@ -76,6 +76,19 @@ test('a text that YAML reads as a number is kept as a string', () => {
   assert.equal(spec.steps[0].text, '401');
 });
 
+test('a message from a participant to itself fails and points to a self step', () => {
+  assert.throws(
+    () => parseSequenceSpec(specText([{ from: 'api', to: 'api', text: 'Hi' }])),
+    /to itself in step 1.*"self" step/i,
+  );
+});
+
+test('an entry that is not a known step fails and names the step', () => {
+  for (const entry of [{ foo: 'bar' }, null, 'end', 42]) {
+    assert.throws(() => parseSequenceSpec(specText([message, entry])), /unrecognized step in step 2/i, JSON.stringify(entry));
+  }
+});
+
 test('an unknown message type fails and names it', () => {
   const text = specText([{ from: 'user', to: 'api', text: 'Hi', type: 'asynch' }]);
 

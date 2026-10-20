@@ -42,3 +42,74 @@ test('a message outside a frame is not inside its bounds', () => {
 
   assert.equal(contains(alt.bounds, outsideMessage.bounds), false);
 });
+
+const WIDE_LABEL = 'Authenticate the user with the identity provider';
+
+function layoutWithMessage(sequence) {
+  const text = JSON.stringify({
+    participants: [
+      { id: 'a', label: 'A' },
+      { id: 'b', label: 'B' },
+      { id: 'c', label: 'C' },
+    ],
+    sequence,
+  });
+  return layoutSequence(parseSequenceSpec(text));
+}
+
+test('a wide message label stays between the lifelines of the participants it connects', () => {
+  const layout = layoutWithMessage([{ from: 'a', to: 'b', text: WIDE_LABEL }]);
+  const lifelineX = new Map(layout.lifelines.map((lifeline) => [lifeline.participantId, lifeline.x]));
+  const { label } = layout.messages[0];
+
+  assert.ok(label.x > lifelineX.get('a'), 'label crosses the lifeline of a');
+  assert.ok(label.x + label.width < lifelineX.get('b'), 'label crosses the lifeline of b');
+});
+
+test('an activation starts at the next message, even when a frame header comes before it', () => {
+  const layout = layoutWithMessage([
+    { from: 'a', to: 'b', text: 'first' },
+    { frame: 'opt', text: 'when ready' },
+    { activate: 'b' },
+    { from: 'b', to: 'c', text: 'second' },
+    { deactivate: 'b' },
+    { end: 'opt' },
+  ]);
+
+  assert.equal(layout.activations[0].top, layout.messages[1].y);
+});
+
+test('an activation with no message inside it still has a visible height', () => {
+  const layout = layoutWithMessage([
+    { from: 'a', to: 'b', text: 'first' },
+    { activate: 'b' },
+    { deactivate: 'b' },
+  ]);
+  const [activation] = layout.activations;
+
+  assert.ok(activation.bottom - activation.top >= 30, `height is ${activation.bottom - activation.top}`);
+});
+
+test('a multi-line label is as wide as its longest line and as tall as its lines', () => {
+  const single = layoutWithMessage([{ from: 'a', to: 'b', text: 'Longer line here' }]).messages[0].label;
+  const multi = layoutWithMessage([{ from: 'a', to: 'b', text: 'Short\nLonger line here' }]).messages[0].label;
+
+  assert.equal(multi.width, single.width);
+  assert.equal(multi.height, 2 * single.height);
+});
+
+test('a label is measured in code points, so an emoji counts as one character', () => {
+  const ascii = layoutWithMessage([{ from: 'a', to: 'b', text: 'abcd' }]).messages[0].label;
+  const emoji = layoutWithMessage([{ from: 'a', to: 'b', text: '😀😀😀😀' }]).messages[0].label;
+
+  assert.equal(emoji.width, ascii.width);
+});
+
+test('a wide message label spanning two columns stays between the lifelines it connects', () => {
+  const layout = layoutWithMessage([{ from: 'a', to: 'c', text: WIDE_LABEL }]);
+  const lifelineX = new Map(layout.lifelines.map((lifeline) => [lifeline.participantId, lifeline.x]));
+  const { label } = layout.messages[0];
+
+  assert.ok(label.x > lifelineX.get('a'), 'label crosses the lifeline of a');
+  assert.ok(label.x + label.width < lifelineX.get('c'), 'label crosses the lifeline of c');
+});

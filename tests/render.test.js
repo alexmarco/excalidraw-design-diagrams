@@ -44,6 +44,25 @@ test('renders a diagram to a PNG and an SVG at the requested output path', requi
   assert.match(await readFile(svgPath, 'utf8'), /^<svg[\s>]/);
 });
 
+test('an output path ending in .svg gets a PNG and an SVG side by side, and the SVG is not overwritten', requiresBrowser, async () => {
+  const outputPath = join(outputDirectory, 'as-svg', 'sample.svg');
+
+  const { pngPath, svgPath } = await renderExcalidrawFile(sampleDiagram, { outputPath, scale: 1, maxWidth: 1920 });
+
+  assert.equal(pngPath, join(outputDirectory, 'as-svg', 'sample.png'));
+  assert.equal(svgPath, outputPath);
+  assert.deepEqual(await readFile(pngPath).then((png) => png.subarray(0, 8)), PNG_SIGNATURE);
+  assert.match(await readFile(svgPath, 'utf8'), /^<svg[\s>]/);
+});
+
+test('an output folder that does not exist yet is created', requiresBrowser, async () => {
+  const outputPath = join(outputDirectory, 'created', 'nested', 'sample.png');
+
+  const { pngPath } = await renderExcalidrawFile(sampleDiagram, { outputPath, scale: 1, maxWidth: 1920 });
+
+  assert.deepEqual(await readFile(pngPath).then((png) => png.subarray(0, 8)), PNG_SIGNATURE);
+});
+
 test('the scale option multiplies the PNG width', requiresBrowser, async () => {
   const onePath = join(outputDirectory, 'scale-1.png');
   const twoPath = join(outputDirectory, 'scale-2.png');

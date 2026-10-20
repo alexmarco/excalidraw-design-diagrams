@@ -4,7 +4,7 @@ Use this guide for diagrams that show messages exchanged between participants ov
 
 ## Workflow
 
-In the commands below, `<skill>` is the skill directory (`skill/` in this repository). Run them from the project root, because the generator and `restyle.js` look for the project's `DESIGN.md` in the working directory.
+In the commands below, `<skill>` is the skill directory (`skill/` in this repository). The generator and `restyle.js` look for the project's `DESIGN.md` (or `docs/DESIGN.md`) in the directory of the spec or file they are given, so they can run from any directory.
 
 1. Write the spec, for example `diagrams/login.yaml`.
 2. Generate the draft. The `.excalidraw` file is written beside the spec and is not regenerated afterwards, because the file is the source of truth. Pass `--output <file>` to choose another path:

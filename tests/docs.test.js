@@ -28,6 +28,14 @@ test('README.md documents usage and the manual skill install', () => {
   assert.match(readme, /\.claude[\\/]skills/);
 });
 
+test('the manual install runs npm install at the repository root and links the skill instead of copying it', () => {
+  const readme = readRepoFile('README.md').replace(/\r\n/g, '\n');
+  const installSection = readme.slice(readme.indexOf('## Install the skill manually'), readme.indexOf('## Working rules'));
+
+  assert.match(installSection, /npm install` at the repository root/);
+  assert.match(installSection, /Use a link, not a copy/);
+});
+
 test('AGENTS.md covers commands and working rules for agents', () => {
   const agents = readRepoFile('AGENTS.md');
 

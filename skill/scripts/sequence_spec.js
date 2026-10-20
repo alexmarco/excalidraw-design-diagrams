@@ -13,7 +13,10 @@ function parseParticipant(entry) {
   return { id: entry.id, label: toText(entry.label ?? entry.id), kind: entry.kind ?? 'participant' };
 }
 
-function parseStep(entry) {
+function parseStep(entry, stepNumber) {
+  if (entry === null || typeof entry !== 'object') {
+    throw new Error(`Unrecognized step in step ${stepNumber}`);
+  }
   if ('from' in entry) {
     return { type: 'message', messageType: entry.type ?? 'sync', from: entry.from, to: entry.to, text: toText(entry.text) };
   }
@@ -32,7 +35,10 @@ function parseStep(entry) {
   if ('else' in entry) {
     return { type: 'else', text: toText(entry.else) };
   }
-  return { type: 'end', frame: entry.end };
+  if ('end' in entry) {
+    return { type: 'end', frame: entry.end };
+  }
+  throw new Error(`Unrecognized step in step ${stepNumber}`);
 }
 
 function validateParticipants(participants) {
@@ -68,6 +74,9 @@ function validateSpec({ participants, steps }) {
       }
       const participantsOfStep = step.type === 'message' ? [step.from, step.to] : [step.participant];
       participantsOfStep.forEach(assertKnownParticipant);
+      if (step.type === 'message' && step.from === step.to) {
+        throw new Error(`Message from "${step.from}" to itself in step ${stepNumber} is invisible; use a "self" step instead`);
+      }
       openFrames.forEach((frame) => frame.messageCount++);
     }
     if (step.type === 'activate' || step.type === 'deactivate') {
@@ -133,7 +142,7 @@ export function parseSequenceSpec(yamlText) {
   }
   const spec = {
     participants: document.participants.map(parseParticipant),
-    steps: document.sequence.map(parseStep),
+    steps: document.sequence.map((entry, index) => parseStep(entry, index + 1)),
   };
   validateSpec(spec);
   return spec;

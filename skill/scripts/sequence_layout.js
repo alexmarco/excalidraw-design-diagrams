@@ -10,14 +10,22 @@ const FRAME_PADDING = 20;
 const FRAME_LABEL_INSET = 8;
 const SELF_MESSAGE_WIDTH = 40;
 const SELF_MESSAGE_HEIGHT = 30;
+const SELF_LABEL_OFFSET = SELF_MESSAGE_WIDTH + LABEL_GAP * 2;
 const ACTIVATION_WIDTH = 12;
 const ACTIVATION_DEPTH_OFFSET = 6;
+const ACTIVATION_MIN_HEIGHT = ROW_HEIGHT / 2;
 const FONT_SIZES = { participant: 18, message: 16, frame: 16 };
 const TEXT_WIDTH_RATIO = 0.6;
 const TEXT_LINE_RATIO = 1.25;
 
+// Width is the longest line in code points; height is one line box per line.
 function textSize(text, fontSize) {
-  return { width: Math.ceil(text.length * fontSize * TEXT_WIDTH_RATIO), height: Math.ceil(fontSize * TEXT_LINE_RATIO) };
+  const lines = text.split(/\r?\n/);
+  const longestLineLength = Math.max(...lines.map((line) => [...line].length));
+  return {
+    width: Math.ceil(longestLineLength * fontSize * TEXT_WIDTH_RATIO),
+    height: lines.length * Math.ceil(fontSize * TEXT_LINE_RATIO),
+  };
 }
 
 function textLabel(text, fontSize, x, y) {
@@ -102,9 +110,26 @@ function closeFrame(frame, bottom) {
   };
 }
 
+// Columns are evenly spaced, so the pitch must fit the widest message label once spread over the columns it crosses.
+function labelPitch(step, columnIndexes) {
+  if (!step.text) {
+    return 0;
+  }
+  const labelWidth = textSize(step.text, FONT_SIZES.message).width;
+  if (step.type === 'self') {
+    return labelWidth + SELF_LABEL_OFFSET + COLUMN_PADDING;
+  }
+  if (step.type === 'message') {
+    const gaps = Math.abs(columnIndexes.get(step.to) - columnIndexes.get(step.from));
+    return Math.ceil((labelWidth + COLUMN_PADDING) / gaps);
+  }
+  return 0;
+}
+
 export function layoutSequence({ participants, steps }) {
   const widestLabel = Math.max(...participants.map((participant) => textSize(participant.label, FONT_SIZES.participant).width));
-  const columnPitch = Math.max(MIN_COLUMN_PITCH, widestLabel + COLUMN_PADDING);
+  const columnIndexes = new Map(participants.map((participant, index) => [participant.id, index]));
+  const columnPitch = Math.max(MIN_COLUMN_PITCH, widestLabel + COLUMN_PADDING, ...steps.map((step) => labelPitch(step, columnIndexes)));
   const columns = new Map(participants.map((participant, index) => [participant.id, MARGIN + columnPitch / 2 + index * columnPitch]));
   const headerTop = MARGIN;
   const lifelineTop = headerTop + HEADER_HEIGHT;
@@ -134,12 +159,13 @@ export function layoutSequence({ participants, steps }) {
       cursorY += ROW_HEIGHT;
     } else if (step.type === 'activate') {
       const stack = openActivations.get(step.participant) ?? [];
-      stack.push({ top: lastMessageY ?? cursorY, depth: stack.length });
+      stack.push({ top: cursorY, depth: stack.length });
       openActivations.set(step.participant, stack);
     } else if (step.type === 'deactivate') {
       const { top, depth } = openActivations.get(step.participant).pop();
       const x = columns.get(step.participant) - ACTIVATION_WIDTH / 2 + depth * ACTIVATION_DEPTH_OFFSET;
-      activations.push({ id: `activation-${activations.length + 1}`, participantId: step.participant, x, top, bottom: lastMessageY ?? cursorY, width: ACTIVATION_WIDTH });
+      const bottom = Math.max(lastMessageY ?? cursorY, top + ACTIVATION_MIN_HEIGHT);
+      activations.push({ id: `activation-${activations.length + 1}`, participantId: step.participant, x, top, bottom, width: ACTIVATION_WIDTH });
     } else if (step.type === 'frame') {
       openFrames.push({ stepNumber, frame: step.frame, text: step.text, top: cursorY, left: Infinity, right: -Infinity, elseSections: [] });
       cursorY += SECTION_HEIGHT;

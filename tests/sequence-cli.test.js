@@ -46,14 +46,15 @@ test('writes to the path given with --output', () => {
   assert.ok(existsSync(outputPath));
 });
 
-test('uses the DESIGN.md of the working directory when no --design is given', () => {
-  const dir = workspace();
-  const specPath = writeFile(join(dir, 'login.yaml'), loginYaml);
-  writeFile(join(dir, 'DESIGN.md'), '---\ncolors:\n  blue-500: "#111111"\n---\n');
+test('uses the DESIGN.md beside the spec when no --design is given, whatever the working directory', () => {
+  const specDir = workspace();
+  const otherDir = workspace();
+  const specPath = writeFile(join(specDir, 'login.yaml'), loginYaml);
+  writeFile(join(specDir, 'DESIGN.md'), '---\ncolors:\n  blue-500: "#111111"\n---\n');
 
-  runCli([specPath], dir);
+  runCli([specPath], otherDir);
 
-  const generated = JSON.parse(readFileSync(join(dir, 'login.excalidraw'), 'utf8'));
+  const generated = JSON.parse(readFileSync(join(specDir, 'login.excalidraw'), 'utf8'));
   const participantHeader = generated.elements.find((element) => element.id === 'participant-api');
   assert.equal(participantHeader.backgroundColor, '#111111');
 });
