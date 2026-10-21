@@ -37,7 +37,7 @@ An Excalidraw `image` element references an entry of the top-level `files` map t
 }
 ```
 
-Result with `node skill/references/render_excalidraw.js icons.excalidraw` (throwaway diagram outside the repo, four icons: Lucide `database` and `server`, Simple Icons `redis`, AWS `Lambda`):
+Result with `node skills/excalidraw-diagram/references/render_excalidraw.js icons.excalidraw` (throwaway diagram outside the repo, four icons: Lucide `database` and `server`, Simple Icons `redis`, AWS `Lambda`):
 
 - The PNG shows the four icons at the right position and size.
 - The SVG output wraps each icon in a `<symbol><image href="data:image/svg+xml;base64,..."/></symbol>` and references it with `<use>`. The data URL survives intact, so the SVG is self-contained.
@@ -50,7 +50,7 @@ Findings:
 - **Element box.** The icon is stretched to the element `width` and `height` (`preserveAspectRatio="none"` in the output), so the element must keep the icon's aspect ratio (all sets used here are square).
 - **Not tested.** Opening the file in excalidraw.com. `image` elements with SVG data URLs are supported by Excalidraw's file model (`BinaryFileData`), but this spike only exercised the local renderer.
 
-Open point for the schema docs: `skill/references/json-schema.md` documents `"files": {}` but no `image` element or `files` entry yet.
+Open point for the schema docs: `skills/excalidraw-diagram/references/json-schema.md` documents `"files": {}` but no `image` element or `files` entry yet.
 
 ### Size of an embedded icon
 
@@ -116,7 +116,7 @@ Create a follow-up ticket for icon support limited to these steps:
 3. **Treat AWS as optional and later.** Only add it if the maintainer accepts the licence ambiguity. Download-only, unmodified, with the pinned zip hash in the script.
 4. **Fetch script in the skill.** Promote the prototype to production (test-first, per `AGENTS.md`): take a set and names, write to a cache outside the repo, normalize `width` and `height`, and keep the `@license` comment. Decide how to handle the TLS note (`--use-system-ca` or `curl --ssl-no-revoke`).
 5. **Embedding helper.** A function that reads a cached SVG and returns the `files` entry plus the `image` element (aspect ratio preserved, stable `fileId` such as `icon-<set>-<name>`). Decide whether to rewrite `currentColor` to a palette colour, which gives better UX in styled diagrams.
-6. **Docs and validation.** Document `image` elements and the `files` map in `skill/references/json-schema.md`, and make sure `validate` accepts them. Check how `restyle` treats `image` elements, since it changes colours.
+6. **Docs and validation.** Document `image` elements and the `files` map in `skills/excalidraw-diagram/references/json-schema.md`, and make sure `validate` accepts them. Check how `restyle` treats `image` elements, since it changes colours.
 7. **Check excalidraw.com once** by opening a generated file, since this spike only tested the local renderer.
 
 No new dependency is needed for any step.

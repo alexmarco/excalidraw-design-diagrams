@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { findBrowser } from '../skill/references/render/find-browser.js';
+import { findBrowser } from '../skills/excalidraw-diagram/references/render/find-browser.js';
 
 const windowsEnv = {
   PROGRAMFILES: 'C:\\Program Files',

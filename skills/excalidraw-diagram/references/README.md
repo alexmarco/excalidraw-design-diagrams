@@ -4,11 +4,13 @@ This skill adapts the diagram design workflow and reference material from [colea
 
 ## Setup
 
-Install the dependencies from the repository root:
+Install the dependencies in the skill folder, once:
 
 ```bash
-npm install
+npm install --omit=dev
 ```
+
+If you skip it, the scripts print this command (with the skill folder) instead of a module-not-found error.
 
 The renderer needs a local Google Chrome or Chromium. It looks for the browser in this order: the `CHROME_PATH` environment variable, the default install locations, then `PATH`. If none is found, the error names `CHROME_PATH`; set it to the browser executable.
 
@@ -32,4 +34,4 @@ The PNG and the SVG are written beside the input by default. Optional arguments:
 
 The PNG is for visual review; the SVG is for documentation and the web.
 
-`render_excalidraw.js` replaces the upstream Python renderer. Its dependencies are declared in the repository's root `package.json`.
+`render_excalidraw.js` replaces the upstream Python renderer. Its dependencies are declared in the skill's `package.json`.

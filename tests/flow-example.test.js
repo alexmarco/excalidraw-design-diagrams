@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseDesign, resolveDesign } from '../skill/scripts/resolve_design.js';
+import { parseDesign, resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const exampleDirectory = join(root, 'examples', 'ci-cd-pipeline');
@@ -18,7 +18,7 @@ test('the CI/CD example DESIGN.md defines only colors and the font family', () =
 });
 
 test('the CI/CD example redefines every color name of the base design, so no role keeps a base color', () => {
-  const baseColors = parseDesign(readText(join(root, 'skill', 'DESIGN.md'))).tokens.colors;
+  const baseColors = parseDesign(readText(join(root, 'skills', 'excalidraw-diagram', 'DESIGN.md'))).tokens.colors;
   const overrideColors = parseDesign(readText(join(exampleDirectory, 'DESIGN.md'))).tokens.colors;
 
   assert.deepEqual(Object.keys(overrideColors).sort(), Object.keys(baseColors).sort());

@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { resolveDesign } from '../skill/scripts/resolve_design.js';
-import { validateDocument } from '../skill/scripts/validate_excalidraw.js';
+import { resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
+import { validateDocument } from '../skills/excalidraw-diagram/scripts/validate_excalidraw.js';
 
 const design = resolveDesign();
 const PADDING = design.diagrams.padding;

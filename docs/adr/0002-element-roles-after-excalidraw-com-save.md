@@ -33,7 +33,7 @@ Not verified:
 - To confirm the finding on a real file:
   1. Take a diagram whose elements have roles, for example `examples/oauth-pkce/oauth-pkce.excalidraw`.
   2. Open the `.excalidraw` file in excalidraw.com, make an edit, and save it to disk.
-  3. Run `node skill/scripts/restyle.js <file.excalidraw>`.
+  3. Run `node skills/excalidraw-diagram/scripts/restyle.js <file.excalidraw>`.
   4. If the report lists the generated elements under "Left unchanged because they have no known role", the limitation applies to that save path.
 
 ## Workaround

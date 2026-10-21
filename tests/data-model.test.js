@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REQUIRED_ROLES, resolveDesign } from '../skill/scripts/resolve_design.js';
+import { REQUIRED_ROLES, resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
 
-const skillDirectory = join(dirname(fileURLToPath(import.meta.url)), '..', 'skill');
+const skillDirectory = join(dirname(fileURLToPath(import.meta.url)), '..', 'skills', 'excalidraw-diagram');
 const readText = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const design = resolveDesign();
 

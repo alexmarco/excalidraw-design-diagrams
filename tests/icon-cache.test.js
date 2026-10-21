@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { downloadText, fetchIcons, iconCacheDirectory } from '../skill/scripts/icon_cache.js';
+import { downloadText, fetchIcons, iconCacheDirectory } from '../skills/excalidraw-diagram/scripts/icon_cache.js';
 
 const LUCIDE_SVG = '<!-- @license lucide-static v1.61.0 - ISC -->\n<svg width="24" height="24"></svg>';
 

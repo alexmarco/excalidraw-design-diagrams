@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveDesign } from '../skill/scripts/resolve_design.js';
+import { resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const exampleDirectory = join(root, 'examples', 'concept-rag');
@@ -34,8 +34,8 @@ test('the concept example renders the handwritten font in the SVG and keeps the 
 });
 
 test('the concept guide is listed in SKILL.md and covers grouping, reading order, text size and the ai role', () => {
-  const skill = readText(join(root, 'skill', 'SKILL.md'));
-  const guide = readText(join(root, 'skill', 'references', 'concept.md'));
+  const skill = readText(join(root, 'skills', 'excalidraw-diagram', 'SKILL.md'));
+  const guide = readText(join(root, 'skills', 'excalidraw-diagram', 'references', 'concept.md'));
 
   assert.match(skill, /\]\(references\/concept\.md\)/);
   for (const heading of [/^## Layout$/m, /^## Communication checklist$/m, /^## Visual checklist$/m]) {

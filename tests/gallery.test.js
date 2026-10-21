@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const skillDirectory = join(root, 'skill');
+const skillDirectory = join(root, 'skills', 'excalidraw-diagram');
 const examplesDirectory = join(root, 'examples');
 const NOT_GUIDES = ['README.md', 'element-templates.md', 'json-schema.md'];
 

@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const cliPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'skill', 'scripts', 'fetch_icons.js');
+const cliPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'skills', 'excalidraw-diagram', 'scripts', 'fetch_icons.js');
 
 function runCli(args, env = {}) {
   return new Promise((resolve) => {

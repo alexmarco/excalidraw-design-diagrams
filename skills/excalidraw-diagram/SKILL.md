@@ -7,6 +7,8 @@ description: Draw Excalidraw diagrams that explain flows and architectures, such
 
 You write the `.excalidraw` file yourself: the geometry, and a role on every element. The scripts do the mechanical parts: apply the design, check the file, and render it so you can see it. `<skill>` is this skill's directory; run the commands from the project root.
 
+First run: if a script reports missing dependencies, run the `npm install --omit=dev --prefix "<skill>"` command it prints, then repeat the step.
+
 ## Workflow
 
 1. Pick the diagram type below and read its guide. Done when you have read the whole guide. Opening the guide's example is optional, for reference.

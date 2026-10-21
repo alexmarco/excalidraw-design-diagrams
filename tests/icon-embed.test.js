@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { embedIcon } from '../skill/scripts/icon_embed.js';
+import { embedIcon } from '../skills/excalidraw-diagram/scripts/icon_embed.js';
 
 const LUCIDE_SVG = `<!-- @license lucide-static v1.61.0 - ISC -->
 <svg

@@ -4,8 +4,8 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveDesign } from '../skill/scripts/resolve_design.js';
-import { restyleDocument } from '../skill/scripts/restyle_excalidraw.js';
+import { resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
+import { restyleDocument } from '../skills/excalidraw-diagram/scripts/restyle_excalidraw.js';
 
 const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.excalidraw', import.meta.url));
 // Style the fixture with the current base design first, so the tests do not depend on past token values.

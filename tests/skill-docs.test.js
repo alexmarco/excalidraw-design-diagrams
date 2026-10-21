@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const skillDirectory = join(root, 'skill');
+const skillDirectory = join(root, 'skills', 'excalidraw-diagram');
 
 // Normalizes line endings so the assertions hold for CRLF working copies on Windows.
 const readText = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
