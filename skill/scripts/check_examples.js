@@ -22,16 +22,20 @@ function checkExample(exampleDir, name, index) {
   for (const extension of ['png', 'svg']) {
     if (!existsSync(join(exampleDir, `${name}.${extension}`))) report(`missing ${name}.${extension}`);
   }
-  if (!index.includes(`(${name}/)`)) report('missing from the examples index');
+  if (!index.includes(`[${name}](${name}/)`)) report('missing from the examples index');
 
   const diagramPath = join(exampleDir, `${name}.excalidraw`);
   if (!existsSync(diagramPath)) {
     report(`missing ${name}.excalidraw`);
     return problems;
   }
-  const document = JSON.parse(readFileSync(diagramPath, 'utf8'));
-  const design = resolveDesign({ projectDir: exampleDir });
-  for (const { id, message } of validateDocument(document, design)) report(`validator: ${id}: ${message}`);
-  if (!isDeepStrictEqual(restyleDocument(document, design).document, document)) report('changes when restyled');
+  try {
+    const document = JSON.parse(readFileSync(diagramPath, 'utf8'));
+    const design = resolveDesign({ projectDir: exampleDir });
+    for (const { id, message } of validateDocument(document, design)) report(`validator: ${id}: ${message}`);
+    if (!isDeepStrictEqual(restyleDocument(document, design).document, document)) report('changes when restyled');
+  } catch (error) {
+    report(`could not be checked: ${error.message}`);
+  }
   return problems;
 }

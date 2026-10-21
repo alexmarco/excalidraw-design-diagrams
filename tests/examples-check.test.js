@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -78,6 +78,37 @@ test('an example missing from the index is reported', () => {
   const dir = examplesWithOauth({ index: '# Examples\n' });
 
   assert.deepEqual(problemsOf(dir), ['oauth-pkce: missing from the examples index']);
+});
+
+test('an index that only links the folder without the example name is reported', () => {
+  const dir = examplesWithOauth({ index: '| [other](oauth-pkce/) | Sequence | Base |\n' });
+
+  assert.deepEqual(problemsOf(dir), ['oauth-pkce: missing from the examples index']);
+});
+
+test('a malformed diagram is reported for that example only', () => {
+  const dir = examplesWithOauth();
+  writeFileSync(join(dir, 'oauth-pkce', 'oauth-pkce.excalidraw'), '{ not json');
+
+  const problems = problemsOf(dir);
+
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /^oauth-pkce: could not be checked: /);
+});
+
+test('a design that cannot be resolved is reported without stopping the other examples', () => {
+  const dir = examplesWithOauth();
+  cpSync(join(dir, 'oauth-pkce'), join(dir, 'second'), { recursive: true });
+  renameSync(join(dir, 'second', 'oauth-pkce.excalidraw'), join(dir, 'second', 'second.excalidraw'));
+  renameSync(join(dir, 'second', 'oauth-pkce.png'), join(dir, 'second', 'second.png'));
+  renameSync(join(dir, 'second', 'oauth-pkce.svg'), join(dir, 'second', 'second.svg'));
+  writeFileSync(join(dir, 'README.md'), `${INDEX_WITH_OAUTH}| [second](second/) | Sequence | Base |\n`);
+  writeFileSync(join(dir, 'oauth-pkce', 'DESIGN.md'), '---\ncomponents: [unclosed\n---\n');
+
+  const problems = problemsOf(dir);
+
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /^oauth-pkce: could not be checked: /);
 });
 
 test('an example folder uses its own DESIGN.md to restyle and validate', () => {

@@ -11,7 +11,7 @@ You write the `.excalidraw` file yourself: the geometry, and a role on every ele
 
 1. Pick the diagram type below and read its guide. Done when you have read the whole guide. Opening the guide's example is optional, for reference.
 2. Draw the file following the guide. Done when every element has a `customData.role`.
-3. Apply the design: `node <skill>/scripts/restyle.js diagram.excalidraw` (add `--design path/to/DESIGN.md` for a style outside the project). It sets colors, fonts, roughness and corner radius from each element's role and keeps geometry and text.
+3. Apply the design: `node <skill>/scripts/restyle.js diagram.excalidraw` (add `--design path/to/DESIGN.md` for a style outside the project). It sets colors, fonts, roughness and corner radius from each element's role and keeps geometry and text. It also sets the canvas background from the design.
 4. Validate: `node <skill>/scripts/validate.js diagram.excalidraw` (with the same `--design` if you used it). Done when it prints `No problems found.`
 5. Render: `node <skill>/references/render_excalidraw.js diagram.excalidraw` writes a PNG and an SVG beside the file. Open the PNG and go through the guide's checklists. Fix and repeat from step 3 until every item passes. If rendering fails, see [references/README.md](references/README.md).
 
