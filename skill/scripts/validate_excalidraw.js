@@ -32,6 +32,12 @@ function structureProblems(elements, design) {
     for (const [field, target] of references) {
       if (target && !ids.has(target)) report(element.id, `${field} points to missing element ${target}`);
     }
+    for (const field of ['startBinding', 'endBinding']) {
+      const target = elements.find((candidate) => candidate.id === element[field]?.elementId);
+      if (target && !(target.boundElements ?? []).some((bound) => bound.id === element.id)) {
+        report(element.id, `${field} to ${target.id} is not listed in its boundElements`);
+      }
+    }
     const role = element.customData?.role;
     if (role === undefined) report(element.id, 'has no role');
     else if (!Object.hasOwn(design.components, role)) report(element.id, `role ${role} is not in the design`);
