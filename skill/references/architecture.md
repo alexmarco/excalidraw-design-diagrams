@@ -1,6 +1,6 @@
 # Architecture Diagrams
 
-Use this guide for the components of a system and how they connect: a web application with its edge, services, queues and databases. You write the `.excalidraw` file directly: geometry, bindings and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/web-app-architecture/`](../examples/web-app-architecture/), drawn with its own Blueprint `DESIGN.md`; open its PNG before drawing.
+Use this guide for the components of a system and how they connect: a web application with its edge, services, queues and databases. You write the `.excalidraw` file directly: geometry, bindings and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/web-app-architecture/`](../examples/web-app-architecture/), drawn with its own Blueprint `DESIGN.md`; its PNG shows the intended result, and this guide is enough to draw without opening it. The document wrapper (`type`, `elements`, `appState`, `files`) is in [json-schema.md](json-schema.md).
 
 ## Workflow
 
@@ -11,27 +11,27 @@ Use this guide for the components of a system and how they connect: a web applic
 3. **Draw the file.** A throwaway script that writes fixed coordinates is fine; keep it outside the project. Templates are in [element-templates.md](element-templates.md).
 4. **Apply the design:** `node <skill>/scripts/restyle.js diagram.excalidraw`.
 5. **Validate:** `node <skill>/scripts/validate.js diagram.excalidraw`. Done when it prints `No problems found.`
-6. **Render and review:** `node <skill>/references/render_excalidraw.js diagram.excalidraw`, open the PNG, and go through both checklists below. Fix and repeat from step 4. Done when every item passes.
+6. **Render and review:** `node <skill>/references/render_excalidraw.js diagram.excalidraw`, open the PNG, and go through both checklists below. The validator does not check that arrows reach their boxes: confirm it in the PNG. Fix and repeat from step 4. Done when every item passes.
 
 ## Layout
 
-All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24 in the base design).
+All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24 in the base design). Free text: height is `1.25 × font size` per line and width about `0.6 × font size × characters`; centered text inside a box takes the box width.
 
-- **Header:** title at the top left (30, role `title`); below it one line (16, role `subtitle`) that says the diagram is illustrative or names its source, and how to read the arrows. Verify protocols and ports against the real source, or write "Illustrative".
-- **Layers as zones:** one dashed `zone` rectangle per layer (clients, edge, application, data, background jobs), stacked top to bottom in the order a request travels. Zones share the same x and width, are `padding` away from each other and at least 90 apart when arrows with labels cross the gap. The label (18, role `zone`) sits `padding` from the zone's top left corner.
-- **Components:** rectangles 220 × 72, with a two-line label (18): the component name, then what it is (`Database` / `PostgreSQL`). The text is bound inside the box (`containerId`, centered). A box sits `padding` from its zone edge and at least 68 below the zone's top, so the zone label has room.
-- **Columns:** boxes snap to shared columns, 340 apart, so connections run straight and every arrow between bands is vertical. Place a component in the column of its main caller.
-- **Roles:** `actor` for people and outside callers, `secondary` for entry points (CDN, load balancer), `primary` for services you build, `store` for anything that holds state (database, cache, queue). Use one color per role and no other color.
-- **Notes:** at most one sticky note (see Notes in [sequence.md](sequence.md)), in a free spot of the zone it explains.
+- **Header:** title at the top left (30, role `title`); below it one line (18, role `subtitle`) that says the diagram is illustrative or names its source, and how to read the arrowheads. Verify protocols and ports against the real source, or write "Illustrative".
+- **Layers as zones:** one dashed rectangle per layer (clients, edge, application, data, background jobs, external systems), stacked top to bottom in the order a request travels, systems outside your control last. The rectangle and its label (18) both take the role `zone`; the label sits `padding` from the zone's top left corner. Zones share the same x and width, and sit 90 apart so the labels of arrows that cross the gap fit. Zone height is `68 + box height + padding`; zone width is `2 × padding + (columns − 1) × 340 + box width`.
+- **Components:** rectangles 220 × 72 inside their zone, 68 below its top so the zone label has room, `padding` from its sides. Each box holds two texts, both in the role of the box and in one group (`groupIds`) with it: the name (20) bound inside it (`containerId` set, the box lists the text in `boundElements`, `textAlign` center, `verticalAlign` middle, the width of the box minus 10), and below it a free text with what it is (15), such as `PostgreSQL` or `static assets`. The name carries the hierarchy: the second line is smaller, never a second name.
+- **Columns:** boxes snap to shared columns, 340 apart, so connections run straight and every arrow between bands is vertical. Put a component in the column of its main caller; a caller with several callees sits in the middle column and reaches the side columns with one bend.
+- **Roles:** the box and its two texts take the same role. `actor` for people and outside callers, `secondary` for entry points (CDN, load balancer, gateway), `primary` for services you build, `store` for anything that holds state (database, cache, queue). `participant-external` suits systems of other organizations. Each role has its own text color in the design, so use no role and no color beyond these.
+- **Notes:** at most one sticky note, role `note`: a rectangle plus one text per line (16, at most three short lines), all rotated by −0.03 radians, in a free spot of the zone it explains with `padding` from the zone edge.
 - **Draw order** (array order is z-order): zones, arrows, shapes and the note's rectangle, then all text.
 
 ## Arrows
 
 - **Direction:** the arrow points from the caller to the callee, or along the message for a queue. A request and its response are one arrow.
-- **Roles:** `message-sync` for a call that waits for an answer (filled head), `message-async` for a hop through a queue or any fire-and-forget message (open head).
-- **Bindings:** every arrow is bound at both ends. Set `startBinding` and `endBinding` with `elementId`, `focus` 0 and `gap` 2, and list the arrow in the `boundElements` of both shapes. Draw the arrow from the midpoint of a box edge, 2 away from it, so moving a box keeps its arrows attached.
-- **Routing:** a straight line when the boxes share a column or a row; otherwise one bend, leaving the side of the box and entering the other box from above or below. Arrows never cross a box and cross each other as little as possible.
-- **Labels:** the protocol and, when it helps, the port (`HTTPS`, `SQL :5432`), font 16, role `text-on-light`. Put the label to the right of a vertical arrow, centered in the gap between two zones, or above a horizontal arrow, centered between the boxes. A label never crosses a zone edge. One protocol per arrow; shorten rather than wrap.
+- **Roles:** `message-sync` for a call that waits for an answer (filled head), `message-async` for any message that does not wait for one, through a queue or not (open head).
+- **Bindings:** every arrow is bound at both ends. Set `startBinding` and `endBinding` with `elementId`, `focus` 0 and `gap` 2, and list the arrow in the `boundElements` of both shapes. The arrow starts and ends at the midpoint of a box edge, 2 away from it, so moving a box keeps its arrows attached. A vertical arrow from box A (bottom `b`) to box B (top `t`) at x = the center of both starts at `(x, b + 2)` and has `points [[0, 0], [0, t − b − 4]]`; `width` and `height` are the extent of the points. An arrow with a bend lists every corner in `points`, relative to its start.
+- **Routing:** a straight line when the boxes share a column or a row; otherwise one bend, leaving the side of the box and entering the other box from above or below. An arrow may cross a zone that holds no box in its way. Arrows never cross a box and cross each other as little as possible.
+- **Labels:** the protocol and, when it helps, the port (`HTTPS`, `SQL :5432`), font 16, role `body`. Put the label to the right of a vertical arrow, centered in the gap between two zones nearest the callee, or above a horizontal arrow, centered between the boxes. A label never crosses a zone edge. One protocol per arrow; shorten rather than wrap.
 
 ## Communication checklist
 
@@ -39,7 +39,7 @@ All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24
 - [ ] Layers read top to bottom in request order, and each component is in the zone of its layer.
 - [ ] Every connection has an arrow with a protocol label, pointing from caller to callee.
 - [ ] Synchronous and asynchronous hops use their own role, and the line below the title explains the arrowheads.
-- [ ] Each component label says what it is, not only its name.
+- [ ] Each component has its name and a second line saying what it is, and the name stands out.
 - [ ] The note, if any, explains a why the arrows cannot show.
 
 ## Visual checklist
@@ -52,4 +52,4 @@ All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24
 - [ ] Labels sit beside their arrow, outside every zone edge, and cannot be mistaken for the label of a neighboring arrow.
 - [ ] Boxes line up on shared columns; zones have equal width and equal gaps.
 - [ ] Roles are visible: services, stores, entry points and outside callers each look different, and the text contrasts with its background.
-- [ ] Restyled with the base design (`restyle.js diagram.excalidraw --design <skill>/DESIGN.md` on a copy), the diagram stays valid and readable.
+- [ ] Only when the diagram has its own `DESIGN.md`: restyling a copy with the base design (`restyle.js copy.excalidraw --design <skill>/DESIGN.md`) still passes `validate.js` and reads well.
