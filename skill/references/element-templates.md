@@ -42,7 +42,7 @@ Use these compact templates as starting points. Set `customData.role` on every e
   "width": 180,
   "height": 90,
   "strokeColor": "#1e3a5f",
-  "backgroundColor": "#3b82f6",
+  "backgroundColor": "#2563eb",
   "fillStyle": "solid",
   "strokeWidth": 2,
   "strokeStyle": "solid",
