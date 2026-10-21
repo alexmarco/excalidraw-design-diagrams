@@ -36,9 +36,10 @@ All sizes are in pixels.
 - **Direction of the pair:** the end with the primary key is the `1` side; the end with the foreign key is the many side. A one-to-one relationship shows `1` at both ends and no crow foot.
 - **Verb:** one word or short phrase centered on the line (font 18, role `relationship`) on an opaque rectangle with role `label-background` that is 20 wider than the text and 28 high; a text is about 0.55 × font size pixels wide per character. Pick a verb that reads as "one `<singular>` `<verb>` many `<plural>`" from the `1` side: "customer places orders", "order contains order lines", "product appears in order lines".
 
-Text inside a shape (table name, badge) has `containerId` set to the shape, `verticalAlign` `middle`, and the shape lists it as `{ "id": "<text id>", "type": "text" }` in its `boundElements`.
 - **Many to many:** draw the join table as a table of its own (`order_lines` between `orders` and `products`) with two `FK` fields; never a line with a crow foot at both ends.
 - **Draw order** (array order is z-order): relationship lines, rows, headers, key badges, label backgrounds, outlines, then all text.
+
+Text inside a shape (table name, badge) has `containerId` set to the shape, `verticalAlign` `middle`, and the shape lists it as `{ "id": "<text id>", "type": "text" }` in its `boundElements`.
 
 ## Communication checklist
 
