@@ -24,8 +24,13 @@ function typesTable() {
   return skill.slice(start).split('\n\n')[0];
 }
 
-function galleryRow(readme, name) {
-  return readme.split('\n').find((line) => line.startsWith('|') && line.includes(`(skill/examples/${name}/)`));
+// The cells of the table row whose "Example" cell is exactly the given link.
+function rowWithExample(markdown, exampleLink) {
+  return markdown
+    .split('\n')
+    .filter((line) => line.startsWith('|'))
+    .map((line) => line.split('|').slice(1, -1).map((cell) => cell.trim()))
+    .find((cells) => cells[1] === exampleLink);
 }
 
 test('every guide in the references folder is linked from the SKILL.md types table', () => {
@@ -55,13 +60,11 @@ test('every example folder is in the README gallery with its image, type and sty
   const index = readText(join(examplesDirectory, 'README.md'));
 
   for (const name of exampleNames) {
-    const row = galleryRow(readme, name);
+    const row = rowWithExample(readme, `[${name}](skill/examples/${name}/)`);
     assert.ok(row, `the README gallery does not list ${name}`);
-    assert.ok(row.includes(`skill/examples/${name}/${name}.png`), `${name}: the gallery row has no image`);
-    const indexRow = index.split('\n').find((line) => line.includes(`[${name}](${name}/)`));
-    const [type, style] = indexRow.split('|').slice(-3, -1).map((cell) => cell.trim());
-    assert.ok(row.includes(type), `${name}: the gallery type differs from the index (${type})`);
-    assert.ok(row.includes(style), `${name}: the gallery style differs from the index (${style})`);
+    assert.ok(row[0].includes(`skill/examples/${name}/${name}.png`), `${name}: the gallery row has no image`);
+    const indexRow = rowWithExample(index, `[${name}](${name}/)`);
+    assert.deepEqual(row.slice(2), indexRow.slice(2), `${name}: the gallery type or style differs from the index`);
   }
 });
 
