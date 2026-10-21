@@ -94,6 +94,14 @@ test('the sequence guide has a communication checklist', () => {
   }
 });
 
+test('the sequence guide has placement rules for asynchronous messages and loop frames', () => {
+  const guide = readText(join(skillDirectory, 'references', 'sequence.md'));
+
+  assert.match(guide, /^## Asynchronous messages$/m);
+  assert.match(guide, /^## Loop frames$/m);
+  assert.match(guide, /examples\/card-payment/);
+});
+
 test('the sequence guide has a visual checklist with the required items', () => {
   const guide = readText(join(skillDirectory, 'references', 'sequence.md'));
   const checklistStart = guide.search(/^## Visual checklist$/m);
@@ -124,6 +132,20 @@ test('the architecture guide covers layout, labels, bindings and both checklists
   assert.match(guide, /startBinding/);
   assert.match(guide, /protocol/i);
   assert.match(guide, /examples\/web-app-architecture/);
+});
+
+test('SKILL.md lists the state guide, which exists and teaches its example', () => {
+  const skill = readText(join(skillDirectory, 'SKILL.md'));
+  const guide = readText(join(skillDirectory, 'references', 'state.md'));
+
+  assert.match(skill, /\]\(references\/state\.md\)/);
+  assert.match(guide, /examples\/order-lifecycle/);
+  for (const heading of ['Workflow', 'Layout', 'Communication checklist', 'Visual checklist']) {
+    assert.match(guide, new RegExp(`^## ${heading}$`, 'm'), `state guide misses ${heading}`);
+  }
+  for (const topic of [/initial/i, /final/i, /guard/i, /self-transition/i, /startBinding/, /cross/i]) {
+    assert.match(guide, topic, `state guide does not cover ${topic}`);
+  }
 });
 
 test('SKILL.md lists the flow guide and the guide covers direction, labels, merges, errors and checklists', () => {

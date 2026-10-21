@@ -48,6 +48,9 @@ export const REQUIRED_ROLES = [
   'frame-divider',
   'error-return',
   'store',
+  'table-row',
+  'key-badge',
+  'relationship',
 ];
 
 function parseYamlOrEmpty(source) {

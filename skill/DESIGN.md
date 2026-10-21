@@ -158,6 +158,17 @@ components:
     backgroundColor: "{colors.teal-100}"
     strokeColor: "{colors.teal-700}"
     textColor: "{colors.gray-700}"
+  table-row:
+    backgroundColor: "{colors.white}"
+    strokeColor: "{colors.navy}"
+    textColor: "{colors.gray-700}"
+  key-badge:
+    backgroundColor: "{colors.amber-700}"
+    strokeColor: "{colors.amber-700}"
+    textColor: "{colors.white}"
+  relationship:
+    strokeColor: "{colors.navy}"
+    textColor: "{colors.gray-700}"
 ---
 
 # Excalidraw Diagram Base
@@ -177,6 +188,8 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner), `frame-divider` (the dashed line between the operands of an `alt`).
 - Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a sticky note with a short why, next to the step it explains), `step` (numbered badge on a message).
 - Architecture roles: `store` (something that holds state: a database, a cache or a queue). Services use `primary`, `secondary` or `tertiary`, outside systems `participant-external` and `actor`, layers `zone`, and connections `message-sync` and `message-async`.
+
+- Data model roles: `table-row` (a field row under a table's `primary` header), `key-badge` (the `PK` or `FK` tag of a field), `relationship` (the line between two tables).
 
 Arrows use the stroke color of their source concept.
 
