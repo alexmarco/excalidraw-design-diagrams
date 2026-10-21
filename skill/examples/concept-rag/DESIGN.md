@@ -6,7 +6,7 @@ colors:
   ink-soft: "#4a3f35"
   paper: "#fffdf5"
   peach: "#ffd8a8"
-  peach-line: "#d9480f"
+  peach-line: "#e67700"
   butter: "#ffec99"
   butter-line: "#b08900"
   mint: "#b2f2bb"
