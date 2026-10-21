@@ -124,6 +124,8 @@ test('the architecture guide covers layout, labels, bindings and both checklists
   assert.match(guide, /startBinding/);
   assert.match(guide, /protocol/i);
   assert.match(guide, /examples\/web-app-architecture/);
+});
+
 test('SKILL.md lists the flow guide and the guide covers direction, labels, merges, errors and checklists', () => {
   const skill = readText(join(skillDirectory, 'SKILL.md'));
   const guide = readText(join(skillDirectory, 'references', 'flow.md'));
