@@ -18,22 +18,22 @@ Use this guide for the life cycle of one thing: an order, a ticket, a connection
 All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md`.
 
 - **Header:** title at the top left (font size 30, role `title`), one line below it (16, role `body`) that names the source and how to read the arrows, for example "Illustrative flow, not tied to a real shop · each arrow is event [guard] · red arrows are the failure path". A diagram with no real source says so.
-- **Main path:** the happy path runs left to right on one row, states 180 × 64, rounded, label font 18, role `primary`. Columns are at least 260 apart so the longest transition label fits in the gap with 16 to spare on each side (about `0.5 × font size` pixels per character).
+- **Main path:** the happy path runs left to right on one row, states 180 × 64, rounded, label font 18, role `tertiary` (its text takes the same role). The gap between the edges of neighbouring states is at least 260, so the longest transition label fits in it with 16 to spare on each side (about `0.5 × font size` pixels per character).
 - **Failure and side paths:** below the main row, under the state they leave, so they do not cross the main path. Plan the grid so that no two transitions cross; when two would, swap the positions of two states.
 - **Initial state:** a filled dot 20 × 20, role `marker`, left of the first state, with an unlabelled transition to it. One per diagram.
-- **Final state:** a ring 28 × 28 (role `structure`, no fill) with a dot 16 × 16 (role `marker`) centered inside it. A diagram may have several. Transitions into it carry the event that ends the life cycle, or none when the state ends on its own.
-- **Failure state:** role `error` for the state a life cycle ends in unsuccessfully, such as "Cancelled". Use color only for the failure path.
-- **Transitions:** role `message-async` (solid, open head), an arrow from the edge of one state to the edge of the next. Bind both ends: `startBinding` and `endBinding` name the connected states, and each state lists the arrow in its `boundElements`. A transition on the failure path takes role `error`, on both the arrow and its label.
-- **Direction:** every arrow is horizontal or vertical. A transition between states that share no row or column bends once at a right angle: out of the bottom or top edge, then into the side edge of the target, with its label above the long segment. Keep the final markers of all rows in one column.
-- **Self-transition:** an arrow that leaves the top edge of a state, goes up 44, right 80 and back down into the same state, with `startBinding` and `endBinding` both naming that state. Its label sits above the loop.
-- **Transition labels:** font 16, `event [guard]`. The event is a short past-tense name or verb (`payment_received`); the guard is a condition in brackets (`[amount = total]`). Put a long guard on a second line. Center the label on the widest free stretch of its arrow, with an opaque rectangle behind it (role `label-background`) so the arrow does not cross the text. A label above a horizontal arrow sits 20 to 28 above it and needs no backing. A self-transition label needs none either.
-- **Draw order** (array order is z-order): states, markers and rings, arrows, label backgrounds, then all text.
+- **Final state:** a ring 28 × 28 (role `structure`, no fill) with a dot 16 × 16 (role `marker`) centered inside it. A diagram may have several, and a ring has no label: the last named state (a box) leads to it with the event that ends the life cycle, such as `delivered`. Draw a ring only where the life cycle ends.
+- **Failure state:** role `error` for every state on the failure path, such as "Cancelled". Use color only for the failure path.
+- **Transitions:** role `message-async` (solid, open head), an arrow from the edge of one state to the edge of the next. Bind both ends: `startBinding` and `endBinding` name the connected states, and each state lists the arrow in its `boundElements`. The initial marker counts as a state for binding. Set `endArrowhead` to `arrow` in the file. A transition on the failure path, including one that leaves a failure state, takes role `error`, on both the arrow and its label; any other label takes `text-on-light`.
+- **Direction:** every arrow is horizontal or vertical. A transition between states that share no row or column bends once at a right angle: out of the bottom or top edge, then into the side edge of the target, with its label above the long segment. When two rows each end in a ring, put both rings in one column.
+- **Self-transition:** an arrow that leaves the top edge of a state, goes up 44, right 80 and back down into the same state, centered on the state's top edge (starting 40 left of its center), with `startBinding` and `endBinding` both naming that state. Its label sits above the loop.
+- **Transition labels:** font 16, `event [guard]`. The event is a short past-tense name or verb (`payment_received`); the guard is a condition in brackets (`[amount = total]`). Put a long guard on a second line. Place it above its arrow, 20 to 28 from it and centered on the arrow's longest straight segment; no backing is needed because the arrow does not cross the text. A label that sits on its arrow (a vertical arrow) gets an opaque rectangle behind it (role `label-background`) and is centered on the arrow.
+- **Draw order** (array order is z-order): states, markers and rings, arrows, label backgrounds, then all text (state labels included, bound to their box with `containerId`).
 
 ## Communication checklist
 
 - [ ] The title names the thing whose life cycle it shows, and the line below names the source or says it is illustrative.
 - [ ] There is exactly one initial marker, and every final state has a ring marker.
-- [ ] Every transition except those from the initial marker has an event; a guard is in brackets after the event.
+- [ ] Every transition except the one from the initial marker has an event; a guard is in brackets after the event.
 - [ ] Every state can be reached, and every state that is not final has a way out.
 - [ ] The failure path uses the `error` role on state, arrows and labels; the rest of the diagram uses no extra color.
 - [ ] Every transition is bound at both ends to the states it connects.
