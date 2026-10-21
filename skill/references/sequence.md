@@ -1,6 +1,6 @@
 # Sequence Diagrams
 
-Use this guide for messages exchanged between participants over time: API calls, login flows, retries. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/oauth-pkce/`](../examples/oauth-pkce/); open its PNG before drawing.
+Use this guide for messages exchanged between participants over time: API calls, login flows, retries. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/oauth-pkce/`](../examples/oauth-pkce/); its PNG is an optional reference for the intended result.
 
 ## Workflow
 

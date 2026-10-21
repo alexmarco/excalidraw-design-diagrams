@@ -1,6 +1,6 @@
 # Data Model Diagrams
 
-Use this guide for the tables of a database and how they relate: entities, fields, keys, cardinalities. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/online-shop-data-model/`](../examples/online-shop-data-model/); open its PNG before drawing.
+Use this guide for the tables of a database and how they relate: entities, fields, keys, cardinalities. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/online-shop-data-model/`](../examples/online-shop-data-model/); its PNG is an optional reference for the intended result.
 
 ## Workflow
 

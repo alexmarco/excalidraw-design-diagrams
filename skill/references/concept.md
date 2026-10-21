@@ -1,6 +1,6 @@
 # Concept Diagrams
 
-Use this guide to explain how an idea or a pipeline works: boxes grouped into stages, read in one direction (how RAG answers a question, how a build pipeline turns code into an image). You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from the design file. The reference result is [`examples/concept-rag/`](../examples/concept-rag/), drawn with its own whiteboard `DESIGN.md`; open its PNG before drawing.
+Use this guide to explain how an idea or a pipeline works: boxes grouped into stages, read in one direction (how RAG answers a question, how a build pipeline turns code into an image). You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from the design file. The reference result is [`examples/concept-rag/`](../examples/concept-rag/), drawn with its own whiteboard `DESIGN.md`; its PNG is an optional reference for the intended result.
 
 ## Workflow
 

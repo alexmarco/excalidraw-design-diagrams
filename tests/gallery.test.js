@@ -65,6 +65,13 @@ test('every example folder is in the README gallery with its image, type and sty
   }
 });
 
+test('no guide makes opening its example mandatory', () => {
+  for (const name of guideNames) {
+    const guide = readText(join(skillDirectory, 'references', name));
+    assert.doesNotMatch(guide, /open its PNG before drawing/i, `${name} mandates opening the example`);
+  }
+});
+
 test('the README names the base style, the complete overrides and the partial override, with links', () => {
   const readme = readText(join(root, 'README.md'));
 
