@@ -38,7 +38,7 @@ test('base DESIGN.md defines every required role', () => {
 });
 
 test('the roles that make a diagram readable are required', () => {
-  for (const role of ['participant-external', 'zone', 'note', 'step', 'frame-tag']) {
+  for (const role of ['participant-external', 'zone', 'note', 'step', 'frame-tag', 'frame-divider']) {
     assert.ok(REQUIRED_ROLES.includes(role), `${role} is not required`);
   }
 });
@@ -46,6 +46,16 @@ test('the roles that make a diagram readable are required', () => {
 test('frames are tinted so the conditional part of a flow stands out', () => {
   assert.notEqual(design.components.frame.backgroundColor, 'transparent');
   assert.notEqual(design.components['frame-tag'].backgroundColor, design.components.frame.backgroundColor);
+});
+
+test('frame operands are separated by dashed lines and the operator tag stands out', () => {
+  assert.equal(design.components['frame-divider'].strokeStyle, 'dashed');
+  assert.equal(design.components['frame-tag'].backgroundColor, design.components.frame.strokeColor);
+  assert.equal(design.components['frame-tag'].textColor, '#ffffff');
+});
+
+test('error text is red like the error stroke', () => {
+  assert.equal(design.components.error.textColor, design.components.error.strokeColor);
 });
 
 test('a label background inside a frame blends with the frame tint', () => {

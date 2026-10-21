@@ -70,7 +70,7 @@ components:
   error:
     backgroundColor: "{colors.red-200}"
     strokeColor: "{colors.red-700}"
-    textColor: "{colors.gray-700}"
+    textColor: "{colors.red-700}"
   title:
     textColor: "{colors.blue-800}"
   subtitle:
@@ -124,9 +124,12 @@ components:
     backgroundColor: "{colors.amber-50}"
     strokeColor: "{colors.amber-50}"
   frame-tag:
-    backgroundColor: "{colors.amber-100}"
+    backgroundColor: "{colors.amber-700}"
     strokeColor: "{colors.amber-700}"
-    textColor: "{colors.amber-700}"
+    textColor: "{colors.white}"
+  frame-divider:
+    strokeColor: "{colors.amber-700}"
+    strokeStyle: dashed
   participant-external:
     backgroundColor: "{colors.blue-100}"
     strokeColor: "{colors.blue-800}"
@@ -160,7 +163,7 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Text roles: `title`, `subtitle`, `body`, `text-on-light`, `text-on-dark`.
 - Evidence roles: `code` (code and data examples), `structure` (structural lines), `marker` (marker dots).
 - Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text) and `label-background-in-frame` (the same box inside a tinted frame).
-- Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner).
+- Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner), `frame-divider` (the dashed line between the operands of an `alt`).
 - Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a sticky note with a short why, next to the step it explains), `step` (numbered badge on a message).
 
 Arrows use the stroke color of their source concept.
