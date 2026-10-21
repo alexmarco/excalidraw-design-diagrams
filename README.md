@@ -12,7 +12,7 @@ The baseline skill lives in [`skills/excalidraw-diagram/`](skills/excalidraw-dia
 ## Commands
 
 ```bash
-npm install # installs the renderer and the DESIGN.md parser dependencies
+npm install # installs the skill dependencies (a workspace) for development
 npm test    # runs the test suite with node:test
 ```
 
@@ -61,13 +61,29 @@ The base design in [`skills/excalidraw-diagram/DESIGN.md`](skills/excalidraw-dia
 - Complete override, which replaces the palette, font, corner radius, roughness and canvas background (roles it does not redefine come from the base): [concept-rag](examples/concept-rag/DESIGN.md) (whiteboard) and [web-app-architecture](examples/web-app-architecture/DESIGN.md) (blueprint).
 - Partial override, which changes only the colors and the font and inherits everything else: [ci-cd-pipeline](examples/ci-cd-pipeline/DESIGN.md) (corporate grey).
 
+## Install the skill
+
+Install it with the [`skills`](https://github.com/vercel-labs/skills) CLI. Run it in your project to install the skill there, or add `-g` to make it available in every project:
+
+```bash
+npx skills add alexmarco/excalidraw-design-diagrams --skill excalidraw-diagram -a claude-code
+npx skills add alexmarco/excalidraw-design-diagrams --skill excalidraw-diagram -a claude-code -g
+```
+
+On Windows, add `--copy` if creating symlinks is not allowed. The CLI copies only the `skills/excalidraw-diagram/` folder, to `.claude/skills/excalidraw-diagram/` in the project (or `~/.claude/skills/excalidraw-diagram/` with `-g`).
+
+First run: install the skill's dependencies once, in the installed folder.
+
+```bash
+cd .claude/skills/excalidraw-diagram
+npm install --omit=dev
+```
+
+If you skip it, the scripts print this command with the exact folder. To update, run `npx skills update`, then `npm install --omit=dev` again if `package.json` changed.
+
 ## Install the skill manually
 
-The skill is not installed automatically. To use it:
-
-1. Run `npm install` at the repository root, the folder that contains `package.json`.
-2. Put the `skills/excalidraw-diagram/` folder in your Claude Code skills folder (`~/.claude/skills/excalidraw-diagram`). You can link it, so a `git pull` updates it, or copy the whole repository there and point to its `skills/excalidraw-diagram/` folder; the scripts need the repository's `node_modules`, so copying `skills/excalidraw-diagram/` alone does not work.
-3. Start a new Claude Code session and check that the skill is listed.
+Copy the `skills/excalidraw-diagram/` folder to `.claude/skills/excalidraw-diagram/` in your project (or `~/.claude/skills/excalidraw-diagram` for every project), run `npm install --omit=dev` inside the copy, and start a new Claude Code session to check that the skill is listed.
 
 ## Working rules
 
