@@ -152,6 +152,17 @@ components:
     backgroundColor: "{colors.navy}"
     strokeColor: "{colors.navy}"
     textColor: "{colors.white}"
+  table-row:
+    backgroundColor: "{colors.white}"
+    strokeColor: "{colors.navy}"
+    textColor: "{colors.gray-700}"
+  key-badge:
+    backgroundColor: "{colors.amber-700}"
+    strokeColor: "{colors.amber-700}"
+    textColor: "{colors.white}"
+  relationship:
+    strokeColor: "{colors.navy}"
+    textColor: "{colors.gray-700}"
 ---
 
 # Excalidraw Diagram Base
@@ -170,6 +181,8 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text) and `label-background-in-frame` (the same box inside a tinted frame).
 - Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner), `frame-divider` (the dashed line between the operands of an `alt`).
 - Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a sticky note with a short why, next to the step it explains), `step` (numbered badge on a message).
+
+- Data model roles: `table-row` (a field row under a table's `primary` header), `key-badge` (the `PK` or `FK` tag of a field), `relationship` (the line between two tables).
 
 Arrows use the stroke color of their source concept.
 
