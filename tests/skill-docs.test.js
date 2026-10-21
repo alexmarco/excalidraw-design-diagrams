@@ -108,3 +108,17 @@ test('the sequence guide has a visual checklist with the required items', () => 
   assert.ok(items.some((item) => /dashed/i.test(item) && /return/i.test(item)), 'missing the dashed returns item');
   assert.ok(items.some((item) => /lifelines? span/i.test(item)), 'missing the lifelines span item');
 });
+
+test('SKILL.md lists the state guide, which exists and teaches its example', () => {
+  const skill = readText(join(skillDirectory, 'SKILL.md'));
+  const guide = readText(join(skillDirectory, 'references', 'state.md'));
+
+  assert.match(skill, /\]\(references\/state\.md\)/);
+  assert.match(guide, /examples\/order-lifecycle/);
+  for (const heading of ['Workflow', 'Layout', 'Communication checklist', 'Visual checklist']) {
+    assert.match(guide, new RegExp(`^## ${heading}$`, 'm'), `state guide misses ${heading}`);
+  }
+  for (const topic of [/initial/i, /final/i, /guard/i, /self-transition/i, /startBinding/, /cross/i]) {
+    assert.match(guide, topic, `state guide does not cover ${topic}`);
+  }
+});
