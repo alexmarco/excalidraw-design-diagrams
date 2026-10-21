@@ -126,6 +126,17 @@ test('text elements take the font family of the design and shapes do not', () =>
   }
 });
 
+test('rounded shapes take the corner radius of the design and sharp shapes stay sharp', () => {
+  const design = designFrom('---\n---\n\n## Diagrams\n\n```yaml\ncornerRadius: 6\n```\n');
+  const shape = (id, roundness) => ({ id, type: 'rectangle', roundness, customData: { role: 'participant' } });
+  const document = { elements: [shape('rounded', { type: 3 }), shape('sharp', null)] };
+
+  const { document: restyled } = restyleDocument(document, design);
+
+  assert.deepEqual(restyled.elements[0].roundness, { type: 3, value: 6 });
+  assert.equal(restyled.elements[1].roundness, null);
+});
+
 test('a role that defines no color or stroke keeps the values the element already has', () => {
   const element = {
     id: 'note',

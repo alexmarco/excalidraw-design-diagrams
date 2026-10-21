@@ -78,7 +78,8 @@ test('evidence artifacts and lines keep the current palette colors', () => {
 });
 
 test('base diagram tokens give the hand-drawn Excalidraw look', () => {
-  assert.equal(design.diagrams.roughness, 0.5);
+  assert.equal(design.diagrams.roughness, 0);
+  assert.equal(design.diagrams.cornerRadius, 8);
   assert.equal(design.diagrams.fontFamily, 5);
   assert.equal(design.diagrams.strokeWidth, 2);
   assert.equal(design.diagrams.strokeStyle, 'solid');
