@@ -3,8 +3,11 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
-import { resolveDesign } from './resolve_design.js';
+import { exitIfDependenciesMissing } from './check_dependencies.js';
 import { restyleDocument } from './restyle_excalidraw.js';
+
+exitIfDependenciesMissing();
+const { resolveDesign } = await import('./resolve_design.js');
 
 const USAGE = 'Usage: node restyle.js <file.excalidraw> [--design <DESIGN.md>]';
 

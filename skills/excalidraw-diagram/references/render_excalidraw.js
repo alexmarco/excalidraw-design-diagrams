@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
 import { parseArgs } from "node:util";
-import { renderExcalidrawFile } from "./render/render-file.js";
+import { exitIfDependenciesMissing } from "../scripts/check_dependencies.js";
+
+exitIfDependenciesMissing();
+const { renderExcalidrawFile } = await import("./render/render-file.js");
 
 function usage() {
   return [
