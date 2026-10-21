@@ -116,3 +116,17 @@ test('the sequence guide has a visual checklist with the required items', () => 
   assert.ok(items.some((item) => /dashed/i.test(item) && /return/i.test(item)), 'missing the dashed returns item');
   assert.ok(items.some((item) => /lifelines? span/i.test(item)), 'missing the lifelines span item');
 });
+
+test('SKILL.md lists the flow guide and the guide covers direction, labels, merges, errors and checklists', () => {
+  const skill = readText(join(skillDirectory, 'SKILL.md'));
+  const guide = readText(join(skillDirectory, 'references', 'flow.md'));
+
+  assert.match(skill, /\]\(references\/flow\.md\)/);
+  assert.match(guide, /examples\/ci-cd-pipeline/);
+  for (const heading of [/^## Layout$/m, /^## Decisions$/m, /^## Merging paths$/m, /^## Error paths$/m]) {
+    assert.match(guide, heading);
+  }
+  const communication = guide.slice(guide.search(/^## Communication checklist$/m));
+  assert.match(communication, /^- \[ \]/m);
+  assert.match(guide, /^## Visual checklist$/m);
+});
