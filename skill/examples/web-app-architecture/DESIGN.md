@@ -57,7 +57,7 @@ components:
 
 # Blueprint
 
-A complete override of the base design: a dark blue canvas, light lines, a monospaced font, sharp corners and no roughness, like a technical drawing. It restyles every element of the diagram through its role, so the diagram file does not change.
+A complete override of the look of the base design: a dark blue canvas, light lines, a monospaced font, sharp corners and no roughness, like a technical drawing. The roles it does not redefine come from the base design. The diagram file does not change.
 
 ## Roles
 

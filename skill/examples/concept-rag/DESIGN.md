@@ -147,7 +147,7 @@ components:
 
 # Whiteboard
 
-A complete override of the base design: a hand-drawn whiteboard look with warm pastel fills, dark ink text and very round corners. It covers every role of the base design, so any diagram type can use it. Shape fills carry the meaning: lavender for steps a model runs (`ai`), blue for the store, yellow for plain processing, peach for the trigger and green for the result.
+A complete override of the base design: a hand-drawn whiteboard look with warm pastel fills, dark ink text and very round corners. It redefines the roles of the concept diagrams; the other roles come from the base design. Shape fills carry the meaning: lavender for steps a model runs (`ai`), blue for the store, yellow for plain processing, peach for the trigger and green for the result.
 
 ## Diagrams
 
