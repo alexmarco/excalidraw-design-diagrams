@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { parseDesign, resolveDesign } from '../skill/scripts/resolve_design.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const exampleDirectory = join(root, 'skill', 'examples', 'ci-cd-pipeline');
+const exampleDirectory = join(root, 'examples', 'ci-cd-pipeline');
 const readText = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 
 test('the CI/CD example DESIGN.md defines only colors and the font family', () => {

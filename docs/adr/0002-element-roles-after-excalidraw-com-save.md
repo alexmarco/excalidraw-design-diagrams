@@ -31,7 +31,7 @@ Not verified:
 - The generator and `restyle` need no changes for this finding.
 - Each restyle run reports the elements it left unchanged because they have no known role. After a real save, the generated elements should not appear in that list. Hand-added elements are expected to appear there, because they never had a role.
 - To confirm the finding on a real file:
-  1. Take a diagram whose elements have roles, for example `skill/examples/oauth-pkce/oauth-pkce.excalidraw`.
+  1. Take a diagram whose elements have roles, for example `examples/oauth-pkce/oauth-pkce.excalidraw`.
   2. Open the `.excalidraw` file in excalidraw.com, make an edit, and save it to disk.
   3. Run `node skill/scripts/restyle.js <file.excalidraw>`.
   4. If the report lists the generated elements under "Left unchanged because they have no known role", the limitation applies to that save path.

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const skillDirectory = join(root, 'skill');
-const examplesDirectory = join(skillDirectory, 'examples');
+const examplesDirectory = join(root, 'examples');
 const NOT_GUIDES = ['README.md', 'element-templates.md', 'json-schema.md'];
 
 const readText = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
@@ -60,9 +60,9 @@ test('every example folder is in the README gallery with its image, type and sty
   const index = readText(join(examplesDirectory, 'README.md'));
 
   for (const name of exampleNames) {
-    const row = rowWithExample(readme, `[${name}](skill/examples/${name}/)`);
+    const row = rowWithExample(readme, `[${name}](examples/${name}/)`);
     assert.ok(row, `the README gallery does not list ${name}`);
-    assert.ok(row[0].includes(`skill/examples/${name}/${name}.png`), `${name}: the gallery row has no image`);
+    assert.ok(row[0].includes(`examples/${name}/${name}.png`), `${name}: the gallery row has no image`);
     const indexRow = rowWithExample(index, `[${name}](${name}/)`);
     assert.deepEqual(row.slice(2), indexRow.slice(2), `${name}: the gallery type or style differs from the index`);
   }
@@ -83,10 +83,10 @@ test('the README names the base style, the complete overrides and the partial ov
   const readme = readText(join(root, 'README.md'));
 
   for (const name of ['concept-rag', 'web-app-architecture']) {
-    assert.match(readme, new RegExp(`complete override[^\\n]*\\(skill/examples/${name}/DESIGN\\.md\\)`, 'i'), name);
+    assert.match(readme, new RegExp(`complete override[^\\n]*\\(examples/${name}/DESIGN\\.md\\)`, 'i'), name);
   }
-  assert.match(readme, /partial override[^\n]*\(skill\/examples\/ci-cd-pipeline\/DESIGN\.md\)/i);
-  assert.match(readme, /base style[^\n]*\(skill\/examples\/oauth-pkce\/\)/i);
+  assert.match(readme, /partial override[^\n]*\(examples\/ci-cd-pipeline\/DESIGN\.md\)/i);
+  assert.match(readme, /base style[^\n]*\(examples\/oauth-pkce\/\)/i);
 });
 
 test('SKILL.md makes the example optional, mentions --design in the steps and describes the merge', () => {
@@ -98,4 +98,15 @@ test('SKILL.md makes the example optional, mentions --design in the steps and de
   assert.match(workflow, /--design/);
   assert.doesNotMatch(skill, /the first that exists/);
   assert.match(skill, /token by token/);
+});
+
+test('the skill folder carries no examples', () => {
+  assert.equal(existsSync(join(skillDirectory, 'examples')), false);
+});
+
+test('guides link to the examples in the repository, not to a path inside the skill', () => {
+  for (const name of guideNames) {
+    const guide = readText(join(skillDirectory, 'references', name));
+    assert.doesNotMatch(guide, /\]\(\.\.\/examples\//, `${name} links to skill/examples`);
+  }
 });

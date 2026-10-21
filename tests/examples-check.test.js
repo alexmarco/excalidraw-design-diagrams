@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkExamples } from '../skill/scripts/check_examples.js';
 
-const EXAMPLES_DIR = fileURLToPath(new URL('../skill/examples', import.meta.url));
+const EXAMPLES_DIR = fileURLToPath(new URL('../examples', import.meta.url));
 const OAUTH_DIR = join(EXAMPLES_DIR, 'oauth-pkce');
 const INDEX_WITH_OAUTH = '| [oauth-pkce](oauth-pkce/) | Sequence | Base |\n';
 

@@ -1,6 +1,6 @@
 # State Diagrams
 
-Use this guide for the life cycle of one thing: an order, a ticket, a connection. States are boxes, transitions are arrows between them. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/order-lifecycle/`](../examples/order-lifecycle/); its PNG is an optional reference for the intended result.
+Use this guide for the life cycle of one thing: an order, a ticket, a connection. States are boxes, transitions are arrows between them. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/order-lifecycle/`](https://github.com/alexmarco/excalidraw-design-diagrams/tree/main/examples/order-lifecycle/); its PNG is an optional reference for the intended result.
 
 ## Workflow
 

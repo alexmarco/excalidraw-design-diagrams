@@ -50,7 +50,7 @@ test('the colored text roles on the canvas reach WCAG AA', () => {
 
 for (const example of ['web-app-architecture', 'ci-cd-pipeline', 'concept-rag']) {
   test(`${example} override: report text on fill ratios`, () => {
-    const explicitPath = fileURLToPath(new URL(`../skill/examples/${example}/DESIGN.md`, import.meta.url));
+    const explicitPath = fileURLToPath(new URL(`../examples/${example}/DESIGN.md`, import.meta.url));
     const failures = failingRatios(textOnFillPairs(resolveDesign({ explicitPath })));
     console.log(`${example} failing:`, failures.join(', ') || 'none');
   });

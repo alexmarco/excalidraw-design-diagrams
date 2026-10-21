@@ -1,6 +1,6 @@
 # Decision Flow Diagrams
 
-Use this guide for a process with choices: a pipeline, an approval, a triage, a retry loop. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from the design file. The reference result is [`examples/ci-cd-pipeline/`](../examples/ci-cd-pipeline/), which also shows a project `DESIGN.md` that overrides only colors and the font family; its PNG is an optional reference for the intended result.
+Use this guide for a process with choices: a pipeline, an approval, a triage, a retry loop. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from the design file. The reference result is [`examples/ci-cd-pipeline/`](https://github.com/alexmarco/excalidraw-design-diagrams/tree/main/examples/ci-cd-pipeline/), which also shows a project `DESIGN.md` that overrides only colors and the font family; its PNG is an optional reference for the intended result.
 
 ## Workflow
 
