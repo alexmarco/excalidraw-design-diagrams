@@ -36,7 +36,7 @@ All sizes are in pixels.
 
 - When two paths lead to the same outcome, draw one node for that outcome and point both arrows at it, each at a different edge ("Fail the run and notify the team" receives the retry exhaustion and the failed smoke test).
 - Arrows never cross. When a crossing looks unavoidable, move the side column or reorder the nodes.
-- A retry path returns to the step it repeats, enters it at the side facing the side column, and is labelled at its first segment ("Yes, run again").
+- A retry path returns to the step it repeats, enters it at the side facing the side column, and is labelled above its horizontal segment ("Yes, run again").
 
 ## Error paths
 
