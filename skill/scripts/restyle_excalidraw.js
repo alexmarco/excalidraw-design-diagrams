@@ -1,10 +1,12 @@
 import { roleStyle } from './role_style.js';
 
 // Returns the document with each role's style reapplied, plus the ids of elements that have no role
-// in the design. Geometry, text and bindings are never rewritten.
+// in the design. Geometry, text and bindings are never rewritten, and neither are images: an icon
+// keeps the colors it was embedded with.
 export function restyleDocument(document, design) {
   const unstyledIds = [];
   const elements = document.elements.map((element) => {
+    if (element.type === 'image') return element;
     const role = element.customData?.role;
     if (!Object.hasOwn(design.components, role)) {
       unstyledIds.push(element.id);

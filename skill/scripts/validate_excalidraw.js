@@ -11,10 +11,10 @@ const NOT_A_BACKING_ROLES = ['zone', 'frame', 'activation'];
 
 export function validateDocument(document, design) {
   const elements = document.elements ?? [];
-  return [...structureProblems(elements, design), ...layoutProblems(elements, design)];
+  return [...structureProblems(elements, design, document.files ?? {}), ...layoutProblems(elements, design)];
 }
 
-function structureProblems(elements, design) {
+function structureProblems(elements, design, files) {
   const problems = [];
   const report = (id, message) => problems.push({ id, kind: 'structure', message });
   const ids = new Set();
@@ -44,6 +44,10 @@ function structureProblems(elements, design) {
       if (target && !pointsTo(target, element.id)) {
         report(element.id, `boundElements lists ${target.id}, which does not point back`);
       }
+    }
+    if (element.type === 'image') {
+      if (!Object.hasOwn(files, element.fileId)) report(element.id, `fileId ${element.fileId} is not in files`);
+      continue;
     }
     const role = element.customData?.role;
     if (role === undefined) report(element.id, 'has no role');

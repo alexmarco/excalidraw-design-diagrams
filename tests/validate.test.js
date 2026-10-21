@@ -201,3 +201,30 @@ test('an arrow bound to shapes that list it back has no binding problems', () =>
     boundArrow('go', 'from', 'to'),
   ]), []);
 });
+
+function imageElement(id, fileId, extra = {}) {
+  return { id, type: 'image', x: 0, y: 0, width: 48, height: 48, fileId, status: 'saved', scale: [1, 1], ...extra };
+}
+
+function documentMessages(elements, files) {
+  return validateDocument({ type: 'excalidraw', elements, files }, design).map(({ id, message }) => `${id}: ${message}`);
+}
+
+test('an image element needs no role', () => {
+  assert.deepEqual(documentMessages([imageElement('logo', 'icon-1')], { 'icon-1': { id: 'icon-1' } }), []);
+});
+
+test('an image whose fileId is not in files is reported', () => {
+  assert.deepEqual(documentMessages([imageElement('logo', 'icon-1')], {}), [
+    'logo: fileId icon-1 is not in files',
+  ]);
+});
+
+test('an image inside a zone is not checked as a text or a shape', () => {
+  const found = documentMessages([
+    shape('layer', 'zone', 0, 0, 400, 200),
+    imageElement('logo', 'icon-1', { x: 4, y: 4 }),
+  ], { 'icon-1': { id: 'icon-1' } });
+
+  assert.deepEqual(found, []);
+});
