@@ -13,6 +13,9 @@ function usage() {
   ].join("\n");
 }
 
+// Errors in the command line; only these are followed by the usage.
+class ArgumentError extends Error {}
+
 function parseArguments(args) {
   const { values, positionals } = parseArgs({
     args,
@@ -30,21 +33,21 @@ function parseArguments(args) {
   }
 
   if (positionals.length === 0) {
-    throw new Error("An input .excalidraw file is required");
+    throw new ArgumentError("An input .excalidraw file is required");
   }
   if (positionals.length > 1) {
-    throw new Error(`Unexpected argument: ${positionals[1]}`);
+    throw new ArgumentError(`Unexpected argument: ${positionals[1]}`);
   }
   if (values.output === "") {
-    throw new Error("--output must not be empty");
+    throw new ArgumentError("--output must not be empty");
   }
   const scale = Number(values.scale ?? 2);
   const maxWidth = Number(values.width ?? 1920);
   if (!Number.isInteger(scale) || scale < 1) {
-    throw new Error("--scale must be a positive integer");
+    throw new ArgumentError("--scale must be a positive integer");
   }
   if (!Number.isInteger(maxWidth) || maxWidth < 1) {
-    throw new Error("--width must be a positive integer");
+    throw new ArgumentError("--width must be a positive integer");
   }
 
   return {
@@ -68,6 +71,8 @@ async function main() {
 
 main().catch((error) => {
   console.error(`ERROR: ${error.message}`);
-  console.error(usage());
+  if (error instanceof ArgumentError || error.code?.startsWith("ERR_PARSE_ARGS")) {
+    console.error(usage());
+  }
   process.exitCode = 1;
 });
