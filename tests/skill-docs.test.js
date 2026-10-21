@@ -117,6 +117,23 @@ test('the sequence guide has a visual checklist with the required items', () => 
   assert.ok(items.some((item) => /lifelines? span/i.test(item)), 'missing the lifelines span item');
 });
 
+test('SKILL.md lists the architecture guide in its types table', () => {
+  const skill = readText(join(skillDirectory, 'SKILL.md'));
+
+  assert.match(skill, /\| Architecture \|.*\]\(references\/architecture\.md\)/);
+});
+
+test('the architecture guide covers layout, labels, bindings and both checklists', () => {
+  const guide = readText(join(skillDirectory, 'references', 'architecture.md'));
+
+  for (const heading of ['Workflow', 'Layout', 'Arrows', 'Communication checklist', 'Visual checklist']) {
+    assert.match(guide, new RegExp(`^## ${heading}$`, 'm'), `missing the ${heading} section`);
+  }
+  assert.match(guide, /startBinding/);
+  assert.match(guide, /protocol/i);
+  assert.match(guide, /examples\/web-app-architecture/);
+});
+
 test('SKILL.md lists the state guide, which exists and teaches its example', () => {
   const skill = readText(join(skillDirectory, 'SKILL.md'));
   const guide = readText(join(skillDirectory, 'references', 'state.md'));
