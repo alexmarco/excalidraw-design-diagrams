@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
-import { resolveDesign } from '../skill/scripts/resolve_design.js';
+import { resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
 
 const WCAG_AA_NORMAL_TEXT = 4.5;
 const HEX_COLOR = /^#[0-9a-f]{6}$/i;

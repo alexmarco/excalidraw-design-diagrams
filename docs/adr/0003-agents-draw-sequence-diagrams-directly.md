@@ -17,9 +17,9 @@ What the agent cannot do reliably by eye is mechanical: applying design tokens, 
 
 ## Decision
 
-1. The sequence generator and its spec format are removed. The agent writes the `.excalidraw` file directly, with geometry and a role on every element, following `skill/references/sequence.md`.
+1. The sequence generator and its spec format are removed. The agent writes the `.excalidraw` file directly, with geometry and a role on every element, following `skills/excalidraw-diagram/references/sequence.md`.
 2. Scripts cover only the mechanical work: `restyle.js` applies the `DESIGN.md` tokens by role, `validate.js` checks structure, overlapping text and padding, and `render_excalidraw.js` renders the file for visual review.
-3. The guide carries the drawing rules (grid, zones, frames, notes, numbering) and two checklists, one for communication and one for what `validate.js` cannot see. `skill/examples/oauth-pkce/` is the reference result (the examples now live in `examples/` at the repository root, outside the skill).
+3. The guide carries the drawing rules (grid, zones, frames, notes, numbering) and two checklists, one for communication and one for what `validate.js` cannot see. `skills/excalidraw-diagram/examples/oauth-pkce/` is the reference result (the examples now live in `examples/` at the repository root, outside the skill).
 
 ## Consequences
 

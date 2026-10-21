@@ -22,7 +22,7 @@ test('renderer dependencies are pinned to the approved exact versions', () => {
 });
 
 test('no package in the repository depends on Playwright', () => {
-  const manifests = [join(root, 'package.json'), join(root, 'skill', 'references', 'package.json')].filter(existsSync);
+  const manifests = [join(root, 'package.json'), join(root, 'skills', 'excalidraw-diagram', 'references', 'package.json')].filter(existsSync);
   for (const manifestPath of manifests) {
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
     const declared = { ...manifest.dependencies, ...manifest.devDependencies };

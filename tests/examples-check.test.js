@@ -4,7 +4,7 @@ import { cpSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } 
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { checkExamples } from '../skill/scripts/check_examples.js';
+import { checkExamples } from '../skills/excalidraw-diagram/scripts/check_examples.js';
 
 const EXAMPLES_DIR = fileURLToPath(new URL('../examples', import.meta.url));
 const OAUTH_DIR = join(EXAMPLES_DIR, 'oauth-pkce');

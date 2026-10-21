@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const testDirectory = dirname(fileURLToPath(import.meta.url));
-const cliPath = join(testDirectory, '..', 'skill', 'references', 'render_excalidraw.js');
+const cliPath = join(testDirectory, '..', 'skills', 'excalidraw-diagram', 'references', 'render_excalidraw.js');
 const sampleDiagram = join(testDirectory, 'fixtures', 'sample.excalidraw');
 
 function runCli(args, env = {}) {

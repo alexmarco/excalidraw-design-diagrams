@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-const CLI_PATH = fileURLToPath(new URL('../skill/scripts/restyle.js', import.meta.url));
+const CLI_PATH = fileURLToPath(new URL('../skills/excalidraw-diagram/scripts/restyle.js', import.meta.url));
 const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.excalidraw', import.meta.url));
 
 function workspace() {

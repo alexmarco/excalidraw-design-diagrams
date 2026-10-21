@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseDesign } from '../skill/scripts/resolve_design.js';
+import { parseDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
 
 test('parseDesign reads tokens from the YAML front matter and diagram tokens from the Diagrams block', () => {
   const markdown = [

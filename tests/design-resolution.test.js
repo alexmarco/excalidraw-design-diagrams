@@ -4,9 +4,9 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveDesign } from '../skill/scripts/resolve_design.js';
+import { resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
 
-const BASE_PATH = fileURLToPath(new URL('../skill/DESIGN.md', import.meta.url));
+const BASE_PATH = fileURLToPath(new URL('../skills/excalidraw-diagram/DESIGN.md', import.meta.url));
 const baseMarkdown = readFileSync(BASE_PATH, 'utf8');
 const baseDesign = resolveDesign({ basePath: BASE_PATH });
 

@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const CLI_PATH = fileURLToPath(new URL('../skill/scripts/validate.js', import.meta.url));
+const CLI_PATH = fileURLToPath(new URL('../skills/excalidraw-diagram/scripts/validate.js', import.meta.url));
 
 function diagramFile(elements) {
   const path = join(mkdtempSync(join(tmpdir(), 'validate-cli-')), 'diagram.excalidraw');

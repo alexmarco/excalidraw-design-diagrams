@@ -21,7 +21,7 @@ Icons are optional. Add them when each one answers a question the label alone do
 
    ```js
    import { readFileSync } from 'node:fs';
-   // The script lives outside the project, so import with absolute file URLs, e.g. file:///C:/projects/repo/skill/scripts/...
+   // The script lives outside the project, so import with absolute file URLs, e.g. file:///C:/projects/repo/skills/excalidraw-diagram/scripts/...
    import { embedIcon } from 'file:///<skill>/scripts/icon_embed.js';
    import { fetchIcons, iconCacheDirectory } from 'file:///<skill>/scripts/icon_cache.js';
    import { resolveDesign } from 'file:///<skill>/scripts/resolve_design.js';

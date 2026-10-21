@@ -5,8 +5,8 @@ import { inflateSync } from 'node:zlib';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { findBrowser } from '../skill/references/render/find-browser.js';
-import { renderExcalidrawFile } from '../skill/references/render/render-file.js';
+import { findBrowser } from '../skills/excalidraw-diagram/references/render/find-browser.js';
+import { renderExcalidrawFile } from '../skills/excalidraw-diagram/references/render/render-file.js';
 
 const testDirectory = dirname(fileURLToPath(import.meta.url));
 const sampleDiagram = join(testDirectory, 'fixtures', 'sample.excalidraw');
