@@ -5,3 +5,4 @@ Each example is a folder with the diagram (`.excalidraw`), its PNG and SVG rende
 | Screenshot | Example | Diagram type | Style |
 | --- | --- | --- | --- |
 | [![OAuth 2.0 with PKCE](oauth-pkce/oauth-pkce.png)](oauth-pkce/) | [oauth-pkce](oauth-pkce/) | Sequence | Base |
+| [![Web application architecture](web-app-architecture/web-app-architecture.png)](web-app-architecture/) | [web-app-architecture](web-app-architecture/) | Architecture | Blueprint (own DESIGN.md) |
