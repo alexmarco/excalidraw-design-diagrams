@@ -72,6 +72,10 @@ test('no guide makes opening its example mandatory', () => {
   }
 });
 
+test('SKILL.md says that restyling sets the canvas background', () => {
+  assert.match(readText(join(skillDirectory, 'SKILL.md')), /canvas background/i);
+});
+
 test('the README names the base style, the complete overrides and the partial override, with links', () => {
   const readme = readText(join(root, 'README.md'));
 
