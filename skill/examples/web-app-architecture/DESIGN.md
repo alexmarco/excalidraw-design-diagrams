@@ -4,7 +4,7 @@ name: Blueprint
 colors:
   blueprint-sheet: "#0b2a4a"
   blueprint-panel: "#134074"
-  blueprint-panel-light: "#1d5694"
+  blueprint-panel-light: "#2b6cb0"
   blueprint-line: "#e8f1fb"
   blueprint-guide: "#7ea6d3"
   blueprint-muted: "#a9c7ea"
@@ -32,7 +32,7 @@ components:
     backgroundColor: "transparent"
     strokeColor: "{colors.blueprint-guide}"
     strokeStyle: dashed
-    textColor: "{colors.blueprint-muted}"
+    textColor: "{colors.blueprint-line}"
   message-sync:
     strokeColor: "{colors.blueprint-line}"
     endArrowhead: triangle
@@ -40,13 +40,13 @@ components:
     strokeColor: "{colors.blueprint-line}"
     endArrowhead: arrow
   note:
-    backgroundColor: "{colors.blueprint-amber}"
-    strokeColor: "{colors.blueprint-amber}"
+    backgroundColor: "{colors.blueprint-line}"
+    strokeColor: "{colors.blueprint-line}"
     textColor: "{colors.blueprint-sheet}"
   title:
     textColor: "{colors.blueprint-white}"
   subtitle:
-    textColor: "{colors.blueprint-cyan}"
+    textColor: "{colors.blueprint-muted}"
   body:
     textColor: "{colors.blueprint-muted}"
   text-on-light:
