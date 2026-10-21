@@ -35,7 +35,7 @@ node <skill>/references/render_excalidraw.js diagrams/login.excalidraw
 - Each diagram type has a guide with its layout rules and checklists; see the types table in [`skill/SKILL.md`](skill/SKILL.md).
 - Render options (`--output`, `--scale`, `--width`) are listed in [`skill/references/README.md`](skill/references/README.md).
 - Styles come from `DESIGN.md`. `restyle.js` and `validate.js` use the file given with `--design`, else the project's `DESIGN.md` (or `docs/DESIGN.md`) next to the diagram, and the base design in [`skill/DESIGN.md`](skill/DESIGN.md) always applies underneath, so the file only overrides the tokens it defines.
-- The example gallery is below; the full index is in [`skill/examples/README.md`](skill/examples/README.md).
+- The example gallery is below; the full index is in [`examples/README.md`](examples/README.md).
 
 ## Examples gallery
 
@@ -43,21 +43,21 @@ Each example is a folder with the `.excalidraw` file and its PNG and SVG renders
 
 | Screenshot | Example | Diagram type | Style |
 | --- | --- | --- | --- |
-| [![OAuth 2.0 with PKCE](skill/examples/oauth-pkce/oauth-pkce.png)](skill/examples/oauth-pkce/) | [oauth-pkce](skill/examples/oauth-pkce/) | Sequence | Base |
-| [![Card payment with webhook and 3-D Secure](skill/examples/card-payment/card-payment.png)](skill/examples/card-payment/) | [card-payment](skill/examples/card-payment/) | Sequence | Base |
-| [![Online order life cycle](skill/examples/order-lifecycle/order-lifecycle.png)](skill/examples/order-lifecycle/) | [order-lifecycle](skill/examples/order-lifecycle/) | State | Base |
-| [![Online shop data model](skill/examples/online-shop-data-model/online-shop-data-model.png)](skill/examples/online-shop-data-model/) | [online-shop-data-model](skill/examples/online-shop-data-model/) | Data model | Base |
-| [![RAG concept diagram](skill/examples/concept-rag/concept-rag.png)](skill/examples/concept-rag/) | [concept-rag](skill/examples/concept-rag/) | Concept | Whiteboard (full restyle) |
-| [![Web application architecture](skill/examples/web-app-architecture/web-app-architecture.png)](skill/examples/web-app-architecture/) | [web-app-architecture](skill/examples/web-app-architecture/) | Architecture | Blueprint (full restyle) |
-| [![CI/CD pipeline](skill/examples/ci-cd-pipeline/ci-cd-pipeline.png)](skill/examples/ci-cd-pipeline/) | [ci-cd-pipeline](skill/examples/ci-cd-pipeline/) | Decision flow | Corporate grey (partial: colors and font) |
+| [![OAuth 2.0 with PKCE](examples/oauth-pkce/oauth-pkce.png)](examples/oauth-pkce/) | [oauth-pkce](examples/oauth-pkce/) | Sequence | Base |
+| [![Card payment with webhook and 3-D Secure](examples/card-payment/card-payment.png)](examples/card-payment/) | [card-payment](examples/card-payment/) | Sequence | Base |
+| [![Online order life cycle](examples/order-lifecycle/order-lifecycle.png)](examples/order-lifecycle/) | [order-lifecycle](examples/order-lifecycle/) | State | Base |
+| [![Online shop data model](examples/online-shop-data-model/online-shop-data-model.png)](examples/online-shop-data-model/) | [online-shop-data-model](examples/online-shop-data-model/) | Data model | Base |
+| [![RAG concept diagram](examples/concept-rag/concept-rag.png)](examples/concept-rag/) | [concept-rag](examples/concept-rag/) | Concept | Whiteboard (full restyle) |
+| [![Web application architecture](examples/web-app-architecture/web-app-architecture.png)](examples/web-app-architecture/) | [web-app-architecture](examples/web-app-architecture/) | Architecture | Blueprint (full restyle) |
+| [![CI/CD pipeline](examples/ci-cd-pipeline/ci-cd-pipeline.png)](examples/ci-cd-pipeline/) | [ci-cd-pipeline](examples/ci-cd-pipeline/) | Decision flow | Corporate grey (partial: colors and font) |
 
 ### How a project style overrides the base
 
 The base design in [`skill/DESIGN.md`](skill/DESIGN.md) always applies. A `DESIGN.md` in the example folder (or the one passed with `--design`) overrides it token by token, so it only needs to define what changes. The diagram file does not change: restyling it recolors every element through its role.
 
-- Base style, no `DESIGN.md`: [oauth-pkce](skill/examples/oauth-pkce/), [card-payment](skill/examples/card-payment/), [order-lifecycle](skill/examples/order-lifecycle/) and [online-shop-data-model](skill/examples/online-shop-data-model/).
-- Complete override, which replaces the palette, font, corner radius, roughness and canvas background (roles it does not redefine come from the base): [concept-rag](skill/examples/concept-rag/DESIGN.md) (whiteboard) and [web-app-architecture](skill/examples/web-app-architecture/DESIGN.md) (blueprint).
-- Partial override, which changes only the colors and the font and inherits everything else: [ci-cd-pipeline](skill/examples/ci-cd-pipeline/DESIGN.md) (corporate grey).
+- Base style, no `DESIGN.md`: [oauth-pkce](examples/oauth-pkce/), [card-payment](examples/card-payment/), [order-lifecycle](examples/order-lifecycle/) and [online-shop-data-model](examples/online-shop-data-model/).
+- Complete override, which replaces the palette, font, corner radius, roughness and canvas background (roles it does not redefine come from the base): [concept-rag](examples/concept-rag/DESIGN.md) (whiteboard) and [web-app-architecture](examples/web-app-architecture/DESIGN.md) (blueprint).
+- Partial override, which changes only the colors and the font and inherits everything else: [ci-cd-pipeline](examples/ci-cd-pipeline/DESIGN.md) (corporate grey).
 
 ## Install the skill manually
 

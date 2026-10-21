@@ -1,6 +1,6 @@
 # Sequence Diagrams
 
-Use this guide for messages exchanged between participants over time: API calls, login flows, retries. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/oauth-pkce/`](../examples/oauth-pkce/); its PNG is an optional reference for the intended result.
+Use this guide for messages exchanged between participants over time: API calls, login flows, retries. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/oauth-pkce/`](https://github.com/alexmarco/excalidraw-design-diagrams/tree/main/examples/oauth-pkce/); its PNG is an optional reference for the intended result.
 
 ## Workflow
 
@@ -47,7 +47,7 @@ A frame is a combined fragment: `alt` (one branch runs), `opt` (runs only if its
 
 ## Asynchronous messages
 
-Use `message-async` when the sender does not wait for the answer: a webhook, an event, an e-mail. [`examples/card-payment/`](../examples/card-payment/) shows both cases.
+Use `message-async` when the sender does not wait for the answer: a webhook, an event, an e-mail. [`examples/card-payment/`](https://github.com/alexmarco/excalidraw-design-diagrams/tree/main/examples/card-payment/) shows both cases.
 
 - **Look:** a solid line with an open head, never dashed: dashed means a reply.
 - **Sender:** it is busy only while it works, so its bar covers that work and nothing more; a sender that just emits the message has no bar, and its arrow starts on the lifeline. A sender that then waits for a reply keeps its bar until the reply arrives.

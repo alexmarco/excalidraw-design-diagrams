@@ -1,6 +1,6 @@
 # Architecture Diagrams
 
-Use this guide for the components of a system and how they connect: a web application with its edge, services, queues and databases. You write the `.excalidraw` file directly: geometry, bindings and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/web-app-architecture/`](../examples/web-app-architecture/), drawn with its own Blueprint `DESIGN.md`; its PNG shows the intended result, and this guide is enough to draw without opening it. The document wrapper (`type`, `elements`, `appState`, `files`) is in [json-schema.md](json-schema.md).
+Use this guide for the components of a system and how they connect: a web application with its edge, services, queues and databases. You write the `.excalidraw` file directly: geometry, bindings and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/web-app-architecture/`](https://github.com/alexmarco/excalidraw-design-diagrams/tree/main/examples/web-app-architecture/), drawn with its own Blueprint `DESIGN.md`; its PNG shows the intended result, and this guide is enough to draw without opening it. The document wrapper (`type`, `elements`, `appState`, `files`) is in [json-schema.md](json-schema.md).
 
 ## Workflow
 

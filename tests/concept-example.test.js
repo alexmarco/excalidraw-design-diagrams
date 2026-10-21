@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { resolveDesign } from '../skill/scripts/resolve_design.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const exampleDirectory = join(root, 'skill', 'examples', 'concept-rag');
+const exampleDirectory = join(root, 'examples', 'concept-rag');
 const readText = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
 const diagram = () => JSON.parse(readText(join(exampleDirectory, 'concept-rag.excalidraw')));
 
