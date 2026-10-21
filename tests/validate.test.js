@@ -40,6 +40,12 @@ test('the real example fixture has no structural problems', () => {
   assert.deepEqual(structural, []);
 });
 
+test('the OAuth example passes every check', () => {
+  const example = JSON.parse(readFileSync(fileURLToPath(new URL('../examples/oauth-pkce/oauth-pkce.excalidraw', import.meta.url)), 'utf8'));
+
+  assert.deepEqual(validateDocument(example, design), []);
+});
+
 test('duplicate ids are reported', () => {
   assert.match(messages([shape('a', 'primary', 0, 0, 10, 10), shape('a', 'primary', 50, 0, 10, 10)]).join('\n'), /a: duplicate id/);
 });
