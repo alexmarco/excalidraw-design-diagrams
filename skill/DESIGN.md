@@ -28,6 +28,8 @@ colors:
   slate-300: "#cbd5e1"
   yellow-100: "#fef9c3"
   yellow-600: "#ca8a04"
+  teal-100: "#ccfbf1"
+  teal-700: "#0f766e"
   white: "#ffffff"
 components:
   primary:
@@ -152,6 +154,10 @@ components:
     backgroundColor: "{colors.navy}"
     strokeColor: "{colors.navy}"
     textColor: "{colors.white}"
+  store:
+    backgroundColor: "{colors.teal-100}"
+    strokeColor: "{colors.teal-700}"
+    textColor: "{colors.gray-700}"
   table-row:
     backgroundColor: "{colors.white}"
     strokeColor: "{colors.navy}"
@@ -181,6 +187,7 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 - Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text) and `label-background-in-frame` (the same box inside a tinted frame).
 - Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner), `frame-divider` (the dashed line between the operands of an `alt`).
 - Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a sticky note with a short why, next to the step it explains), `step` (numbered badge on a message).
+- Architecture roles: `store` (something that holds state: a database, a cache or a queue). Services use `primary`, `secondary` or `tertiary`, outside systems `participant-external` and `actor`, layers `zone`, and connections `message-sync` and `message-async`.
 
 - Data model roles: `table-row` (a field row under a table's `primary` header), `key-badge` (the `PK` or `FK` tag of a field), `relationship` (the line between two tables).
 

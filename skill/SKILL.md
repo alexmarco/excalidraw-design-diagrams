@@ -22,6 +22,7 @@ The `.excalidraw` file is the source of truth: later changes are edits to it. Af
 | Type | Use it for | Guide |
 | --- | --- | --- |
 | Sequence | Messages between participants over time: API calls, login flows, retries | [references/sequence.md](references/sequence.md) |
+| Architecture | Components and connections of a system: services, queues, databases, grouped by layer | [references/architecture.md](references/architecture.md) |
 | Data model | Tables, keys and relationships with cardinalities: database schemas, entity-relationship diagrams | [references/data-model.md](references/data-model.md) |
 | State | The life cycle of one thing: states, transitions with events and guards | [references/state.md](references/state.md) |
 | Decision flow | Steps with choices: pipelines, approvals, retry and error paths | [references/flow.md](references/flow.md) |

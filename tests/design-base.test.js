@@ -105,3 +105,8 @@ test('base diagram tokens give the hand-drawn Excalidraw look', () => {
   assert.equal(design.diagrams.fillStyle, 'solid');
   assert.equal(design.diagrams.endArrowhead, 'arrow');
 });
+
+test('a store (database, cache, queue) is a required role that differs from a service', () => {
+  assert.ok(REQUIRED_ROLES.includes('store'), 'store is not required');
+  assert.notEqual(design.components.store.backgroundColor, design.components.primary.backgroundColor);
+});
