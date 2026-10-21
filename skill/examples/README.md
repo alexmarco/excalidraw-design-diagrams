@@ -6,3 +6,4 @@ Each example is a folder with the diagram (`.excalidraw`), its PNG and SVG rende
 | --- | --- | --- | --- |
 | [![OAuth 2.0 with PKCE](oauth-pkce/oauth-pkce.png)](oauth-pkce/) | [oauth-pkce](oauth-pkce/) | Sequence | Base |
 | [![Web application architecture](web-app-architecture/web-app-architecture.png)](web-app-architecture/) | [web-app-architecture](web-app-architecture/) | Architecture | Blueprint (own DESIGN.md) |
+| [![CI/CD pipeline](ci-cd-pipeline/ci-cd-pipeline.png)](ci-cd-pipeline/) | [ci-cd-pipeline](ci-cd-pipeline/) | Decision flow | Corporate grey (colors and font only) |
