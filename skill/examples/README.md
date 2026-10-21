@@ -5,3 +5,4 @@ Each example is a folder with the diagram (`.excalidraw`), its PNG and SVG rende
 | Screenshot | Example | Diagram type | Style |
 | --- | --- | --- | --- |
 | [![OAuth 2.0 with PKCE](oauth-pkce/oauth-pkce.png)](oauth-pkce/) | [oauth-pkce](oauth-pkce/) | Sequence | Base |
+| [![Online shop data model](online-shop-data-model/online-shop-data-model.png)](online-shop-data-model/) | [online-shop-data-model](online-shop-data-model/) | Data model | Base |
