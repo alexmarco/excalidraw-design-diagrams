@@ -5,7 +5,7 @@ colors:
   blue-100: "#dbeafe"
   blue-300: "#93c5fd"
   blue-400: "#60a5fa"
-  blue-500: "#3b82f6"
+  blue-600: "#2563eb"
   blue-800: "#1e40af"
   navy: "#1e3a5f"
   orange-100: "#fed7aa"
@@ -16,7 +16,7 @@ colors:
   red-100: "#fee2e2"
   red-200: "#fecaca"
   red-600: "#dc2626"
-  red-700: "#b91c1c"
+  red-800: "#991b1b"
   amber-50: "#fffbeb"
   amber-100: "#fef3c7"
   amber-700: "#b45309"
@@ -33,13 +33,13 @@ colors:
   white: "#ffffff"
 components:
   primary:
-    backgroundColor: "{colors.blue-500}"
+    backgroundColor: "{colors.blue-600}"
     strokeColor: "{colors.navy}"
     textColor: "{colors.white}"
   secondary:
     backgroundColor: "{colors.blue-400}"
     strokeColor: "{colors.navy}"
-    textColor: "{colors.gray-700}"
+    textColor: "{colors.slate-800}"
   tertiary:
     backgroundColor: "{colors.blue-300}"
     strokeColor: "{colors.navy}"
@@ -71,17 +71,17 @@ components:
     textColor: "{colors.gray-700}"
   error:
     backgroundColor: "{colors.red-200}"
-    strokeColor: "{colors.red-700}"
-    textColor: "{colors.red-700}"
+    strokeColor: "{colors.red-800}"
+    textColor: "{colors.red-800}"
   error-return:
-    strokeColor: "{colors.red-700}"
-    textColor: "{colors.red-700}"
+    strokeColor: "{colors.red-800}"
+    textColor: "{colors.red-800}"
     strokeStyle: dashed
     endArrowhead: arrow
   title:
     textColor: "{colors.blue-800}"
   subtitle:
-    textColor: "{colors.blue-500}"
+    textColor: "{colors.blue-600}"
   body:
     textColor: "{colors.slate-500}"
   text-on-light:
@@ -94,13 +94,13 @@ components:
   structure:
     strokeColor: "{colors.navy}"
   marker:
-    backgroundColor: "{colors.blue-500}"
-    strokeColor: "{colors.blue-500}"
+    backgroundColor: "{colors.blue-600}"
+    strokeColor: "{colors.blue-600}"
   label-background:
     backgroundColor: "{colors.white}"
     strokeColor: "{colors.white}"
   participant:
-    backgroundColor: "{colors.blue-500}"
+    backgroundColor: "{colors.blue-600}"
     strokeColor: "{colors.navy}"
     textColor: "{colors.white}"
   actor:

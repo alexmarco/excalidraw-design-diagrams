@@ -6,7 +6,7 @@ const design = resolveDesign();
 
 // Expected values come from the palette the skill used before DESIGN.md (the former skill/references/color-palette.md).
 const SHAPE_PURPOSES = {
-  primary: { fill: '#3b82f6', stroke: '#1e3a5f' },
+  primary: { fill: '#2563eb', stroke: '#1e3a5f' },
   secondary: { fill: '#60a5fa', stroke: '#1e3a5f' },
   tertiary: { fill: '#93c5fd', stroke: '#1e3a5f' },
   start: { fill: '#fed7aa', stroke: '#c2410c' },
@@ -15,12 +15,12 @@ const SHAPE_PURPOSES = {
   decision: { fill: '#fef3c7', stroke: '#b45309' },
   ai: { fill: '#ddd6fe', stroke: '#6d28d9' },
   inactive: { fill: '#dbeafe', stroke: '#1e40af', strokeStyle: 'dashed' },
-  error: { fill: '#fecaca', stroke: '#b91c1c' },
+  error: { fill: '#fecaca', stroke: '#991b1b' },
 };
 
 const TEXT_PURPOSES = {
   title: '#1e40af',
-  subtitle: '#3b82f6',
+  subtitle: '#2563eb',
   body: '#64748b',
   'text-on-light': '#374151',
   'text-on-dark': '#ffffff',
@@ -90,8 +90,8 @@ test('evidence artifacts and lines keep the current palette colors', () => {
   assert.equal(design.components.code.backgroundColor, '#1e293b');
   assert.equal(design.components.code.textColor, '#22c55e');
   assert.equal(design.components.structure.strokeColor, '#1e3a5f');
-  assert.equal(design.components.marker.backgroundColor, '#3b82f6');
-  assert.equal(design.components.marker.strokeColor, '#3b82f6');
+  assert.equal(design.components.marker.backgroundColor, '#2563eb');
+  assert.equal(design.components.marker.strokeColor, '#2563eb');
   assert.equal(design.diagrams.viewBackgroundColor, '#ffffff');
 });
 

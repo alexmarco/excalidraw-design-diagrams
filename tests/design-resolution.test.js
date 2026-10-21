@@ -47,8 +47,8 @@ test('a design without a required role fails', () => {
 
 test('an explicit design path wins over the project file', () => {
   const projectDir = tempDirectory();
-  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-500': '#111111' }));
-  const explicitPath = writeFile(join(tempDirectory(), 'custom.md'), colorsOnlyDesign({ 'blue-500': '#000000' }));
+  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-600': '#111111' }));
+  const explicitPath = writeFile(join(tempDirectory(), 'custom.md'), colorsOnlyDesign({ 'blue-600': '#000000' }));
 
   const design = resolveDesign({ explicitPath, projectDir });
 
@@ -57,7 +57,7 @@ test('an explicit design path wins over the project file', () => {
 
 test('the project file wins over the base design', () => {
   const projectDir = tempDirectory();
-  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-500': '#111111' }));
+  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-600': '#111111' }));
 
   const design = resolveDesign({ projectDir });
 
@@ -66,7 +66,7 @@ test('the project file wins over the base design', () => {
 
 test('a project file in docs/ is used when the project root has none', () => {
   const projectDir = tempDirectory();
-  writeFile(join(projectDir, 'docs', 'DESIGN.md'), colorsOnlyDesign({ 'blue-500': '#222222' }));
+  writeFile(join(projectDir, 'docs', 'DESIGN.md'), colorsOnlyDesign({ 'blue-600': '#222222' }));
 
   const design = resolveDesign({ projectDir });
 
@@ -75,8 +75,8 @@ test('a project file in docs/ is used when the project root has none', () => {
 
 test('the project file at the root wins over the one in docs/', () => {
   const projectDir = tempDirectory();
-  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-500': '#111111' }));
-  writeFile(join(projectDir, 'docs', 'DESIGN.md'), colorsOnlyDesign({ 'blue-500': '#222222' }));
+  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-600': '#111111' }));
+  writeFile(join(projectDir, 'docs', 'DESIGN.md'), colorsOnlyDesign({ 'blue-600': '#222222' }));
 
   const design = resolveDesign({ projectDir });
 
@@ -85,7 +85,7 @@ test('the project file at the root wins over the one in docs/', () => {
 
 test('a project file that defines only colors inherits roles and diagram tokens from the base', () => {
   const projectDir = tempDirectory();
-  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-500': '#111111' }));
+  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-600': '#111111' }));
 
   const design = resolveDesign({ projectDir });
 
@@ -96,7 +96,7 @@ test('a project file that defines only colors inherits roles and diagram tokens 
 
 test('a project file without a Diagrams block resolves', () => {
   const projectDir = tempDirectory();
-  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-500': '#111111' }));
+  writeFile(join(projectDir, 'DESIGN.md'), colorsOnlyDesign({ 'blue-600': '#111111' }));
 
   assert.doesNotThrow(() => resolveDesign({ projectDir }));
 });
