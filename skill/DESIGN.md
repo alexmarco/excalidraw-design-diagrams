@@ -169,11 +169,12 @@ Arrows use the stroke color of their source concept.
 
 Diagram-only tokens that are not tied to a role.
 
-`roughness` takes the values Excalidraw offers: 0 (architect), 1 (artist) or 2 (cartoonist). `cornerRadius` is the radius in pixels of rounded shapes; sharp shapes stay sharp. `fontFamily` 5 is Excalifont.
+`roughness` takes the values Excalidraw offers: 0 (architect), 1 (artist) or 2 (cartoonist). `cornerRadius` is the radius in pixels of rounded shapes; sharp shapes stay sharp. `padding` is the minimum space in pixels between the edge of a zone or frame and the content inside it. `fontFamily` 5 is Excalifont.
 
 ```yaml
 roughness: 0
 cornerRadius: 8
+padding: 24
 fontFamily: 5
 strokeWidth: 2
 strokeStyle: solid
