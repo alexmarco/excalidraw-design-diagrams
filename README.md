@@ -51,12 +51,13 @@ Each example is a folder with the `.excalidraw` file and its PNG and SVG renders
 | [![RAG concept diagram](examples/concept-rag/concept-rag.png)](examples/concept-rag/) | [concept-rag](examples/concept-rag/) | Concept | Whiteboard (full restyle) |
 | [![Web application architecture](examples/web-app-architecture/web-app-architecture.png)](examples/web-app-architecture/) | [web-app-architecture](examples/web-app-architecture/) | Architecture | Blueprint (full restyle) |
 | [![CI/CD pipeline](examples/ci-cd-pipeline/ci-cd-pipeline.png)](examples/ci-cd-pipeline/) | [ci-cd-pipeline](examples/ci-cd-pipeline/) | Decision flow | Corporate grey (partial: colors and font) |
+| [![Web application architecture with icons](examples/web-app-icons/web-app-icons.png)](examples/web-app-icons/) | [web-app-icons](examples/web-app-icons/) | Architecture with icons | Base |
 
 ### How a project style overrides the base
 
 The base design in [`skill/DESIGN.md`](skill/DESIGN.md) always applies. A `DESIGN.md` in the example folder (or the one passed with `--design`) overrides it token by token, so it only needs to define what changes. The diagram file does not change: restyling it recolors every element through its role.
 
-- Base style, no `DESIGN.md`: [oauth-pkce](examples/oauth-pkce/), [card-payment](examples/card-payment/), [order-lifecycle](examples/order-lifecycle/), [online-shop-data-model](examples/online-shop-data-model/) and [online-shop-reduced](examples/online-shop-reduced/).
+- Base style, no `DESIGN.md`: [oauth-pkce](examples/oauth-pkce/), [card-payment](examples/card-payment/), [order-lifecycle](examples/order-lifecycle/), [online-shop-data-model](examples/online-shop-data-model/) and [online-shop-reduced](examples/online-shop-reduced/) and [web-app-icons](examples/web-app-icons/).
 - Complete override, which replaces the palette, font, corner radius, roughness and canvas background (roles it does not redefine come from the base): [concept-rag](examples/concept-rag/DESIGN.md) (whiteboard) and [web-app-architecture](examples/web-app-architecture/DESIGN.md) (blueprint).
 - Partial override, which changes only the colors and the font and inherits everything else: [ci-cd-pipeline](examples/ci-cd-pipeline/DESIGN.md) (corporate grey).
 

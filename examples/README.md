@@ -12,3 +12,4 @@ Each example is a folder with the diagram (`.excalidraw`), its PNG and SVG rende
 | [![RAG concept diagram](concept-rag/concept-rag.png)](concept-rag/) | [concept-rag](concept-rag/) | Concept | Whiteboard (full restyle) |
 | [![Web application architecture](web-app-architecture/web-app-architecture.png)](web-app-architecture/) | [web-app-architecture](web-app-architecture/) | Architecture | Blueprint (full restyle) |
 | [![CI/CD pipeline](ci-cd-pipeline/ci-cd-pipeline.png)](ci-cd-pipeline/) | [ci-cd-pipeline](ci-cd-pipeline/) | Decision flow | Corporate grey (partial: colors and font) |
+| [![Web application architecture with icons](web-app-icons/web-app-icons.png)](web-app-icons/) | [web-app-icons](web-app-icons/) | Architecture with icons | Base |

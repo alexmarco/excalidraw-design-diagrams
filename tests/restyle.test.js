@@ -191,3 +191,15 @@ test('restyling keeps the document background when the design has no canvas back
 
   assert.equal(document.appState.viewBackgroundColor, '#123456');
 });
+
+test('restyling leaves an image element as it is, with or without a role, and does not report it', () => {
+  const image = { id: 'logo', type: 'image', x: 1, y: 2, width: 48, height: 48, fileId: 'icon-1', strokeColor: 'transparent', backgroundColor: 'transparent', roughness: 0 };
+  const withRole = { ...image, id: 'logo-with-role', customData: { role: 'primary' } };
+  const document = { ...generated, elements: [...generated.elements, image, withRole], files: { 'icon-1': { id: 'icon-1' } } };
+
+  const result = restyleDocument(document, designFrom('---\ncomponents:\n  primary:\n    backgroundColor: "#111111"\n---\n'));
+
+  assert.deepEqual(result.document.elements.slice(-2), [image, withRole]);
+  assert.deepEqual(result.document.files, document.files);
+  assert.equal(result.unstyledIds.includes('logo'), false);
+});
