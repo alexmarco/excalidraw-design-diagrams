@@ -42,6 +42,25 @@ A frame is a combined fragment: `alt` (one branch runs), `opt` (runs only if its
 - **Nesting:** an inner frame sits `padding` inside its parent.
 - **Where an `alt` starts:** after the reply that carries the outcome it branches on ("Redirect to callback", "authorization result"), so each call and its reply stay together and no bar starts without a call.
 
+## Asynchronous messages
+
+Use `message-async` when the sender does not wait for the answer: a webhook, an event, an e-mail. [`examples/card-payment/`](../examples/card-payment/) shows both cases.
+
+- **Look:** a solid line with an open head, never dashed: dashed means a reply.
+- **Sender:** it is busy only while it works, so its bar covers that work and nothing more; a sender that just emits the message has no bar.
+- **Receiver:** its bar starts at the arrow, as for any call, and ends at its reply, if it sends one. An async message with no reply gets a bar only when the receiver does work you draw.
+- **Label:** the name of the event or payload (`payment_intent.succeeded`), not a verb. A confirmation such as `200 OK` is a separate `message-return` numbered after it.
+
+## Loop frames
+
+A `loop` repeats its body until a condition holds.
+
+- **Columns:** the frame covers only the participants that exchange the repeated messages, not all columns. Its left edge sits far enough from the first covered lifeline for the tag and the guard to fit before it.
+- **Guard:** one guard, the exit condition (`[until 2xx]`), on the tag's row.
+- **Body:** draw one pass: the message and the reply that decides whether it repeats. Do not draw the retries.
+- **Position:** the frame starts after the messages that trigger the loop, with the same space above its first message as an `alt` frame.
+- **Note:** say what the repetition implies for the reader in a note beside the frame, never inside it.
+
 ## Notes
 
 A note explains a why the arrows cannot show ("state ties the callback to this request and blocks CSRF"). Use one or two per diagram.
