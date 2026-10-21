@@ -129,6 +129,21 @@ test('zones closer than the padding to each other are reported', () => {
   assert.equal(messages([left, shape('idp', 'zone', 400 + PADDING, 0, 300, 300)]).length, 0);
 });
 
+test('text crossing the edge of a zone is reported', () => {
+  const zone = shape('device', 'zone', 0, 0, 400, 300);
+
+  assert.match(messages([zone, text('across', 'text-on-light', 380, 100, 60, 20)]).join('\n'), /across: crosses the edge of zone device/);
+});
+
+test('a note covering an arrow or a text is reported, its own text is not', () => {
+  const note = shape('why', 'note', 100, 100, 200, 80);
+  const arrow = { id: 'call', type: 'arrow', x: 0, y: 140, width: 400, height: 0, points: [[0, 0], [400, 0]], roughness: 0, customData: { role: 'message-sync' } };
+
+  assert.match(messages([note, arrow]).join('\n'), /why: covers arrow call/);
+  assert.match(messages([note, text('label', 'text-on-light', 150, 110, 60, 20)]).join('\n'), /why: covers text label/);
+  assert.equal(messages([note, text('why-line-0', 'note', 114, 111, 120, 19)]).length, 0);
+});
+
 test('the frame tag and frame texts may sit in the frame corner', () => {
   const frame = shape('alt', 'frame', 100, 100, 300, 200);
 

@@ -1,5 +1,6 @@
-// Mechanical checks an agent cannot reliably do by eye: file structure, and text that collides
-// with bars, frame edges, other text or lifelines, or sits too close to the edge of its zone or frame.
+// Mechanical checks an agent cannot reliably do by eye: file structure; text that collides with bars,
+// frame or zone edges, other text or lifelines; notes that cover arrows or text; and content too close
+// to the edge of its zone or frame.
 
 const ROUGHNESS_VALUES = [0, 1, 2];
 const FONT_FAMILIES = [1, 2, 3, 5, 6, 7, 8, 9, 10];
@@ -58,9 +59,11 @@ function layoutProblems(elements, design) {
     for (const bar of withRole('activation')) {
       if (intersects(box, boundsOf(bar))) report(textElement.id, `overlaps activation bar ${bar.id}`);
     }
-    for (const frame of withRole('frame').filter((element) => element.type === 'rectangle')) {
-      const frameBox = boundsOf(frame);
-      if (intersects(box, frameBox) && !contains(frameBox, box, 0)) report(textElement.id, `crosses the edge of frame ${frame.id}`);
+    for (const area of [...withRole('frame'), ...withRole('zone')].filter((element) => element.type === 'rectangle')) {
+      const areaBox = boundsOf(area);
+      if (intersects(box, areaBox) && !contains(areaBox, box, 0)) {
+        report(textElement.id, `crosses the edge of ${area.customData.role} ${area.id}`);
+      }
     }
     for (const earlier of texts.slice(0, index)) {
       if (intersects(box, boundsOf(earlier))) report(textElement.id, `overlaps text ${earlier.id}`);
@@ -70,6 +73,16 @@ function layoutProblems(elements, design) {
       report(textElement.id, 'a lifeline crosses it without a label background');
     }
   });
+
+  for (const note of withRole('note').filter((element) => element.type === 'rectangle')) {
+    const noteBox = boundsOf(note);
+    for (const arrow of elements.filter((element) => element.type === 'arrow')) {
+      if (intersects(noteBox, boundsOf(arrow))) report(note.id, `covers arrow ${arrow.id}`);
+    }
+    for (const covered of texts.filter((element) => element.customData?.role !== 'note')) {
+      if (intersects(noteBox, boundsOf(covered))) report(note.id, `covers text ${covered.id}`);
+    }
+  }
 
   const padding = design.diagrams.padding ?? 0;
   const zones = elements.filter((element) => element.type === 'rectangle' && element.customData?.role === 'zone');
@@ -101,11 +114,15 @@ function boundsOf(element) {
   return { left: element.x, top: element.y, right: element.x + element.width, bottom: element.y + element.height };
 }
 
-// Touching edges do not count as an overlap; a vertical line crossing a box does.
+// Touching edges do not count as an overlap; a vertical or horizontal line crossing a box does.
 function intersects(a, b) {
-  return a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
-    || (a.left === a.right && b.left < a.left && a.left < b.right && a.top < b.bottom && b.top < a.bottom)
-    || (b.left === b.right && a.left < b.left && b.left < a.right && a.top < b.bottom && b.top < a.bottom);
+  return overlaps(a.left, a.right, b.left, b.right) && overlaps(a.top, a.bottom, b.top, b.bottom);
+}
+
+function overlaps(start, end, otherStart, otherEnd) {
+  if (start === end) return otherStart < start && start < otherEnd;
+  if (otherStart === otherEnd) return start < otherStart && otherStart < end;
+  return start < otherEnd && otherStart < end;
 }
 
 function grow(box, margin) {
