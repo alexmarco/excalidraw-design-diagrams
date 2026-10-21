@@ -46,6 +46,7 @@ export const REQUIRED_ROLES = [
   'frame-tag',
   'label-background-in-frame',
   'frame-divider',
+  'error-return',
 ];
 
 function parseYamlOrEmpty(source) {

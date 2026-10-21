@@ -71,6 +71,11 @@ components:
     backgroundColor: "{colors.red-200}"
     strokeColor: "{colors.red-700}"
     textColor: "{colors.red-700}"
+  error-return:
+    strokeColor: "{colors.red-700}"
+    textColor: "{colors.red-700}"
+    strokeStyle: dashed
+    endArrowhead: arrow
   title:
     textColor: "{colors.blue-800}"
   subtitle:
@@ -159,7 +164,7 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 
 ## Roles
 
-- Shape roles: `primary`, `secondary`, `tertiary` (neutral emphasis), `start` (trigger), `end` (success), `warning` (reset), `decision`, `ai`, `inactive` (dashed stroke), `error`.
+- Shape roles: `primary`, `secondary`, `tertiary` (neutral emphasis), `start` (trigger), `end` (success), `warning` (reset), `decision`, `ai`, `inactive` (dashed stroke), `error`, `error-return` (a reply that carries an error: red and dashed).
 - Text roles: `title`, `subtitle`, `body`, `text-on-light`, `text-on-dark`.
 - Evidence roles: `code` (code and data examples), `structure` (structural lines), `marker` (marker dots).
 - Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text) and `label-background-in-frame` (the same box inside a tinted frame).

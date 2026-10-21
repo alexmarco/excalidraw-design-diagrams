@@ -58,6 +58,14 @@ test('error text is red like the error stroke', () => {
   assert.equal(design.components.error.textColor, design.components.error.strokeColor);
 });
 
+test('an error reply is red and dashed like any other reply', () => {
+  const errorReturn = design.components['error-return'];
+  assert.equal(errorReturn.strokeColor, design.components.error.strokeColor);
+  assert.equal(errorReturn.textColor, design.components.error.textColor);
+  assert.equal(errorReturn.strokeStyle, design.components['message-return'].strokeStyle);
+  assert.equal(errorReturn.endArrowhead, design.components['message-return'].endArrowhead);
+});
+
 test('a label background inside a frame blends with the frame tint', () => {
   const backing = design.components['label-background-in-frame'];
   assert.equal(backing.backgroundColor, design.components.frame.backgroundColor);
