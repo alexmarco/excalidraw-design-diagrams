@@ -22,6 +22,7 @@ The `.excalidraw` file is the source of truth: later changes are edits to it. Af
 | Type | Use it for | Guide |
 | --- | --- | --- |
 | Sequence | Messages between participants over time: API calls, login flows, retries | [references/sequence.md](references/sequence.md) |
+| Concept | How an idea or pipeline works, in grouped stages: RAG, a build pipeline | [references/concept.md](references/concept.md) |
 
 For a type without a guide, draw with [references/element-templates.md](references/element-templates.md) and [references/json-schema.md](references/json-schema.md), and keep the same workflow.
 
