@@ -152,3 +152,52 @@ test('the frame tag and frame texts may sit in the frame corner', () => {
     [],
   );
 });
+
+function boundArrow(id, startId, endId) {
+  return {
+    id, type: 'arrow', x: 100, y: 25, width: 100, height: 0, points: [[0, 0], [100, 0]], roughness: 0,
+    customData: { role: 'message-async' },
+    startBinding: { elementId: startId, focus: 0, gap: 0 },
+    endBinding: { elementId: endId, focus: 0, gap: 0 },
+  };
+}
+
+test('an arrow bound to a shape that does not list it back is reported', () => {
+  const found = messages([
+    shape('from', 'primary', 0, 0, 100, 50, { boundElements: [{ type: 'arrow', id: 'go' }] }),
+    shape('to', 'primary', 200, 0, 100, 50, { boundElements: [] }),
+    boundArrow('go', 'from', 'to'),
+  ]).join('\n');
+
+  assert.match(found, /go: endBinding to to is not listed in its boundElements/);
+  assert.doesNotMatch(found, /startBinding/);
+});
+
+test('a shape that lists an arrow that does not point back is reported', () => {
+  const found = messages([
+    shape('from', 'primary', 0, 0, 100, 50, { boundElements: [{ type: 'arrow', id: 'go' }] }),
+    shape('to', 'primary', 200, 0, 100, 50, { boundElements: [{ type: 'arrow', id: 'go' }] }),
+    shape('other', 'primary', 400, 0, 100, 50, { boundElements: [{ type: 'arrow', id: 'go' }] }),
+    boundArrow('go', 'from', 'to'),
+  ]).join('\n');
+
+  assert.match(found, /other: boundElements lists go, which does not point back/);
+  assert.doesNotMatch(found, /(from|to): boundElements/);
+});
+
+test('a shape that lists a text that is not contained in it is reported', () => {
+  const found = messages([
+    shape('box', 'primary', 0, 0, 100, 50, { boundElements: [{ type: 'text', id: 'label' }] }),
+    text('label', 'body', 10, 10, 50, 20),
+  ]).join('\n');
+
+  assert.match(found, /box: boundElements lists label, which does not point back/);
+});
+
+test('an arrow bound to shapes that list it back has no binding problems', () => {
+  assert.deepEqual(messages([
+    shape('from', 'primary', 0, 0, 100, 50, { boundElements: [{ type: 'arrow', id: 'go' }] }),
+    shape('to', 'primary', 200, 0, 100, 50, { boundElements: [{ type: 'arrow', id: 'go' }] }),
+    boundArrow('go', 'from', 'to'),
+  ]), []);
+});

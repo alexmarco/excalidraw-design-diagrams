@@ -1,0 +1,13 @@
+# Examples
+
+Each example is a folder with the diagram (`.excalidraw`), its PNG and SVG renders, and optionally its own `DESIGN.md`. The automated check (`npm test`) verifies every folder: both renders exist, the validator passes, restyling changes nothing, and the example is listed here.
+
+| Screenshot | Example | Diagram type | Style |
+| --- | --- | --- | --- |
+| [![OAuth 2.0 with PKCE](oauth-pkce/oauth-pkce.png)](oauth-pkce/) | [oauth-pkce](oauth-pkce/) | Sequence | Base |
+| [![Card payment with webhook and 3-D Secure](card-payment/card-payment.png)](card-payment/) | [card-payment](card-payment/) | Sequence | Base |
+| [![Online order life cycle](order-lifecycle/order-lifecycle.png)](order-lifecycle/) | [order-lifecycle](order-lifecycle/) | State | Base |
+| [![Online shop data model](online-shop-data-model/online-shop-data-model.png)](online-shop-data-model/) | [online-shop-data-model](online-shop-data-model/) | Data model | Base |
+| [![RAG concept diagram](concept-rag/concept-rag.png)](concept-rag/) | [concept-rag](concept-rag/) | Concept | Whiteboard (full restyle) |
+| [![Web application architecture](web-app-architecture/web-app-architecture.png)](web-app-architecture/) | [web-app-architecture](web-app-architecture/) | Architecture | Blueprint (full restyle) |
+| [![CI/CD pipeline](ci-cd-pipeline/ci-cd-pipeline.png)](ci-cd-pipeline/) | [ci-cd-pipeline](ci-cd-pipeline/) | Decision flow | Corporate grey (partial: colors and font) |

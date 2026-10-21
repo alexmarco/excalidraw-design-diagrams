@@ -17,7 +17,15 @@ export function restyleDocument(document, design) {
       ...cornerStyle(element, design),
     };
   });
-  return { document: { ...document, elements }, unstyledIds };
+  return { document: { ...document, elements, appState: canvasStyle(document, design) }, unstyledIds };
+}
+
+// The canvas takes the design's background; a design without the token keeps the current one.
+function canvasStyle(document, design) {
+  const { viewBackgroundColor } = design.diagrams;
+  return viewBackgroundColor === undefined
+    ? document.appState
+    : { ...document.appState, viewBackgroundColor };
 }
 
 // Rounded shapes take the design's corner radius; sharp shapes stay sharp.

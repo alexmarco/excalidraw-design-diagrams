@@ -22,6 +22,7 @@ function structureProblems(elements, design) {
     if (ids.has(element.id)) report(element.id, 'duplicate id');
     ids.add(element.id);
   }
+  const byId = new Map(elements.map((element) => [element.id, element]));
   for (const element of elements) {
     const references = [
       ['containerId', element.containerId],
@@ -31,6 +32,18 @@ function structureProblems(elements, design) {
     ];
     for (const [field, target] of references) {
       if (target && !ids.has(target)) report(element.id, `${field} points to missing element ${target}`);
+    }
+    for (const field of ['startBinding', 'endBinding']) {
+      const target = byId.get(element[field]?.elementId);
+      if (target && !(target.boundElements ?? []).some((bound) => bound.id === element.id)) {
+        report(element.id, `${field} to ${target.id} is not listed in its boundElements`);
+      }
+    }
+    for (const bound of element.boundElements ?? []) {
+      const target = byId.get(bound.id);
+      if (target && !pointsTo(target, element.id)) {
+        report(element.id, `boundElements lists ${target.id}, which does not point back`);
+      }
     }
     const role = element.customData?.role;
     if (role === undefined) report(element.id, 'has no role');
@@ -43,6 +56,13 @@ function structureProblems(elements, design) {
     }
   }
   return problems;
+}
+
+// A bound element points back to its shape through a binding (arrows) or a containerId (texts).
+function pointsTo(bound, shapeId) {
+  return bound.containerId === shapeId
+    || bound.startBinding?.elementId === shapeId
+    || bound.endBinding?.elementId === shapeId;
 }
 
 function layoutProblems(elements, design) {

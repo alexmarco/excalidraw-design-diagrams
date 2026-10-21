@@ -1,6 +1,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { inflateSync } from 'node:zlib';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,6 +24,21 @@ const requiresBrowser = { skip: browserAvailable ? false : 'no Chrome or Chromiu
 
 const pngWidth = (png) => png.readUInt32BE(16);
 
+// RGB of the first pixel (8-bit RGBA). Whatever the row filter, the first pixel of the first row has no
+// neighbours, so its raw bytes are the pixel itself.
+function topLeftPixel(png) {
+  const chunks = [];
+  for (let offset = 8; offset < png.length; ) {
+    const length = png.readUInt32BE(offset);
+    if (png.toString('ascii', offset + 4, offset + 8) === 'IDAT') {
+      chunks.push(png.subarray(offset + 8, offset + 8 + length));
+    }
+    offset += 12 + length;
+  }
+  const [, red, green, blue] = inflateSync(Buffer.concat(chunks));
+  return [red, green, blue];
+}
+
 let outputDirectory;
 
 before(async () => {
@@ -42,6 +58,22 @@ test('renders a diagram to a PNG and an SVG at the requested output path', requi
   assert.equal(svgPath, join(outputDirectory, 'sample.svg'));
   assert.deepEqual(await readFile(pngPath).then((png) => png.subarray(0, 8)), PNG_SIGNATURE);
   assert.match(await readFile(svgPath, 'utf8'), /^<svg[\s>]/);
+});
+
+test('the canvas background of the document shows in both the PNG and the SVG', requiresBrowser, async () => {
+  const diagram = JSON.parse(await readFile(sampleDiagram, 'utf8'));
+  diagram.appState.viewBackgroundColor = '#0b1020';
+  const darkDiagramPath = join(outputDirectory, 'dark-source.excalidraw');
+  await writeFile(darkDiagramPath, JSON.stringify(diagram));
+
+  const { pngPath, svgPath } = await renderExcalidrawFile(darkDiagramPath, {
+    outputPath: join(outputDirectory, 'dark.png'),
+    scale: 1,
+    maxWidth: 1920,
+  });
+
+  assert.match(await readFile(svgPath, 'utf8'), /fill="#0b1020"/);
+  assert.deepEqual(topLeftPixel(await readFile(pngPath)), [0x0b, 0x10, 0x20]);
 });
 
 test('an output path ending in .svg gets a PNG and an SVG side by side, and the SVG is not overwritten', requiresBrowser, async () => {
