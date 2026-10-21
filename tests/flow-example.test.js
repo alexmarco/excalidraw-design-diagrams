@@ -17,6 +17,13 @@ test('the CI/CD example DESIGN.md defines only colors and the font family', () =
   assert.deepEqual(Object.keys(override.diagrams), ['fontFamily']);
 });
 
+test('the CI/CD example redefines every color name of the base design, so no role keeps a base color', () => {
+  const baseColors = parseDesign(readText(join(root, 'skill', 'DESIGN.md'))).tokens.colors;
+  const overrideColors = parseDesign(readText(join(exampleDirectory, 'DESIGN.md'))).tokens.colors;
+
+  assert.deepEqual(Object.keys(overrideColors).sort(), Object.keys(baseColors).sort());
+});
+
 test('every other token of the CI/CD example resolves from the base design', () => {
   const base = resolveDesign();
   const design = resolveDesign({ projectDir: exampleDirectory });
