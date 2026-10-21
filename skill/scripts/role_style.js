@@ -23,5 +23,6 @@ export function roleStyle(role, elementType, design) {
     ...style,
     strokeColor: component.textColor ?? design.components[TEXT_ROLE_FALLBACK].textColor,
     backgroundColor: 'transparent',
+    fontFamily: design.diagrams.fontFamily,
   });
 }

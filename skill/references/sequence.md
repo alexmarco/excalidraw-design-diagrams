@@ -1,95 +1,72 @@
 # Sequence Diagrams
 
-Use this guide for diagrams that show messages exchanged between participants over time, such as API calls, login flows or retries. The generator reads a YAML spec and writes a first-draft `.excalidraw` file with participants, lifelines, messages, activations and frames already placed.
+Use this guide for messages exchanged between participants over time: API calls, login flows, retries. You write the `.excalidraw` file directly: geometry and a role on every element. `restyle.js` then applies colors and fonts from `DESIGN.md`. The reference result is [`examples/oauth-pkce/`](../examples/oauth-pkce/); open its PNG before drawing.
 
 ## Workflow
 
-In the commands below, `<skill>` is the skill directory (`skill/` in this repository). The generator and `restyle.js` look for the project's `DESIGN.md` (or `docs/DESIGN.md`) in the directory of the spec or file they are given, so they can run from any directory.
+`<skill>` is the skill directory. Each step ends when its check passes.
 
-1. Write the spec, for example `diagrams/login.yaml`.
-2. Generate the draft. The `.excalidraw` file is written beside the spec and is not regenerated afterwards, because the file is the source of truth. Pass `--output <file>` to choose another path:
+1. **Plan the story.** Write down the participants in the order they first interact, the messages in order, the conditional parts (`alt`, `opt`, `loop`) and the one or two facts a reader would ask "why?" about. Keep one story per diagram and one level of abstraction (components or methods, not both). Done when every message has a sender, a receiver and a short label.
+2. **Lay out the grid** following [Layout](#layout): columns, zones with their reserved room, rows. Done when every column and zone edge is fixed before any message is drawn.
+3. **Draw the file.** A throwaway script that writes fixed coordinates is fine; keep it outside the project. Templates for each element are in [element-templates.md](element-templates.md).
+4. **Apply the design:** `node <skill>/scripts/restyle.js diagram.excalidraw`.
+5. **Validate:** `node <skill>/scripts/validate.js diagram.excalidraw`. Fix every reported problem and run it again. Done when it prints `No problems found.`
+6. **Render and review:** `node <skill>/references/render_excalidraw.js diagram.excalidraw`, open the PNG, and go through both checklists at the end of this guide. Fix and repeat from step 4. Done when every item passes.
 
-   ```bash
-   node <skill>/scripts/generate_sequence.js diagrams/login.yaml
-   ```
+## Layout
 
-3. Render the file and review the PNG against the checklist below:
+All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24 in the base design): the space between the edge of a zone or frame and anything inside it, and between zones.
 
-   ```bash
-   node <skill>/references/render_excalidraw.js diagrams/login.excalidraw
-   ```
+- **Header:** title at the top left (font size 30, role `title`), one line below it naming the source and how to read the diagram (16, role `body`), for example "RFC 6749 · numbers follow the order of the requests · dashed arrows are responses". A diagram with no real source says so: "Illustrative flow · …".
+- **Participants:** boxes 210 × 56, rounded, label font 18, in the order they first interact so arrows cross as few lifelines as possible. Role `participant` for the system the diagram explains, `participant-external` for the services and tools it calls, `actor` for people and outside callers.
+- **Columns:** at least 300 apart, more where a label must fit between two lifelines. A label is about `0.5 × font size` pixels per character in Excalifont, plus 26 for its step badge.
+- **Zones (optional):** a dashed box that groups participants by where they run ("User's device", "Identity provider"), role `zone`, label at `padding` from its top left corner. Size each zone before drawing messages: it wraps its participant boxes plus the room its notes and self-message labels need, plus `padding` on every side, and stays `padding` away from the next zone.
+- **Rows:** one message every 58, and 66 after a self message. Lifelines (role `lifeline`) run from the bottom of the header box to below the last message.
+- **Activation bars:** 14 wide, centered on the lifeline, role `activation`. A participant is active while it handles a call: from the row of the call to the row of its reply. Arrows start and end at the edge of the bar (lifeline ± 7), not at its center.
+- **Messages:** role `message-sync` (solid, filled head), `message-async` (solid, open head) or `message-return` (dashed, open head) for every reply. Number every message, replies included, in reading order: a 22 × 22 ellipse with role `step` and its number bound inside.
+- **Message labels:** font 16, above the arrow. Center the label in the widest free stretch of the arrow: between the lifelines and zone edges it crosses, with the whole label at least 16 from any lifeline or bar and `padding` from any zone edge. When the label does not fit the widest stretch, shorten it ("GET /resource (Bearer token)", not the full header).
+- **Label backgrounds:** put an opaque rectangle behind every message label: role `label-background`, or `label-background-in-frame` inside a tinted frame.
+- **Self messages:** an arrow out of the bar, 44 to the right, 26 down and back. Its badge and label go to its right.
+- **Calls and replies:** every reply answers a call drawn above it, in the same frame branch. A participant that sends a new request, such as a browser following a redirect, makes a call, not a reply.
+- **Errors:** a call that carries an error takes the role `error`, a reply that carries one takes `error-return`, on both the arrow and its label. Use color only for errors and the critical path.
+- **Draw order** (array order is z-order): zones, frame areas, lifelines, frame dividers, activation bars, arrows, shapes and backgrounds, then all text.
 
-4. Edit the `.excalidraw` file by hand if needed. Do not regenerate it from the spec, or the edits are lost.
-5. After changing `DESIGN.md` or applying the role styles again, run `restyle.js` and render again:
+## Frames
 
-   ```bash
-   node <skill>/scripts/restyle.js diagrams/login.excalidraw
-   ```
+A frame is a combined fragment: `alt` (one branch runs), `opt` (runs only if its condition holds), `loop` (repeats), `break` (exits early), `ref` (points to another diagram).
 
-Pass `--design <DESIGN.md>` to the generator or to `restyle.js` to use a design file other than the project's.
+- **Area:** a rectangle with role `frame`, covering every column that takes part in any of its branches, with `padding` between its edges and everything inside.
+- **Operator tag:** in the top left corner, flush with the frame edges, role `frame-tag`, text `alt`, `opt`, `loop`, sized to its text plus 12 on each side.
+- **Guards:** the condition of each branch in brackets, `[user approved]`, role `frame`, font 15, on a transparent background so the frame tint shows through. The first guard sits on the tag's row, `padding` to the right of the tag; when a lifeline would run under any guard, move the column right until the guards sit at least 16 past that lifeline. The guards of later branches sit just below their divider, in the same column as the first guard.
+- **Dividers:** a dashed line across the frame between two `alt` branches, role `frame-divider`.
+- **Nesting:** an inner frame sits `padding` inside its parent.
+- **Where an `alt` starts:** after the reply that carries the outcome it branches on ("Redirect to callback", "authorization result"), so each call and its reply stay together and no bar starts without a call.
 
-## Spec format
+## Notes
 
-The spec is YAML with two lists: `participants` and `sequence`.
+A note explains a why the arrows cannot show ("state ties the callback to this request and blocks CSRF"). Use one or two per diagram.
 
-```yaml
-participants:
-  - id: user
-    label: User
-    kind: actor
-  - id: api
-    label: API
-  - id: db
-    label: Database
-sequence:
-  - from: user
-    to: api
-    text: POST /login
-  - activate: api
-  - from: api
-    to: db
-    text: Find user
-    type: return
-  - deactivate: api
-```
+- A sticky note: rectangle with role `note`, one text element per line with role `note`, font 15, at most three short lines, all rotated by −0.03 radians.
+- Place it in the free gap nearest the step it explains, inside its zone with `padding`. It may cross a lifeline only where no message or label passes.
+- When no gap is wide enough, move the later columns to the right to open one, and size the zones for it; or place the note in the right margin, outside every zone.
 
-### Participants
+## Communication checklist
 
-- `id` (required): unique name that the steps refer to.
-- `label`: text in the header. Defaults to `id`. Keep it short; numbers are read as text.
-- `kind`: `participant` (default, a rectangle) or `actor` (a person or external caller, drawn in the actor colors).
-
-### Steps
-
-Each entry in `sequence` is one step. Message steps are numbered in order; the diagram reads top to bottom.
-
-| Step | Keys | Meaning |
-| --- | --- | --- |
-| Message | `from`, `to`, `text`, `type` | An arrow from one participant to another |
-| Self message | `self`, `text`, `type` | A call a participant makes to itself |
-| Activation | `activate` | Starts an activation bar on a participant's lifeline |
-| Deactivation | `deactivate` | Ends the most recent activation bar of a participant |
-| Frame | `frame`, `text` | Opens an `alt`, `opt` or `loop` box around the following messages |
-| Else | `else`, `text` | Starts the second section of an `alt` frame |
-| End | `end` | Closes the innermost frame, which must be of the same kind |
-
-- `type` on messages and self messages: `sync` (default, solid line with a filled head), `async` (solid line with an open head) or `return` (dashed line with an open head). Use `return` for every reply.
-- `text` is optional on messages and frames. Frames show it in brackets, for example `alt [valid credentials]`.
-- Frames can be nested. A frame must contain at least one message.
-- An `alt` frame can have several `else` sections, one per branch, as in the example in `examples/databricks-auth/`.
-- An activation must be closed by a matching `deactivate`, and every frame must be closed by an `end`.
-
-The parser rejects a spec with an unknown participant, an unknown message type, an unmatched frame or activation, or an `else` outside an `alt` frame. The error names the step, so fix the spec and generate again.
+- [ ] The title says what the diagram explains and the line below names the source.
+- [ ] Every message is numbered in reading order, replies included.
+- [ ] Each note explains a why next to its step, and covers no arrow, label or guard.
+- [ ] Zones, if used, group participants by where they run and keep `padding` from their content and from each other.
+- [ ] Errors use the `error` role on the arrow and the label; the rest of the diagram uses no extra color.
+- [ ] The system being explained uses `participant`; the services it calls use `participant-external`.
 
 ## Visual checklist
 
-Review the rendered PNG against every item. Fix the spec (or the `.excalidraw` file) and render again until all items pass.
+`validate.js` checks overlaps, padding and structure; this list covers what it cannot see.
 
-- [ ] No clipped text: every label is fully inside its header, frame or diagram, and no label overlaps another label, a header or a message arrow.
-- [ ] Arrows reach their targets: every message starts on the source lifeline and ends on the target lifeline, with its arrowhead visible.
-- [ ] Dashed returns: every `return` message is dashed, and every call is solid.
-- [ ] Lifelines span all messages: each lifeline runs from its header down past the last message, including messages inside frames.
-- [ ] Frames enclose their messages and their labels, and each `else` divider sits between the sections it separates.
-- [ ] Activation bars cover the messages they handle and end at the reply.
-- [ ] Reading order: participants run left to right in the order they first interact, and messages run top to bottom in the order of the spec.
-- [ ] Labels are short verbs or payloads (`POST /login`, `401`, `Token`), so they fit between two lifelines.
+- [ ] No clipped text: every label is fully inside its box, frame or zone, and fully readable at the rendered size.
+- [ ] Arrows reach their targets: each starts and ends on the edge of a lifeline or bar, with its head visible.
+- [ ] Dashed returns: every reply is dashed with an open head; every call is solid.
+- [ ] Lifelines span all messages, including those inside frames.
+- [ ] Activation bars start at the call and end at the reply of the call they handle; every reply has its call above it in the same branch.
+- [ ] Each frame tag is in the corner, its guards are in one column, and its dividers are dashed.
+- [ ] Labels are short verbs or payloads (`POST /token`, `401`, `access_token`).

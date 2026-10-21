@@ -4,14 +4,12 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseSequenceSpec } from '../skill/scripts/sequence_spec.js';
-import { buildSequenceDocument } from '../skill/scripts/sequence_excalidraw.js';
 import { resolveDesign } from '../skill/scripts/resolve_design.js';
 import { restyleDocument } from '../skill/scripts/restyle_excalidraw.js';
 
-const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.yaml', import.meta.url));
-const loginSpec = parseSequenceSpec(readFileSync(FIXTURE_PATH, 'utf8'));
-const generated = buildSequenceDocument(loginSpec, resolveDesign());
+const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.excalidraw', import.meta.url));
+// Style the fixture with the current base design first, so the tests do not depend on past token values.
+const generated = restyleDocument(JSON.parse(readFileSync(FIXTURE_PATH, 'utf8')), resolveDesign()).document;
 
 function tempFile(content) {
   const path = join(mkdtempSync(join(tmpdir(), 'restyle-')), 'DESIGN.md');
@@ -112,6 +110,31 @@ test('restyling keeps geometry, text and bindings', () => {
       assert.deepEqual(restyled[field], generated.elements[index][field], `${restyled.id} changed ${field}`);
     }
   });
+});
+
+test('text elements take the font family of the design and shapes do not', () => {
+  const design = designFrom('---\n---\n\n## Diagrams\n\n```yaml\nfontFamily: 2\n```\n');
+
+  const { document } = restyleDocument(generated, design);
+
+  for (const element of document.elements) {
+    if (element.type === 'text') {
+      assert.equal(element.fontFamily, 2, `${element.id} kept its font`);
+    } else {
+      assert.equal(element.fontFamily, undefined, `${element.id} got a font`);
+    }
+  }
+});
+
+test('rounded shapes take the corner radius of the design and sharp shapes stay sharp', () => {
+  const design = designFrom('---\n---\n\n## Diagrams\n\n```yaml\ncornerRadius: 6\n```\n');
+  const shape = (id, roundness) => ({ id, type: 'rectangle', roundness, customData: { role: 'participant' } });
+  const document = { elements: [shape('rounded', { type: 3 }), shape('sharp', null)] };
+
+  const { document: restyled } = restyleDocument(document, design);
+
+  assert.deepEqual(restyled.elements[0].roundness, { type: 3, value: 6 });
+  assert.equal(restyled.elements[1].roundness, null);
 });
 
 test('a role that defines no color or stroke keeps the values the element already has', () => {

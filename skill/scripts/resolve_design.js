@@ -39,6 +39,14 @@ export const REQUIRED_ROLES = [
   'lifeline',
   'activation',
   'frame',
+  'participant-external',
+  'zone',
+  'note',
+  'step',
+  'frame-tag',
+  'label-background-in-frame',
+  'frame-divider',
+  'error-return',
 ];
 
 function parseYamlOrEmpty(source) {

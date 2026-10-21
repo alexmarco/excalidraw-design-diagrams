@@ -17,6 +17,7 @@ colors:
   red-200: "#fecaca"
   red-600: "#dc2626"
   red-700: "#b91c1c"
+  amber-50: "#fffbeb"
   amber-100: "#fef3c7"
   amber-700: "#b45309"
   violet-200: "#ddd6fe"
@@ -24,6 +25,9 @@ colors:
   slate-500: "#64748b"
   slate-800: "#1e293b"
   gray-700: "#374151"
+  slate-300: "#cbd5e1"
+  yellow-100: "#fef9c3"
+  yellow-600: "#ca8a04"
   white: "#ffffff"
 components:
   primary:
@@ -66,7 +70,12 @@ components:
   error:
     backgroundColor: "{colors.red-200}"
     strokeColor: "{colors.red-700}"
-    textColor: "{colors.gray-700}"
+    textColor: "{colors.red-700}"
+  error-return:
+    strokeColor: "{colors.red-700}"
+    textColor: "{colors.red-700}"
+    strokeStyle: dashed
+    endArrowhead: arrow
   title:
     textColor: "{colors.blue-800}"
   subtitle:
@@ -113,8 +122,36 @@ components:
     backgroundColor: "{colors.blue-300}"
     strokeColor: "{colors.navy}"
   frame:
-    backgroundColor: "{colors.white}"
+    backgroundColor: "{colors.amber-50}"
+    strokeColor: "{colors.amber-700}"
+    textColor: "{colors.amber-700}"
+  label-background-in-frame:
+    backgroundColor: "{colors.amber-50}"
+    strokeColor: "{colors.amber-50}"
+  frame-tag:
+    backgroundColor: "{colors.amber-700}"
+    strokeColor: "{colors.amber-700}"
+    textColor: "{colors.white}"
+  frame-divider:
+    strokeColor: "{colors.amber-700}"
+    strokeStyle: dashed
+  participant-external:
+    backgroundColor: "{colors.blue-100}"
+    strokeColor: "{colors.blue-800}"
+    textColor: "{colors.gray-700}"
+  zone:
+    backgroundColor: "transparent"
+    strokeColor: "{colors.slate-300}"
+    strokeStyle: dashed
+    textColor: "{colors.slate-500}"
+  note:
+    backgroundColor: "{colors.yellow-100}"
+    strokeColor: "{colors.yellow-600}"
+    textColor: "{colors.gray-700}"
+  step:
+    backgroundColor: "{colors.navy}"
     strokeColor: "{colors.navy}"
+    textColor: "{colors.white}"
 ---
 
 # Excalidraw Diagram Base
@@ -127,11 +164,12 @@ Colors are defined once under `colors` and referenced from roles with `{colors.<
 
 ## Roles
 
-- Shape roles: `primary`, `secondary`, `tertiary` (neutral emphasis), `start` (trigger), `end` (success), `warning` (reset), `decision`, `ai`, `inactive` (dashed stroke), `error`.
+- Shape roles: `primary`, `secondary`, `tertiary` (neutral emphasis), `start` (trigger), `end` (success), `warning` (reset), `decision`, `ai`, `inactive` (dashed stroke), `error`, `error-return` (a reply that carries an error: red and dashed).
 - Text roles: `title`, `subtitle`, `body`, `text-on-light`, `text-on-dark`.
 - Evidence roles: `code` (code and data examples), `structure` (structural lines), `marker` (marker dots).
-- Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text).
-- Sequence roles: `participant`, `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame`.
+- Backing roles: `label-background` (the opaque box behind a free label, so lines do not cross its text) and `label-background-in-frame` (the same box inside a tinted frame).
+- Sequence roles: `participant` (the system being explained), `participant-external` (services and tools it calls), `actor`, `message-sync`, `message-async`, `message-return`, `lifeline`, `activation`, `frame` (tinted area of an `alt`, `opt` or `loop` block, with its conditions), `frame-tag` (the operator box in the frame's corner), `frame-divider` (the dashed line between the operands of an `alt`).
+- Reading aids: `zone` (background area that groups participants, such as "Local machine"), `note` (a sticky note with a short why, next to the step it explains), `step` (numbered badge on a message).
 
 Arrows use the stroke color of their source concept.
 
@@ -139,8 +177,13 @@ Arrows use the stroke color of their source concept.
 
 Diagram-only tokens that are not tied to a role.
 
+`roughness` takes the values Excalidraw offers: 0 (architect), 1 (artist) or 2 (cartoonist). `cornerRadius` is the radius in pixels of rounded shapes; sharp shapes stay sharp. `padding` is the minimum space in pixels between the edge of a zone or frame and the content inside it. `fontFamily` 5 is Excalifont.
+
 ```yaml
 roughness: 0
+cornerRadius: 8
+padding: 24
+fontFamily: 5
 strokeWidth: 2
 strokeStyle: solid
 fillStyle: solid

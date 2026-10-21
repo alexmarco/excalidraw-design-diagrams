@@ -10,9 +10,22 @@ export function restyleDocument(document, design) {
       unstyledIds.push(element.id);
       return element;
     }
-    return { ...element, ...roleStyle(role, element.type, design), ...arrowheadStyle(element, role, design) };
+    return {
+      ...element,
+      ...roleStyle(role, element.type, design),
+      ...arrowheadStyle(element, role, design),
+      ...cornerStyle(element, design),
+    };
   });
   return { document: { ...document, elements }, unstyledIds };
+}
+
+// Rounded shapes take the design's corner radius; sharp shapes stay sharp.
+function cornerStyle(element, design) {
+  const { cornerRadius } = design.diagrams;
+  return element.roundness?.type === 3 && cornerRadius !== undefined
+    ? { roundness: { type: 3, value: cornerRadius } }
+    : {};
 }
 
 // Only arrows take an arrowhead from their role, and only when the design defines one for it.

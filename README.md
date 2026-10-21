@@ -12,30 +12,30 @@ The baseline skill lives in [`skill/`](skill/). Its rendering tools are document
 ## Commands
 
 ```bash
-npm install # installs the renderer and the spec parser dependencies
+npm install # installs the renderer and the DESIGN.md parser dependencies
 npm test    # runs the test suite with node:test
 ```
 
 ## Usage
 
-The skill works in three steps: generate, render, restyle. In the commands below, `<skill>` is the skill directory (`skill/` in this repository), and you run them from your project root.
+The agent draws the `.excalidraw` file itself, following the guide for the diagram type, and the scripts do the mechanical work. In the commands below, `<skill>` is the skill directory (`skill/` in this repository), and you run them from your project root.
 
 ```bash
-# 1. Generate a first draft from a sequence spec; the .excalidraw file is written beside the spec
-node <skill>/scripts/generate_sequence.js diagrams/login.yaml
-
-# 2. Render a PNG to review and an SVG for documentation, written beside the file
-node <skill>/references/render_excalidraw.js diagrams/login.excalidraw
-
-# 3. After changing DESIGN.md, reapply the role styles, then render again
+# 1. Apply colors, fonts and corner radius from DESIGN.md to every element, by its role
 node <skill>/scripts/restyle.js diagrams/login.excalidraw
+
+# 2. Check structure, overlapping text and padding; exits with 1 and lists each problem
+node <skill>/scripts/validate.js diagrams/login.excalidraw
+
+# 3. Render a PNG to review and an SVG for documentation, written beside the file
+node <skill>/references/render_excalidraw.js diagrams/login.excalidraw
 ```
 
-- The `.excalidraw` file is the source of truth. The generator refuses to overwrite it, and later edits are made in the file.
-- Sequence diagrams: the spec format and the visual checklist are in [`skill/references/sequence.md`](skill/references/sequence.md).
+- The `.excalidraw` file is the source of truth; later changes are edits to it. After changing `DESIGN.md`, run the three steps again.
+- Sequence diagrams: layout, frames, notes and the checklists are in [`skill/references/sequence.md`](skill/references/sequence.md).
 - Render options (`--output`, `--scale`, `--width`) are listed in [`skill/references/README.md`](skill/references/README.md).
-- Colors and strokes come from `DESIGN.md`. The generator and `restyle.js` use the file given with `--design`, else the project's `DESIGN.md` (or `docs/DESIGN.md`), else the base design in [`skill/DESIGN.md`](skill/DESIGN.md).
-- A real example, the authentication flow of `databricks-agent-kit`, is in [`examples/databricks-auth/`](examples/databricks-auth/): the spec, the generated file, and its PNG and SVG renders.
+- Styles come from `DESIGN.md`. `restyle.js` and `validate.js` use the file given with `--design`, else the project's `DESIGN.md` (or `docs/DESIGN.md`) next to the diagram, else the base design in [`skill/DESIGN.md`](skill/DESIGN.md).
+- The reference example, an OAuth 2.0 authorization code flow with PKCE, is in [`skill/examples/oauth-pkce/`](skill/examples/oauth-pkce/).
 
 ## Install the skill manually
 

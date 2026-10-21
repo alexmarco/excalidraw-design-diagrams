@@ -21,7 +21,9 @@ test('README.md documents usage and the manual skill install', () => {
   const readme = readRepoFile('README.md').replace(/\r\n/g, '\n');
 
   assert.match(readme, /^## Usage$/m);
-  assert.match(readme, /generate_sequence\.js/);
+  assert.match(readme, /validate\.js/);
+  assert.doesNotMatch(readme, /generate_sequence/);
+  assert.match(readme, /examples\/oauth-pkce/);
   assert.match(readme, /render_excalidraw\.js/);
   assert.match(readme, /restyle\.js/);
   assert.match(readme, /^## Install the skill manually$/m);

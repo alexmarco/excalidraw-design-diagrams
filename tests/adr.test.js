@@ -55,3 +55,20 @@ test('ADR 0002 separates what was verified from what was not', () => {
 test('ADR 0002 describes how to check the finding on a real file', () => {
   assert.match(adr2, /restyle/);
 });
+
+const adr3 = readAdr('0003-');
+
+test('ADR 0003 records that agents draw sequence diagrams without a generator', () => {
+  assert.ok(adr3, 'docs/adr/0003-*.md must exist');
+  assert.match(adr3, /generator/i);
+  assert.match(adr3, /validate/);
+  assert.match(adr3, /ADR 0001/);
+});
+
+test('ADR 0001 points to the ADR that supersedes its first-draft decision', () => {
+  assert.match(adr, /superseded by ADR 0003/i);
+});
+
+test('ADR 0002 checks a real file without the removed generator', () => {
+  assert.doesNotMatch(adr2, /generate_sequence/);
+});
