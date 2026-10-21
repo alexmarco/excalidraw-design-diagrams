@@ -1,6 +1,6 @@
 # Element Templates
 
-Use these compact templates as starting points. Set `customData.role` on every element and take its colors from the role tokens in `DESIGN.md`; the hex values below only illustrate the base design. Excalidraw files need the enclosing document structure shown in `json-schema.md`.
+Use these compact templates as starting points. Set `customData.role` on every element; `restyle.js` then sets its colors, stroke, roughness, font and corner radius from that role's tokens in `DESIGN.md`, so the style values below are placeholders. Excalidraw files need the enclosing document structure shown in `json-schema.md`.
 
 ## Free-floating text
 
@@ -8,6 +8,7 @@ Use these compact templates as starting points. Set `customData.role` on every e
 {
   "type": "text",
   "id": "section-title",
+  "customData": { "role": "title" },
   "x": 100,
   "y": 100,
   "width": 200,
@@ -15,7 +16,7 @@ Use these compact templates as starting points. Set `customData.role` on every e
   "text": "Section title",
   "originalText": "Section title",
   "fontSize": 20,
-  "fontFamily": 3,
+  "fontFamily": 5,
   "textAlign": "left",
   "verticalAlign": "top",
   "strokeColor": "#1e40af",
@@ -35,6 +36,7 @@ Use these compact templates as starting points. Set `customData.role` on every e
 {
   "type": "rectangle",
   "id": "process",
+  "customData": { "role": "primary" },
   "x": 100,
   "y": 100,
   "width": 180,
@@ -56,7 +58,8 @@ Use these compact templates as starting points. Set `customData.role` on every e
   "link": null,
   "locked": false,
   "roundness": {
-    "type": 3
+    "type": 3,
+    "value": 8
   }
 }
 ```
@@ -67,6 +70,7 @@ Use these compact templates as starting points. Set `customData.role` on every e
 {
   "type": "line",
   "id": "timeline",
+  "customData": { "role": "structure" },
   "x": 100,
   "y": 100,
   "width": 0,
@@ -93,6 +97,7 @@ Use these compact templates as starting points. Set `customData.role` on every e
 {
   "type": "arrow",
   "id": "flow",
+  "customData": { "role": "message-sync" },
   "x": 280,
   "y": 145,
   "width": 120,

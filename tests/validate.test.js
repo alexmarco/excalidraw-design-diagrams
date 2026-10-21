@@ -41,7 +41,7 @@ test('the real example fixture has no structural problems', () => {
 });
 
 test('the OAuth example passes every check', () => {
-  const example = JSON.parse(readFileSync(fileURLToPath(new URL('../examples/oauth-pkce/oauth-pkce.excalidraw', import.meta.url)), 'utf8'));
+  const example = JSON.parse(readFileSync(fileURLToPath(new URL('../skill/examples/oauth-pkce/oauth-pkce.excalidraw', import.meta.url)), 'utf8'));
 
   assert.deepEqual(validateDocument(example, design), []);
 });
