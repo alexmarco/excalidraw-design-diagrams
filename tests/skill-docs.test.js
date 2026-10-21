@@ -94,6 +94,14 @@ test('the sequence guide has a communication checklist', () => {
   }
 });
 
+test('the sequence guide has placement rules for asynchronous messages and loop frames', () => {
+  const guide = readText(join(skillDirectory, 'references', 'sequence.md'));
+
+  assert.match(guide, /^## Asynchronous messages$/m);
+  assert.match(guide, /^## Loop frames$/m);
+  assert.match(guide, /examples\/card-payment/);
+});
+
 test('the sequence guide has a visual checklist with the required items', () => {
   const guide = readText(join(skillDirectory, 'references', 'sequence.md'));
   const checklistStart = guide.search(/^## Visual checklist$/m);
