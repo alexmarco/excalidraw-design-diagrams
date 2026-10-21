@@ -3,7 +3,7 @@ version: alpha
 name: Whiteboard
 colors:
   ink: "#343a40"
-  ink-soft: "#6b5b4d"
+  ink-soft: "#4a3f35"
   paper: "#fffdf5"
   peach: "#ffd8a8"
   peach-line: "#d9480f"
@@ -18,6 +18,7 @@ colors:
   rose: "#ffc9c9"
   rose-line: "#c92a2a"
   sand: "#ffe8cc"
+  stone: "#e9ecef"
   white: "#ffffff"
 components:
   primary:
@@ -29,8 +30,8 @@ components:
     strokeColor: "{colors.butter-line}"
     textColor: "{colors.ink}"
   tertiary:
-    backgroundColor: "{colors.sand}"
-    strokeColor: "{colors.peach-line}"
+    backgroundColor: "{colors.stone}"
+    strokeColor: "{colors.ink}"
     textColor: "{colors.ink}"
   start:
     backgroundColor: "{colors.peach}"
@@ -69,7 +70,7 @@ components:
   title:
     textColor: "{colors.ink}"
   subtitle:
-    textColor: "{colors.lavender-line}"
+    textColor: "{colors.ink}"
   body:
     textColor: "{colors.ink-soft}"
   text-on-light:
@@ -135,8 +136,8 @@ components:
     strokeStyle: dashed
     textColor: "{colors.ink-soft}"
   note:
-    backgroundColor: "{colors.butter}"
-    strokeColor: "{colors.butter-line}"
+    backgroundColor: "{colors.white}"
+    strokeColor: "{colors.ink-soft}"
     textColor: "{colors.ink}"
   step:
     backgroundColor: "{colors.ink}"
