@@ -113,6 +113,16 @@ test('content closer than the padding to the edge of its zone is reported', () =
   assert.equal(messages([zone, shape('user', 'actor', PADDING, 60, 100, 50)]).length, 0);
 });
 
+test('zones closer than the padding to each other are reported', () => {
+  const left = shape('device', 'zone', 0, 0, 400, 300);
+
+  assert.match(
+    messages([left, shape('idp', 'zone', 400 + PADDING - 1, 0, 300, 300)]).join('\n'),
+    new RegExp(`idp: closer than ${PADDING}px to zone device`),
+  );
+  assert.equal(messages([left, shape('idp', 'zone', 400 + PADDING, 0, 300, 300)]).length, 0);
+});
+
 test('the frame tag and frame texts may sit in the frame corner', () => {
   const frame = shape('alt', 'frame', 100, 100, 300, 200);
 

@@ -72,6 +72,12 @@ function layoutProblems(elements, design) {
   });
 
   const padding = design.diagrams.padding ?? 0;
+  const zones = elements.filter((element) => element.type === 'rectangle' && element.customData?.role === 'zone');
+  zones.forEach((zone, index) => {
+    for (const earlier of zones.slice(0, index)) {
+      if (intersects(grow(boundsOf(zone), padding), boundsOf(earlier))) report(zone.id, `closer than ${padding}px to zone ${earlier.id}`);
+    }
+  });
   const areas = elements.filter((element) => element.type === 'rectangle' && ['zone', 'frame'].includes(element.customData?.role));
   for (const area of areas) {
     const areaBox = boundsOf(area);
@@ -100,6 +106,10 @@ function intersects(a, b) {
   return a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom
     || (a.left === a.right && b.left < a.left && a.left < b.right && a.top < b.bottom && b.top < a.bottom)
     || (b.left === b.right && a.left < b.left && b.left < a.right && a.top < b.bottom && b.top < a.bottom);
+}
+
+function grow(box, margin) {
+  return { left: box.left - margin, top: box.top - margin, right: box.right + margin, bottom: box.bottom + margin };
 }
 
 function contains(outer, inner, margin) {
