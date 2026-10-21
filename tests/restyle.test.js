@@ -174,3 +174,20 @@ test('a DESIGN.md saved with CRLF line endings restyles the same way', () => {
 
   assert.deepEqual(restyleDocument(generated, crlfDesign), restyleDocument(generated, lfDesign));
 });
+
+test('restyling applies the canvas background token to the document', () => {
+  const design = designFrom('## Diagrams\n\n```yaml\nviewBackgroundColor: "#0b1020"\n```\n');
+  const { document } = restyleDocument(generated, design);
+
+  assert.equal(document.appState.viewBackgroundColor, '#0b1020');
+});
+
+test('restyling keeps the document background when the design has no canvas background token', () => {
+  const design = resolveDesign();
+  delete design.diagrams.viewBackgroundColor;
+  const darkDocument = { ...generated, appState: { ...generated.appState, viewBackgroundColor: '#123456' } };
+
+  const { document } = restyleDocument(darkDocument, design);
+
+  assert.equal(document.appState.viewBackgroundColor, '#123456');
+});
