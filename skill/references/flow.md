@@ -17,19 +17,19 @@ Use this guide for a process with choices: a pipeline, an approval, a triage, a 
 
 All sizes are in pixels.
 
-- **Header:** title at the top left (font size 30, role `title`), one line below it (16, role `body`) naming the source and how to read the diagram, for example "Illustrative pipeline · read top to bottom · diamonds are decisions · dashed arrows are retry and errors". A diagram with no real source says so.
-- **Reading direction:** top to bottom. The main path, the one a run follows when everything goes well, is a single straight column. Branches leave to the right; the retry and error paths live in a side column to the right of the main one. Start at the top of the main column and end at its bottom.
-- **Nodes:** steps are rectangles 230 × 64, rounded, font 18, role `primary`. The start is an ellipse 200 × 60, role `start`, labelled with the trigger ("Push to main"). The success end is an ellipse 200 × 60, role `end`. A decision is a diamond 260 × 120, role `decision`. A failure end is a rectangle 230 × 64, role `error`. Every node holds its label as a bound text with the same role.
+- **Header:** title at the top left (font size 30, role `title`), one line below it (16, role `body`) naming the source and how to read the diagram, for example "Illustrative pipeline · read top to bottom · diamonds are decisions · dashed arrows are retry and errors". Name only the dashed arrows the diagram has. A diagram with no real source says so.
+- **Reading direction:** top to bottom. The main path, the one a run follows when everything goes well, is a single straight column. Branches leave to the right into a side column. The side column holds the steps of a non-main branch, retry nodes and error nodes. Start at the top of the main column and end at its bottom.
+- **Nodes:** steps are rectangles 230 × 64, rounded, font 18, role `primary`. The start is an ellipse 200 × 60, role `start`, labelled with the trigger ("Push to main"). The success end is an ellipse 200 × 60, role `end`. A decision is a diamond 260 × 120, role `decision`. A failure end is a rectangle 230 × 64, role `error`. Every node holds its label as a bound text with the same role: `containerId` is the node, the node lists the text in `boundElements`, `textAlign` is `center`, `verticalAlign` is `middle`, and the text is about `0.55 × font size` pixels wide per character and `1.25 × font size` high per line. Labels, the title and the subtitle are free texts with the roles named below.
 - **Rows:** 58 between one node and the next on the main column; arrows run straight between node edges.
 - **Side column:** its center sits at least 100 to the right of the main column's diamonds, so a branch arrow between a diamond and a side node is at least 100 long.
-- **Arrows:** flow arrows are `message-sync` (solid, filled head), start and end at the node edge and bind to both nodes. A retry path that goes back up is `message-return` (dashed grey) with a right-angle bend. A path that ends in a failure is `error-return` (dashed red).
+- **Arrows:** flow arrows are `message-sync` (solid, filled head), start and end exactly on the node edge (the vertex of a diamond), with binding `gap` 0, and bind to both nodes. An arrow that bends uses `points` with one vertex per turn and no rounding. A retry path that goes back up is `message-return` (dashed grey) with a right-angle bend. A path that ends in a failure is `error-return` (dashed red).
 - **Draw order** (array order is z-order): arrows, then shapes, then all text.
 
 ## Decisions
 
 - Phrase a decision as a yes-or-no question ("Tests pass?"), at most four words.
-- Every decision has one outgoing arrow per answer, and each arrow carries its answer as a label: `Yes` and `No`. Put the happy answer on the main column, straight down, and the other answer to the side.
-- Place a label beside its arrow, 10 to the right of a vertical arrow or above a horizontal one, in role `text-on-light` (or `error-return` on an error arrow), font 16, never on the arrow line and never touching a node or an arrowhead.
+- Every decision has one outgoing arrow per answer, and each arrow carries its answer as a label: `Yes` and `No`. Put the answer that continues the main path on the main column, straight down, and the other answer to the side. Arrows that leave a step carry no label.
+- Place a label beside its arrow, 10 to the right of a vertical arrow, or on a horizontal segment (the first one of a bending arrow) with its bottom 6 above the line and its left edge 20 past the source node, in role `text-on-light` (or `error-return` on an error arrow), font 16, never on the arrow line and never touching a node or an arrowhead.
 - A decision has one arrow in and two arrows out.
 
 ## Merging paths
@@ -42,7 +42,7 @@ All sizes are in pixels.
 
 - A path that ends in failure is drawn with `error-return` arrows into a node with the role `error`. Use red for failure only; the rest of the diagram uses no extra color.
 - A failure is a terminal: no arrows leave an `error` node. When a failure triggers a recovery, draw it as a normal step after the `error` node.
-- Success and failure ends stay apart: `end` at the bottom of the main column, `error` in the side column.
+- Success and failure ends stay apart: the main `end` at the bottom of the main column, `error` nodes in the side column. A second success end, such as an early exit, goes in the side column with the `end` role.
 
 ## Communication checklist
 
@@ -59,7 +59,7 @@ All sizes are in pixels.
 
 - [ ] No clipped text: every label is fully inside its node and readable at the rendered size.
 - [ ] Arrows reach their targets: each starts and ends on a node edge with its head visible, and none crosses another arrow or a node.
-- [ ] The main path is one straight column read top to bottom, and the side column holds only retry and error nodes.
+- [ ] The main path is one straight column read top to bottom, and the side column holds only non-main branch steps, retry nodes, error nodes and early ends.
 - [ ] Start, end, decision and error nodes look different from steps and from each other, by shape and by color.
 - [ ] Dashed arrows are retry or error paths only; every other arrow is solid.
 - [ ] Every label sits beside its arrow with clear space around it, touching no node and no arrowhead.
