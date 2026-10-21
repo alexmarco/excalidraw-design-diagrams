@@ -25,9 +25,10 @@ All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24
 - **Activation bars:** 14 wide, centered on the lifeline, role `activation`. A participant is active while it handles a call: from the row of the call to the row of its reply. Arrows start and end at the edge of the bar (lifeline ± 7), not at its center.
 - **Messages:** role `message-sync` (solid, filled head), `message-async` (solid, open head) or `message-return` (dashed, open head) for every reply. Number every message, replies included, in reading order: a 22 × 22 ellipse with role `step` and its number bound inside.
 - **Message labels:** font 16, above the arrow. Center the label in the widest free stretch of the arrow: between the lifelines and zone edges it crosses, with the whole label at least 16 from any lifeline or bar and `padding` from any zone edge. When the label does not fit the widest stretch, shorten it ("GET /resource (Bearer token)", not the full header).
-- **Label backgrounds:** put an opaque rectangle behind every message label and every guard: role `label-background`, or `label-background-in-frame` inside a tinted frame.
+- **Label backgrounds:** put an opaque rectangle behind every message label: role `label-background`, or `label-background-in-frame` inside a tinted frame.
 - **Self messages:** an arrow out of the bar, 44 to the right, 26 down and back. Its badge and label go to its right.
-- **Errors:** the arrow and its label take the role `error`; the arrow is solid, whether it is a call or a reply. Use color only for errors and the critical path.
+- **Calls and replies:** every reply answers a call drawn above it, in the same frame branch. A participant that sends a new request, such as a browser following a redirect, makes a call, not a reply.
+- **Errors:** a call that carries an error takes the role `error`, a reply that carries one takes `error-return`, on both the arrow and its label. Use color only for errors and the critical path.
 - **Draw order** (array order is z-order): zones, frame areas, lifelines, frame dividers, activation bars, arrows, shapes and backgrounds, then all text.
 
 ## Frames
@@ -36,10 +37,10 @@ A frame is a combined fragment: `alt` (one branch runs), `opt` (runs only if its
 
 - **Area:** a rectangle with role `frame`, covering every column that takes part in any of its branches, with `padding` between its edges and everything inside.
 - **Operator tag:** in the top left corner, flush with the frame edges, role `frame-tag`, text `alt`, `opt`, `loop`, sized to its text plus 12 on each side.
-- **Guards:** the condition of each branch in brackets, `[user approves]`, role `frame`, font 15, with a label background. The first guard sits on the tag's row, `padding` to the right of the tag. The guards of later branches sit just below their divider, in the same column as the first guard.
+- **Guards:** the condition of each branch in brackets, `[user approved]`, role `frame`, font 15, on a transparent background so the frame tint shows through. The first guard sits on the tag's row, `padding` to the right of the tag; when a lifeline would run under any guard, move the column right until the guards sit at least 16 past that lifeline. The guards of later branches sit just below their divider, in the same column as the first guard.
 - **Dividers:** a dashed line across the frame between two `alt` branches, role `frame-divider`.
 - **Nesting:** an inner frame sits `padding` inside its parent.
-- **Activation across branches:** when a call made before an `alt` is answered in several branches, the bar continues into each branch from its divider.
+- **Where an `alt` starts:** after the reply that carries the outcome it branches on ("Redirect to callback", "authorization result"), so each call and its reply stay together and no bar starts without a call.
 
 ## Notes
 
@@ -66,6 +67,6 @@ A note explains a why the arrows cannot show ("state ties the callback to this r
 - [ ] Arrows reach their targets: each starts and ends on the edge of a lifeline or bar, with its head visible.
 - [ ] Dashed returns: every reply is dashed with an open head; every call is solid.
 - [ ] Lifelines span all messages, including those inside frames.
-- [ ] Activation bars start at the call and end at the reply of the call they handle.
+- [ ] Activation bars start at the call and end at the reply of the call they handle; every reply has its call above it in the same branch.
 - [ ] Each frame tag is in the corner, its guards are in one column, and its dividers are dashed.
 - [ ] Labels are short verbs or payloads (`POST /token`, `401`, `access_token`).
