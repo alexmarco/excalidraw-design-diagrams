@@ -16,8 +16,10 @@ Rendering needs no network access and does not download a browser.
 
 ## Render
 
+Run it from the project root; `<skill>` is the skill directory:
+
 ```bash
-node render_excalidraw.js <path-to-file.excalidraw>
+node <skill>/references/render_excalidraw.js <path-to-file.excalidraw>
 ```
 
 The PNG and the SVG are written beside the input by default. Optional arguments:

@@ -17,17 +17,17 @@ Use this guide for messages exchanged between participants over time: API calls,
 
 All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24 in the base design): the space between the edge of a zone or frame and anything inside it, and between zones.
 
-- **Header:** title at the top left (font size 30, role `title`), one line below it naming the source and how to read the diagram (16, role `body`), for example "RFC 6749 · numbers follow the order of the requests · dashed arrows are responses".
+- **Header:** title at the top left (font size 30, role `title`), one line below it naming the source and how to read the diagram (16, role `body`), for example "RFC 6749 · numbers follow the order of the requests · dashed arrows are responses". A diagram with no real source says so: "Illustrative flow · …".
 - **Participants:** boxes 210 × 56, rounded, label font 18, in the order they first interact so arrows cross as few lifelines as possible. Role `participant` for the system the diagram explains, `participant-external` for the services and tools it calls, `actor` for people and outside callers.
 - **Columns:** at least 300 apart, more where a label must fit between two lifelines. A label is about `0.5 × font size` pixels per character in Excalifont, plus 26 for its step badge.
 - **Zones (optional):** a dashed box that groups participants by where they run ("User's device", "Identity provider"), role `zone`, label at `padding` from its top left corner. Size each zone before drawing messages: it wraps its participant boxes plus the room its notes and self-message labels need, plus `padding` on every side, and stays `padding` away from the next zone.
-- **Rows:** one message every 58. Lifelines (role `lifeline`) run from the bottom of the header box to below the last message.
+- **Rows:** one message every 58, and 66 after a self message. Lifelines (role `lifeline`) run from the bottom of the header box to below the last message.
 - **Activation bars:** 14 wide, centered on the lifeline, role `activation`. A participant is active while it handles a call: from the row of the call to the row of its reply. Arrows start and end at the edge of the bar (lifeline ± 7), not at its center.
 - **Messages:** role `message-sync` (solid, filled head), `message-async` (solid, open head) or `message-return` (dashed, open head) for every reply. Number every message, replies included, in reading order: a 22 × 22 ellipse with role `step` and its number bound inside.
-- **Message labels:** font 16, above the arrow. Center the label in the widest free stretch of the arrow: between the lifelines and zone edges it crosses, at least 16 from any lifeline or bar and `padding` from any zone edge. When the label does not fit the widest stretch, shorten it ("GET /resource (Bearer token)", not the full header).
-- **Label backgrounds:** put an opaque rectangle behind every free label that a line could cross: role `label-background`, or `label-background-in-frame` inside a tinted frame.
+- **Message labels:** font 16, above the arrow. Center the label in the widest free stretch of the arrow: between the lifelines and zone edges it crosses, with the whole label at least 16 from any lifeline or bar and `padding` from any zone edge. When the label does not fit the widest stretch, shorten it ("GET /resource (Bearer token)", not the full header).
+- **Label backgrounds:** put an opaque rectangle behind every message label and every guard: role `label-background`, or `label-background-in-frame` inside a tinted frame.
 - **Self messages:** an arrow out of the bar, 44 to the right, 26 down and back. Its badge and label go to its right.
-- **Errors:** the arrow and its label take the role `error`. Use color only for errors and the critical path.
+- **Errors:** the arrow and its label take the role `error`; the arrow is solid, whether it is a call or a reply. Use color only for errors and the critical path.
 - **Draw order** (array order is z-order): zones, frame areas, lifelines, frame dividers, activation bars, arrows, shapes and backgrounds, then all text.
 
 ## Frames
@@ -45,8 +45,9 @@ A frame is a combined fragment: `alt` (one branch runs), `opt` (runs only if its
 
 A note explains a why the arrows cannot show ("state ties the callback to this request and blocks CSRF"). Use one or two per diagram.
 
-- A sticky note: rectangle with role `note`, text with role `note`, font 15, at most three short lines, both rotated by −0.03 radians.
+- A sticky note: rectangle with role `note`, one text element per line with role `note`, font 15, at most three short lines, all rotated by −0.03 radians.
 - Place it in the free gap nearest the step it explains, inside its zone with `padding`. It may cross a lifeline only where no message or label passes.
+- When no gap is wide enough, move the later columns to the right to open one, and size the zones for it; or place the note in the right margin, outside every zone.
 
 ## Communication checklist
 

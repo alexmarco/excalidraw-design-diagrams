@@ -28,5 +28,5 @@ For a type without a guide, draw with [references/element-templates.md](referenc
 ## Design rules
 
 - Every element has a role; its look comes from that role's tokens in the design file, never from hand-picked values. The design file is the first that exists of: the one passed with `--design`, the project's `DESIGN.md` (or `docs/DESIGN.md`) next to the diagram, and the base `<skill>/DESIGN.md`.
-- Verify names, endpoints and formats against the real source before drawing a technical diagram.
+- Verify names, endpoints and formats against the real source before drawing a technical diagram; when there is no real source, label the diagram as illustrative.
 - Keep labels short enough to read at the rendered size.
