@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const skillDirectory = join(root, 'skill');
+const skillDirectory = join(root, 'skills', 'excalidraw-diagram');
 
 // Normalizes line endings so the assertions hold for CRLF working copies on Windows.
 const readText = (path) => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
@@ -33,12 +33,13 @@ test('SKILL.md links the sequence guide and every local link resolves', () => {
   }
 });
 
-test('SKILL.md documents the generate, render and restyle commands', () => {
+test('SKILL.md documents the restyle, validate and render commands and no generator', () => {
   const skill = readText(join(skillDirectory, 'SKILL.md'));
 
-  assert.match(skill, /generate_sequence\.js/);
-  assert.match(skill, /render_excalidraw\.js/);
   assert.match(skill, /restyle\.js/);
+  assert.match(skill, /validate\.js/);
+  assert.match(skill, /render_excalidraw\.js/);
+  assert.doesNotMatch(skill, /generate_sequence/);
 });
 
 test('SKILL.md does not repeat the sequence checklist', () => {
@@ -60,14 +61,45 @@ test('no skill document points to the old color palette or Playwright flow', () 
   }
 });
 
-test('the sequence guide describes the spec format', () => {
+test('the sequence guide teaches drawing the file directly, with layout and frame rules', () => {
   const guide = readText(join(skillDirectory, 'references', 'sequence.md'));
 
-  assert.match(guide, /^## Spec format$/m);
-  for (const key of ['participants', 'sequence', 'from', 'to', 'self', 'activate', 'deactivate', 'frame', 'else', 'end']) {
-    assert.match(guide, new RegExp(`\`${key}\``), `the spec format does not mention ${key}`);
+  assert.match(guide, /^## Layout$/m);
+  assert.match(guide, /^## Frames$/m);
+  assert.match(guide, /validate\.js/);
+  assert.match(guide, /padding/);
+  assert.match(guide, /examples\/oauth-pkce/);
+  assert.doesNotMatch(guide, /generate_sequence/);
+});
+
+test('every local link in the reference guides resolves inside the skill', () => {
+  const referencesDirectory = join(skillDirectory, 'references');
+  for (const name of readdirSync(referencesDirectory).filter((file) => file.endsWith('.md'))) {
+    for (const target of localLinks(readText(join(referencesDirectory, name)))) {
+      const resolved = join(referencesDirectory, target.replace(/#.*$/, ''));
+      assert.ok(existsSync(resolved), `${name} links to missing ${target}`);
+      assert.ok(resolved.startsWith(skillDirectory), `${name} links outside the skill: ${target}`);
+    }
   }
-  assert.match(guide, /generate_sequence\.js/);
+});
+
+test('the sequence guide has a communication checklist', () => {
+  const guide = readText(join(skillDirectory, 'references', 'sequence.md'));
+  const start = guide.search(/^## Communication checklist$/m);
+
+  assert.notEqual(start, -1, 'missing the Communication checklist section');
+  const items = guide.slice(start).split('\n').filter((line) => /^- \[ \]/.test(line)).join('\n');
+  for (const topic of [/title/i, /number/i, /note/i, /zone/i, /error/i]) {
+    assert.match(items, topic, `the communication checklist does not cover ${topic}`);
+  }
+});
+
+test('the sequence guide has placement rules for asynchronous messages and loop frames', () => {
+  const guide = readText(join(skillDirectory, 'references', 'sequence.md'));
+
+  assert.match(guide, /^## Asynchronous messages$/m);
+  assert.match(guide, /^## Loop frames$/m);
+  assert.match(guide, /examples\/card-payment/);
 });
 
 test('the sequence guide has a visual checklist with the required items', () => {
@@ -83,4 +115,49 @@ test('the sequence guide has a visual checklist with the required items', () => 
   assert.ok(items.some((item) => /arrows? reach/i.test(item)), 'missing the arrows reach item');
   assert.ok(items.some((item) => /dashed/i.test(item) && /return/i.test(item)), 'missing the dashed returns item');
   assert.ok(items.some((item) => /lifelines? span/i.test(item)), 'missing the lifelines span item');
+});
+
+test('SKILL.md lists the architecture guide in its types table', () => {
+  const skill = readText(join(skillDirectory, 'SKILL.md'));
+
+  assert.match(skill, /\| Architecture \|.*\]\(references\/architecture\.md\)/);
+});
+
+test('the architecture guide covers layout, labels, bindings and both checklists', () => {
+  const guide = readText(join(skillDirectory, 'references', 'architecture.md'));
+
+  for (const heading of ['Workflow', 'Layout', 'Arrows', 'Communication checklist', 'Visual checklist']) {
+    assert.match(guide, new RegExp(`^## ${heading}$`, 'm'), `missing the ${heading} section`);
+  }
+  assert.match(guide, /startBinding/);
+  assert.match(guide, /protocol/i);
+  assert.match(guide, /examples\/web-app-architecture/);
+});
+
+test('SKILL.md lists the state guide, which exists and teaches its example', () => {
+  const skill = readText(join(skillDirectory, 'SKILL.md'));
+  const guide = readText(join(skillDirectory, 'references', 'state.md'));
+
+  assert.match(skill, /\]\(references\/state\.md\)/);
+  assert.match(guide, /examples\/order-lifecycle/);
+  for (const heading of ['Workflow', 'Layout', 'Communication checklist', 'Visual checklist']) {
+    assert.match(guide, new RegExp(`^## ${heading}$`, 'm'), `state guide misses ${heading}`);
+  }
+  for (const topic of [/initial/i, /final/i, /guard/i, /self-transition/i, /startBinding/, /cross/i]) {
+    assert.match(guide, topic, `state guide does not cover ${topic}`);
+  }
+});
+
+test('SKILL.md lists the flow guide and the guide covers direction, labels, merges, errors and checklists', () => {
+  const skill = readText(join(skillDirectory, 'SKILL.md'));
+  const guide = readText(join(skillDirectory, 'references', 'flow.md'));
+
+  assert.match(skill, /\]\(references\/flow\.md\)/);
+  assert.match(guide, /examples\/ci-cd-pipeline/);
+  for (const heading of [/^## Layout$/m, /^## Decisions$/m, /^## Merging paths$/m, /^## Error paths$/m]) {
+    assert.match(guide, heading);
+  }
+  const communication = guide.slice(guide.search(/^## Communication checklist$/m));
+  assert.match(communication, /^- \[ \]/m);
+  assert.match(guide, /^## Visual checklist$/m);
 });

@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const testDirectory = dirname(fileURLToPath(import.meta.url));
-const cliPath = join(testDirectory, '..', 'skill', 'references', 'render_excalidraw.js');
+const cliPath = join(testDirectory, '..', 'skills', 'excalidraw-diagram', 'references', 'render_excalidraw.js');
 const sampleDiagram = join(testDirectory, 'fixtures', 'sample.excalidraw');
 
 function runCli(args, env = {}) {
@@ -30,6 +30,27 @@ test('fails when no input file is given', async () => {
 
   assert.equal(code, 1);
   assert.match(stderr, /An input .excalidraw file is required/);
+});
+
+test('an argument error is followed by the usage', async () => {
+  const { stderr } = await runCli([]);
+
+  assert.match(stderr, /Usage: node render_excalidraw\.js/);
+});
+
+test('an unknown option is followed by the usage', async () => {
+  const { code, stderr } = await runCli([sampleDiagram, '--colour', 'red']);
+
+  assert.equal(code, 1);
+  assert.match(stderr, /Usage: node render_excalidraw\.js/);
+});
+
+test('a runtime error prints only the error, so it is not hidden by the usage', async () => {
+  const { code, stderr } = await runCli([join(testDirectory, 'fixtures', 'missing.excalidraw')]);
+
+  assert.equal(code, 1);
+  assert.match(stderr, /missing\.excalidraw/);
+  assert.doesNotMatch(stderr, /Usage:/);
 });
 
 test('rejects a scale that is not a positive integer', async () => {

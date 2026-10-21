@@ -4,14 +4,12 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseSequenceSpec } from '../skill/scripts/sequence_spec.js';
-import { buildSequenceDocument } from '../skill/scripts/sequence_excalidraw.js';
-import { resolveDesign } from '../skill/scripts/resolve_design.js';
-import { restyleDocument } from '../skill/scripts/restyle_excalidraw.js';
+import { resolveDesign } from '../skills/excalidraw-diagram/scripts/resolve_design.js';
+import { restyleDocument } from '../skills/excalidraw-diagram/scripts/restyle_excalidraw.js';
 
-const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.yaml', import.meta.url));
-const loginSpec = parseSequenceSpec(readFileSync(FIXTURE_PATH, 'utf8'));
-const generated = buildSequenceDocument(loginSpec, resolveDesign());
+const FIXTURE_PATH = fileURLToPath(new URL('./fixtures/sequence/login.excalidraw', import.meta.url));
+// Style the fixture with the current base design first, so the tests do not depend on past token values.
+const generated = restyleDocument(JSON.parse(readFileSync(FIXTURE_PATH, 'utf8')), resolveDesign()).document;
 
 function tempFile(content) {
   const path = join(mkdtempSync(join(tmpdir(), 'restyle-')), 'DESIGN.md');
@@ -114,6 +112,31 @@ test('restyling keeps geometry, text and bindings', () => {
   });
 });
 
+test('text elements take the font family of the design and shapes do not', () => {
+  const design = designFrom('---\n---\n\n## Diagrams\n\n```yaml\nfontFamily: 2\n```\n');
+
+  const { document } = restyleDocument(generated, design);
+
+  for (const element of document.elements) {
+    if (element.type === 'text') {
+      assert.equal(element.fontFamily, 2, `${element.id} kept its font`);
+    } else {
+      assert.equal(element.fontFamily, undefined, `${element.id} got a font`);
+    }
+  }
+});
+
+test('rounded shapes take the corner radius of the design and sharp shapes stay sharp', () => {
+  const design = designFrom('---\n---\n\n## Diagrams\n\n```yaml\ncornerRadius: 6\n```\n');
+  const shape = (id, roundness) => ({ id, type: 'rectangle', roundness, customData: { role: 'participant' } });
+  const document = { elements: [shape('rounded', { type: 3 }), shape('sharp', null)] };
+
+  const { document: restyled } = restyleDocument(document, design);
+
+  assert.deepEqual(restyled.elements[0].roundness, { type: 3, value: 6 });
+  assert.equal(restyled.elements[1].roundness, null);
+});
+
 test('a role that defines no color or stroke keeps the values the element already has', () => {
   const element = {
     id: 'note',
@@ -150,4 +173,33 @@ test('a DESIGN.md saved with CRLF line endings restyles the same way', () => {
   const crlfDesign = designFrom('---\r\ncomponents:\r\n  participant:\r\n    backgroundColor: "#111111"\r\n---\r\n');
 
   assert.deepEqual(restyleDocument(generated, crlfDesign), restyleDocument(generated, lfDesign));
+});
+
+test('restyling applies the canvas background token to the document', () => {
+  const design = designFrom('## Diagrams\n\n```yaml\nviewBackgroundColor: "#0b1020"\n```\n');
+  const { document } = restyleDocument(generated, design);
+
+  assert.equal(document.appState.viewBackgroundColor, '#0b1020');
+});
+
+test('restyling keeps the document background when the design has no canvas background token', () => {
+  const design = resolveDesign();
+  delete design.diagrams.viewBackgroundColor;
+  const darkDocument = { ...generated, appState: { ...generated.appState, viewBackgroundColor: '#123456' } };
+
+  const { document } = restyleDocument(darkDocument, design);
+
+  assert.equal(document.appState.viewBackgroundColor, '#123456');
+});
+
+test('restyling leaves an image element as it is, with or without a role, and does not report it', () => {
+  const image = { id: 'logo', type: 'image', x: 1, y: 2, width: 48, height: 48, fileId: 'icon-1', strokeColor: 'transparent', backgroundColor: 'transparent', roughness: 0 };
+  const withRole = { ...image, id: 'logo-with-role', customData: { role: 'primary' } };
+  const document = { ...generated, elements: [...generated.elements, image, withRole], files: { 'icon-1': { id: 'icon-1' } } };
+
+  const result = restyleDocument(document, designFrom('---\ncomponents:\n  primary:\n    backgroundColor: "#111111"\n---\n'));
+
+  assert.deepEqual(result.document.elements.slice(-2), [image, withRole]);
+  assert.deepEqual(result.document.files, document.files);
+  assert.equal(result.unstyledIds.includes('logo'), false);
 });

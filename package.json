@@ -6,12 +6,10 @@
   "engines": {
     "node": ">=22.18"
   },
+  "workspaces": [
+    "skills/excalidraw-diagram"
+  ],
   "scripts": {
     "test": "node --test"
-  },
-  "dependencies": {
-    "@excalidraw/utils": "0.1.7",
-    "esbuild": "0.28.2",
-    "yaml": "2.9.1"
   }
 }

@@ -21,19 +21,38 @@ test('README.md documents usage and the manual skill install', () => {
   const readme = readRepoFile('README.md').replace(/\r\n/g, '\n');
 
   assert.match(readme, /^## Usage$/m);
-  assert.match(readme, /generate_sequence\.js/);
+  assert.match(readme, /validate\.js/);
+  assert.doesNotMatch(readme, /generate_sequence/);
+  assert.match(readme, /examples\/oauth-pkce/);
   assert.match(readme, /render_excalidraw\.js/);
   assert.match(readme, /restyle\.js/);
   assert.match(readme, /^## Install the skill manually$/m);
   assert.match(readme, /\.claude[\\/]skills/);
 });
 
-test('the manual install runs npm install at the repository root and warns that copying skill/ alone fails', () => {
+test('README.md documents the install with npx skills add and the first-run dependency step', () => {
+  const readme = readRepoFile('README.md').replace(/\r\n/g, '\n');
+  const installSection = readme.slice(readme.indexOf('## Install the skill'), readme.indexOf('## Install the skill manually'));
+
+  assert.match(installSection, /npx skills add alexmarco\/excalidraw-design-diagrams --skill excalidraw-diagram/);
+  assert.match(installSection, / -g\b/);
+  assert.match(installSection, /--copy/);
+  assert.match(installSection, /npm install --omit=dev/);
+  assert.match(installSection, /npx skills update/);
+});
+
+test('the manual install copies the skill folder and installs its dependencies there', () => {
   const readme = readRepoFile('README.md').replace(/\r\n/g, '\n');
   const installSection = readme.slice(readme.indexOf('## Install the skill manually'), readme.indexOf('## Working rules'));
 
-  assert.match(installSection, /npm install` at the repository root/);
-  assert.match(installSection, /copying `skill\/` alone does not work/);
+  assert.match(installSection, /npm install --omit=dev/);
+  assert.doesNotMatch(installSection, /repository root/);
+});
+
+test('SKILL.md documents the first-run dependency install in one place', () => {
+  const skill = readRepoFile('skills/excalidraw-diagram/SKILL.md');
+
+  assert.match(skill, /npm install --omit=dev/);
 });
 
 test('AGENTS.md covers commands and working rules for agents', () => {

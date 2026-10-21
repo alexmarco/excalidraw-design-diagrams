@@ -1,6 +1,6 @@
 # 0001. The `.excalidraw` file is the source of truth
 
-- Status: Accepted
+- Status: Accepted. Decision 2 superseded by ADR 0003.
 - Date: 2026-10-20
 
 ## Context
