@@ -32,9 +32,9 @@ node <skill>/references/render_excalidraw.js diagrams/login.excalidraw
 ```
 
 - The `.excalidraw` file is the source of truth; later changes are edits to it. After changing `DESIGN.md`, run the three steps again.
-- Sequence diagrams: layout, frames, notes and the checklists are in [`skill/references/sequence.md`](skill/references/sequence.md).
+- Each diagram type has a guide with its layout rules and checklists; see the types table in [`skill/SKILL.md`](skill/SKILL.md).
 - Render options (`--output`, `--scale`, `--width`) are listed in [`skill/references/README.md`](skill/references/README.md).
-- Styles come from `DESIGN.md`. `restyle.js` and `validate.js` use the file given with `--design`, else the project's `DESIGN.md` (or `docs/DESIGN.md`) next to the diagram, else the base design in [`skill/DESIGN.md`](skill/DESIGN.md).
+- Styles come from `DESIGN.md`. `restyle.js` and `validate.js` use the file given with `--design`, else the project's `DESIGN.md` (or `docs/DESIGN.md`) next to the diagram, and the base design in [`skill/DESIGN.md`](skill/DESIGN.md) always applies underneath, so the file only overrides the tokens it defines.
 - The example gallery is below; the full index is in [`skill/examples/README.md`](skill/examples/README.md).
 
 ## Examples gallery
@@ -47,16 +47,16 @@ Each example is a folder with the `.excalidraw` file and its PNG and SVG renders
 | [![Card payment with webhook and 3-D Secure](skill/examples/card-payment/card-payment.png)](skill/examples/card-payment/) | [card-payment](skill/examples/card-payment/) | Sequence | Base |
 | [![Online order life cycle](skill/examples/order-lifecycle/order-lifecycle.png)](skill/examples/order-lifecycle/) | [order-lifecycle](skill/examples/order-lifecycle/) | State | Base |
 | [![Online shop data model](skill/examples/online-shop-data-model/online-shop-data-model.png)](skill/examples/online-shop-data-model/) | [online-shop-data-model](skill/examples/online-shop-data-model/) | Data model | Base |
-| [![RAG concept diagram](skill/examples/concept-rag/concept-rag.png)](skill/examples/concept-rag/) | [concept-rag](skill/examples/concept-rag/) | Concept | Whiteboard (full override) |
-| [![Web application architecture](skill/examples/web-app-architecture/web-app-architecture.png)](skill/examples/web-app-architecture/) | [web-app-architecture](skill/examples/web-app-architecture/) | Architecture | Blueprint (own DESIGN.md) |
-| [![CI/CD pipeline](skill/examples/ci-cd-pipeline/ci-cd-pipeline.png)](skill/examples/ci-cd-pipeline/) | [ci-cd-pipeline](skill/examples/ci-cd-pipeline/) | Decision flow | Corporate grey (colors and font only) |
+| [![RAG concept diagram](skill/examples/concept-rag/concept-rag.png)](skill/examples/concept-rag/) | [concept-rag](skill/examples/concept-rag/) | Concept | Whiteboard (full restyle) |
+| [![Web application architecture](skill/examples/web-app-architecture/web-app-architecture.png)](skill/examples/web-app-architecture/) | [web-app-architecture](skill/examples/web-app-architecture/) | Architecture | Blueprint (full restyle) |
+| [![CI/CD pipeline](skill/examples/ci-cd-pipeline/ci-cd-pipeline.png)](skill/examples/ci-cd-pipeline/) | [ci-cd-pipeline](skill/examples/ci-cd-pipeline/) | Decision flow | Corporate grey (partial: colors and font) |
 
 ### How a project style overrides the base
 
 The base design in [`skill/DESIGN.md`](skill/DESIGN.md) always applies. A `DESIGN.md` in the example folder (or the one passed with `--design`) overrides it token by token, so it only needs to define what changes. The diagram file does not change: restyling it recolors every element through its role.
 
 - Base style, no `DESIGN.md`: [oauth-pkce](skill/examples/oauth-pkce/), [card-payment](skill/examples/card-payment/), [order-lifecycle](skill/examples/order-lifecycle/) and [online-shop-data-model](skill/examples/online-shop-data-model/).
-- Complete override, which replaces the palette, font, corner radius and canvas background: [concept-rag](skill/examples/concept-rag/DESIGN.md) (whiteboard) and [web-app-architecture](skill/examples/web-app-architecture/DESIGN.md) (blueprint).
+- Complete override, which replaces the palette, font, corner radius, roughness and canvas background (roles it does not redefine come from the base): [concept-rag](skill/examples/concept-rag/DESIGN.md) (whiteboard) and [web-app-architecture](skill/examples/web-app-architecture/DESIGN.md) (blueprint).
 - Partial override, which changes only the colors and the font and inherits everything else: [ci-cd-pipeline](skill/examples/ci-cd-pipeline/DESIGN.md) (corporate grey).
 
 ## Install the skill manually
