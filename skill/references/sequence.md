@@ -25,7 +25,9 @@ All sizes are in pixels. `padding` is the `## Diagrams` token of `DESIGN.md` (24
 - **Activation bars:** 14 wide, centered on the lifeline, role `activation`. A participant is active while it handles a call: from the row of the call to the row of its reply. Arrows start and end at the edge of the bar (lifeline ± 7), not at its center.
 - **Messages:** role `message-sync` (solid, filled head), `message-async` (solid, open head) or `message-return` (dashed, open head) for every reply. Number every message, replies included, in reading order: a 22 × 22 ellipse with role `step` and its number bound inside.
 - **Message labels:** font 16, above the arrow. Center the label in the widest free stretch of the arrow: between the lifelines and zone edges it crosses, with the whole label at least 16 from any lifeline or bar and `padding` from any zone edge. When the label does not fit the widest stretch, shorten it ("GET /resource (Bearer token)", not the full header).
-- **Label backgrounds:** put an opaque rectangle behind every message label: role `label-background`, or `label-background-in-frame` inside a tinted frame.
+- **Label backgrounds:** put an opaque rectangle behind every message label: role `label-background`, or `label-background-in-frame` inside a tinted frame. It is 22 high with its top 30 above the arrow and as wide as the label text plus 38; the badge sits 4 from its left edge and the text starts 33 from it. For a self message the background starts 1 below the arrow's row.
+- **Text roles:** a message label is `text-on-light`; the number in a badge is `step` (font 14, bound to its ellipse); a participant label takes the role of its box; the text in a frame tag takes `frame-tag`. Bound texts go with the other texts at the end of the draw order.
+- **Lifeline tail:** lifelines end 70 below the last message.
 - **Self messages:** an arrow out of the bar, 44 to the right, 26 down and back. Its badge and label go to its right.
 - **Calls and replies:** every reply answers a call drawn above it, in the same frame branch. A participant that sends a new request, such as a browser following a redirect, makes a call, not a reply.
 - **Errors:** a call that carries an error takes the role `error`, a reply that carries one takes `error-return`, on both the arrow and its label. Use color only for errors and the critical path.
@@ -38,9 +40,30 @@ A frame is a combined fragment: `alt` (one branch runs), `opt` (runs only if its
 - **Area:** a rectangle with role `frame`, covering every column that takes part in any of its branches, with `padding` between its edges and everything inside.
 - **Operator tag:** in the top left corner, flush with the frame edges, role `frame-tag`, text `alt`, `opt`, `loop`, sized to its text plus 12 on each side.
 - **Guards:** the condition of each branch in brackets, `[user approved]`, role `frame`, font 15, on a transparent background so the frame tint shows through. The first guard sits on the tag's row, `padding` to the right of the tag; when a lifeline would run under any guard, move the column right until the guards sit at least 16 past that lifeline. The guards of later branches sit just below their divider, in the same column as the first guard.
+- **Size and spacing:** the tag is 26 high with font 16. The frame's top edge is 66 above its first message and its bottom edge 38 below its last arrow (below the end of the bar for a self message). The next message after a frame is 58 below its bottom edge.
 - **Dividers:** a dashed line across the frame between two `alt` branches, role `frame-divider`.
 - **Nesting:** an inner frame sits `padding` inside its parent.
 - **Where an `alt` starts:** after the reply that carries the outcome it branches on ("Redirect to callback", "authorization result"), so each call and its reply stay together and no bar starts without a call.
+
+## Asynchronous messages
+
+Use `message-async` when the sender does not wait for the answer: a webhook, an event, an e-mail. [`examples/card-payment/`](../examples/card-payment/) shows both cases.
+
+- **Look:** a solid line with an open head, never dashed: dashed means a reply.
+- **Sender:** it is busy only while it works, so its bar covers that work and nothing more; a sender that just emits the message has no bar, and its arrow starts on the lifeline. A sender that then waits for a reply keeps its bar until the reply arrives.
+- **Receiver:** its bar starts at the arrow, as for any call, and ends at its reply, if it sends one. An async message with no reply gets a bar only when the receiver does work you draw; with no bar, the arrow ends on the lifeline.
+- **Frame edges:** a bar may not cross the edge of a frame; end it at the last reply inside and start a new one outside.
+- **Label:** the name of the event or payload (`payment_intent.succeeded`), not a verb. A confirmation such as `200 OK` is a separate `message-return` numbered after it.
+
+## Loop frames
+
+A `loop` repeats its body until a condition holds.
+
+- **Columns:** the frame covers only the participants that exchange the repeated messages, not all columns. Its left edge sits 130 left of the first covered lifeline, and the guard starts 16 right of that lifeline when it would otherwise run under it (tag, `padding` and guard together are wider than 130).
+- **Guard:** one guard, the exit condition (`[until 2xx]`), on the tag's row.
+- **Body:** draw one pass: the message and the reply that decides whether it repeats. Do not draw the retries.
+- **Position:** the frame starts after the messages that trigger the loop, with the same space above its first message as an `alt` frame.
+- **Note:** say what the repetition implies for the reader in a note beside the frame, never inside it.
 
 ## Notes
 
