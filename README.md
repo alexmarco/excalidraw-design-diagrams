@@ -41,17 +41,17 @@ node <skill>/references/render_excalidraw.js diagrams/login.excalidraw
 
 Each example is a folder with the `.excalidraw` file and its PNG and SVG renders.
 
-| Screenshot | Example | Diagram type | Style |
-| --- | --- | --- | --- |
-| [![OAuth 2.0 with PKCE](examples/oauth-pkce/oauth-pkce.png)](examples/oauth-pkce/) | [oauth-pkce](examples/oauth-pkce/) | Sequence | Base |
-| [![Card payment with webhook and 3-D Secure](examples/card-payment/card-payment.png)](examples/card-payment/) | [card-payment](examples/card-payment/) | Sequence | Base |
-| [![Online order life cycle](examples/order-lifecycle/order-lifecycle.png)](examples/order-lifecycle/) | [order-lifecycle](examples/order-lifecycle/) | State | Base |
-| [![Online shop data model](examples/online-shop-data-model/online-shop-data-model.png)](examples/online-shop-data-model/) | [online-shop-data-model](examples/online-shop-data-model/) | Data model | Base |
-| [![Online shop data model (reduced)](examples/online-shop-reduced/online-shop-reduced.png)](examples/online-shop-reduced/) | [online-shop-reduced](examples/online-shop-reduced/) | Data model | Base |
-| [![RAG concept diagram](examples/concept-rag/concept-rag.png)](examples/concept-rag/) | [concept-rag](examples/concept-rag/) | Concept | Whiteboard (full restyle) |
-| [![Web application architecture](examples/web-app-architecture/web-app-architecture.png)](examples/web-app-architecture/) | [web-app-architecture](examples/web-app-architecture/) | Architecture | Blueprint (full restyle) |
-| [![CI/CD pipeline](examples/ci-cd-pipeline/ci-cd-pipeline.png)](examples/ci-cd-pipeline/) | [ci-cd-pipeline](examples/ci-cd-pipeline/) | Decision flow | Corporate grey (partial: colors and font) |
-| [![Web application architecture with icons](examples/web-app-icons/web-app-icons.png)](examples/web-app-icons/) | [web-app-icons](examples/web-app-icons/) | Architecture with icons | Base |
+| Screenshot                                                                                                                 | Example                                                    | Diagram type            | Style                                     |
+| -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------------------- | ----------------------------------------- |
+| [![OAuth 2.0 with PKCE](examples/oauth-pkce/oauth-pkce.png)](examples/oauth-pkce/)                                         | [oauth-pkce](examples/oauth-pkce/)                         | Sequence                | Base                                      |
+| [![Card payment with webhook and 3-D Secure](examples/card-payment/card-payment.png)](examples/card-payment/)              | [card-payment](examples/card-payment/)                     | Sequence                | Base                                      |
+| [![Online order life cycle](examples/order-lifecycle/order-lifecycle.png)](examples/order-lifecycle/)                      | [order-lifecycle](examples/order-lifecycle/)               | State                   | Base                                      |
+| [![Online shop data model](examples/online-shop-data-model/online-shop-data-model.png)](examples/online-shop-data-model/)  | [online-shop-data-model](examples/online-shop-data-model/) | Data model              | Base                                      |
+| [![Online shop data model (reduced)](examples/online-shop-reduced/online-shop-reduced.png)](examples/online-shop-reduced/) | [online-shop-reduced](examples/online-shop-reduced/)       | Data model              | Base                                      |
+| [![RAG concept diagram](examples/concept-rag/concept-rag.png)](examples/concept-rag/)                                      | [concept-rag](examples/concept-rag/)                       | Concept                 | Whiteboard (full restyle)                 |
+| [![Web application architecture](examples/web-app-architecture/web-app-architecture.png)](examples/web-app-architecture/)  | [web-app-architecture](examples/web-app-architecture/)     | Architecture            | Blueprint (full restyle)                  |
+| [![CI/CD pipeline](examples/ci-cd-pipeline/ci-cd-pipeline.png)](examples/ci-cd-pipeline/)                                  | [ci-cd-pipeline](examples/ci-cd-pipeline/)                 | Decision flow           | Corporate grey (partial: colors and font) |
+| [![Web application architecture with icons](examples/web-app-icons/web-app-icons.png)](examples/web-app-icons/)            | [web-app-icons](examples/web-app-icons/)                   | Architecture with icons | Base                                      |
 
 ### How a project style overrides the base
 
@@ -84,6 +84,12 @@ If you skip it, the scripts print this command with the exact folder. To update,
 ## Install the skill manually
 
 Copy the `skills/excalidraw-diagram/` folder to `.claude/skills/excalidraw-diagram/` in your project (or `~/.claude/skills/excalidraw-diagram` for every project), run `npm install --omit=dev` inside the copy, and start a new Claude Code session to check that the skill is listed.
+
+## Development workflow
+
+GitHub Actions runs `npm ci` and `npm test` for pull requests targeting `main` or `develop`, and for pushes to those branches. Branch protection must require the `test` job before merging.
+
+When changing a diagram guide, have an agent draw a diagram using that guide and review it against the guide's communication and visual checklists. Include the diagram or the validation evidence with the change so reviewers can verify the guide in practice.
 
 ## Working rules
 
