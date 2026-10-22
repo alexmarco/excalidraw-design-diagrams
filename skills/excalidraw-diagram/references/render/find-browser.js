@@ -56,7 +56,8 @@ export function findBrowser({
     return installed;
   }
 
-  const pathDirectories = (env.PATH ?? "").split(path.delimiter).filter(Boolean);
+  const pathDelimiter = platform === "win32" ? ";" : path.delimiter;
+  const pathDirectories = (env.PATH ?? "").split(pathDelimiter).filter(Boolean);
   for (const directory of pathDirectories) {
     for (const executableName of executableNamesOnPath(platform)) {
       const candidate = path.join(directory, executableName);
