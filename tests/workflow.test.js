@@ -15,7 +15,7 @@ test('GitHub Actions tests pull requests and pushes to main and develop', () => 
   assert.match(workflow, /branches:\s*\[main, develop\]/);
   assert.match(workflow, /node-version:\s*22\.18/);
   assert.match(workflow, /npm ci/);
-  assert.match(workflow, /npm test/);
+  assert.match(workflow, /npm test -- --test-concurrency=1/);
 });
 
 test('README describes the automated pull request checks', () => {
